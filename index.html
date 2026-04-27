@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Méritum Hotéis | Gestão Hoteleira Operacional</title>
+    <link rel="icon" type="image/svg+xml" href="/2.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Coconat Pro (adicionar arquivo local se disponível) -->
+    <!-- Fallback: Cormorant Garamond para elegância similar ao Coconat -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Manrope:wght@200;300;400;500;600;700;800&family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --meritum-blue: #0d2039;
+            --meritum-blue-dark: #08152a;
+            --meritum-blue-light: #1a3250;
+            --meritum-gold: #c5a059;
+            --meritum-gold-light: #d4b576;
+            --meritum-gold-dark: #a88940;
+            --meritum-text: #0d2039;
+            --meritum-text-light: #1a2d4a;
+            --meritum-bg: #ffffff;
+            --meritum-gray: #f8f9fa;
+        }
+
+        /* Font Loading - Coconat Pro with fallback */
+        @font-face {
+            font-family: 'Coconat Pro';
+            src: local('Coconat Pro'), local('CoconatPro');
+            font-display: swap;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--meritum-bg);
+            color: var(--meritum-text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            line-height: 1.8;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        /* Typography System */
+        h1, h2, h3, h4, h5, h6, .font-serif, .font-display {
+            font-family: 'Coconat Pro', 'Cormorant Garamond', 'Crimson Pro', serif;
+            font-weight: 400;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .font-heading {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        /* Display Typography */
+        .text-display {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+        }
+
+        /* Enhanced Contrast */
+        p, li, span {
+            color: var(--meritum-text);
+            font-weight: 400;
+        }
+
+        .text-contrast {
+            color: var(--meritum-blue-dark);
+        }
+
+        .text-secondary {
+            color: var(--meritum-text-light);
+            font-weight: 300;
+        }
+
+        /* Glass Morphism Header */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(24px) saturate(180%);
+            z-index: 9999 !important;
+            border-bottom: 1px solid rgba(13, 32, 57, 0.08);
+            box-shadow: 0 2px 24px rgba(13, 32, 57, 0.04);
+        }
+
+        /* Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Watermark System */
+        .watermark {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.03;
+            transition: opacity 0.8s ease;
+        }
+
+        .watermark-animate {
+            animation: watermarkFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes watermarkFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, -10px) rotate(2deg); }
+            50% { transform: translate(-5px, 5px) rotate(-1deg); }
+            75% { transform: translate(5px, 10px) rotate(1deg); }
+        }
+
+        /* Sophisticated Hover Effects */
+        .text-balance {
+            text-wrap: balance;
+        }
+
+        .hover-lift {
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hover-lift:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(13, 32, 57, 0.12);
+        }
+
+        .hover-scale {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hover-scale:hover {
+            transform: scale(1.02);
+        }
+
+        /* Refined Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f8f9fa;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--meritum-gold), var(--meritum-blue));
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--meritum-blue);
+        }
+
+        /* Logo Styles */
+        img[alt="Méritum Hotéis"], .brand-logo {
+            object-fit: contain;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-invert {
+            filter: brightness(0) invert(1);
+        }
+
+        .logo-bright {
+            filter: brightness(1.1) contrast(1.05);
+        }
+
+        .logo-hero {
+            filter: drop-shadow(0 4px 32px rgba(197, 160, 89, 0.2));
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Premium Gradients */
+        .gradient-gold {
+            background: linear-gradient(135deg, var(--meritum-gold-light) 0%, var(--meritum-gold) 50%, var(--meritum-gold-dark) 100%);
+        }
+
+        .gradient-blue {
+            background: linear-gradient(135deg, var(--meritum-blue-light) 0%, var(--meritum-blue) 50%, var(--meritum-blue-dark) 100%);
+        }
+
+        /* Divider Lines */
+        .divider-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--meritum-gold), transparent);
+            opacity: 0.3;
+        }
+
+        .divider-vertical {
+            width: 1px;
+            background: linear-gradient(180deg, transparent, var(--meritum-gold), transparent);
+            opacity: 0.3;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 3rem; }
+        }
+
+        @keyframes drawDown {
+            from {
+                height: 0;
+                opacity: 0;
+            }
+            to {
+                height: 3rem;
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes drawCurve {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes drawPath {
+            from {
+                stroke-dasharray: 200;
+                stroke-dashoffset: 200;
+            }
+            to {
+                stroke-dasharray: 200;
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .animate-expand-width {
+            animation: expandWidth 1s ease-out forwards;
+        }
+
+        .animate-draw-down {
+            animation: drawDown 1.2s ease-out forwards;
+        }
+
+        .animate-draw-curve {
+            animation: drawCurve 1s ease-out forwards;
+        }
+
+        .animate-draw-path {
+            animation: drawPath 2s ease-out forwards;
+        }
+
+        .animate-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Button Glow Effect */
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-glow:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Text Shimmer Effect */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        .text-shimmer {
+            background: linear-gradient(90deg, var(--meritum-blue) 0%, var(--meritum-gold) 50%, var(--meritum-blue) 100%);
+            background-size: 1000px 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 8s linear infinite;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="selection:bg-[#0d2039] selection:text-white">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
