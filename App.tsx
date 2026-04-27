@@ -189,7 +189,7 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-2">
             <div className="mb-8">
               <img
-                src="/3.svg"
+                src="/3-white.svg"
                 alt="Méritum Hotéis"
                 className="h-auto w-64 opacity-95 hover:opacity-100 transition-opacity duration-500"
               />

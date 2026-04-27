@@ -406,8 +406,8 @@ const Home: React.FC = () => {
               to="/contato"
               className="group inline-flex items-center px-14 py-6 gradient-blue text-white font-heading text-[10px] uppercase tracking-[0.5em] font-bold hover:shadow-2xl hover:shadow-[#0d2039]/30 transition-all duration-700 hover:scale-105 btn-glow relative overflow-hidden"
             >
-              <span className="relative z-10">Fale Conosco</span>
-              <ArrowRight className="ml-5 group-hover:translate-x-3 transition-transform duration-700 relative z-10" size={18} />
+              <span className="relative z-10 !text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]">Fale Conosco</span>
+              <ArrowRight className="ml-5 group-hover:translate-x-3 transition-transform duration-700 relative z-10 !text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]" size={18} />
             </Link>
           </div>
         </div>
