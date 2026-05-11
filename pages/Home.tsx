@@ -253,7 +253,6 @@ const Home: React.FC = () => {
         <div className="max-w-[1400px] mx-auto px-8 relative">
           <div className="mb-24 reveal">
             <div className="flex items-center gap-6 mb-10">
-              <img src="/2.svg" alt="" className="w-12 h-12 brightness-0 invert opacity-20" />
               <div className="divider-line w-16"></div>
               <h4 className="text-[#c5a059] font-heading text-[9px] uppercase tracking-[0.8em] font-semibold">
                 Prova Real
@@ -278,18 +277,21 @@ const Home: React.FC = () => {
                     href="https://hotelcolonialfoz.com.br"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-2 text-[#c5a059] hover:text-white transition-all duration-700 mt-2"
-                    title="Visitar site do hotel"
+                    className="group flex items-center gap-2 text-[#5a9d72] hover:text-[#7ec49a] transition-all duration-700 mt-2"
+                    title="Visitar site do hotel (abre em nova aba)"
                   >
                     <span className="text-[9px] uppercase tracking-[0.4em] font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500">Visitar</span>
                     <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500" strokeWidth={1.5} />
                   </a>
                 </div>
-                <div className="divider-line w-full mb-8"></div>
+                <div
+                  className="w-full mb-8 h-px opacity-55 bg-gradient-to-r from-transparent via-[#4a8a62] to-transparent"
+                  aria-hidden
+                />
               </div>
 
               <p className="text-white/95 text-lg md:text-xl font-light leading-[1.8] mb-10 tracking-tight">
-                <strong className="font-medium text-[#c5a059]">Atuação da Méritum Hotéis:</strong>
+                <strong className="font-medium text-[#5a9d72]">Atuação da Méritum Hotéis:</strong>
               </p>
 
               <ul className="space-y-6 mb-16">
@@ -301,13 +303,15 @@ const Home: React.FC = () => {
                   "Apoio à tomada de decisão estratégica"
                 ].map((item, i) => (
                   <li key={i} className="flex items-start reveal" style={{ transitionDelay: `${i * 0.1}s` }}>
-                    <span className="text-[#c5a059] mr-5 mt-1 text-lg">•</span>
+                    <span className="text-[#4a8a62] mr-5 mt-1 text-lg drop-shadow-[0_0_12px_rgba(90,157,114,0.35)]" aria-hidden>
+                      •
+                    </span>
                     <span className="text-white/95 text-lg font-light leading-[1.8] tracking-tight">{item}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="bg-white/5 border-l-2 border-[#c5a059] p-8 mt-12 backdrop-blur-sm">
+              <div className="bg-white/5 border-l-2 border-[#4a8a62] shadow-[inset_0_0_0_1px_rgba(74,138,98,0.22)] p-8 mt-12 backdrop-blur-sm">
                 <p className="text-white/85 text-base font-light leading-[1.8] italic tracking-tight mb-6">
                   Observação importante: A atuação respeita a identidade, estrutura e momento do empreendimento, sem descaracterização do hotel.
                 </p>
@@ -316,22 +320,39 @@ const Home: React.FC = () => {
                   href="https://hotelcolonialfoz.com.br"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-3 text-[#c5a059] hover:text-white transition-all duration-700"
+                  className="group inline-flex flex-wrap items-center gap-3 transition-all duration-700"
                 >
-                  <span className="text-[9px] uppercase tracking-[0.4em] font-semibold">Conheça o Hotel Colonial Iguaçu</span>
-                  <ArrowUpRight size={16} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-700" strokeWidth={1.5} />
+                  <span className="text-[9px] uppercase tracking-[0.4em] font-bold text-white">
+                    Conheça o Hotel Colonial Iguaçu
+                  </span>
+                  <ArrowUpRight
+                    size={16}
+                    className="text-[#5a9d72] group-hover:text-[#7ec49a] group-hover:translate-x-2 group-hover:-translate-y-2 transition-all duration-700"
+                    strokeWidth={2}
+                  />
                 </a>
+                <p className="mt-4 text-[10px] leading-relaxed text-white/35 font-light tracking-wide max-w-md">
+                  O link abre o site oficial do hotel em uma nova aba; você sai desta página da Méritum.
+                </p>
               </div>
             </div>
 
             <div className="lg:col-span-5 reveal hover-scale" style={{ transitionDelay: '0.2s' }}>
-              <div className="aspect-[4/5] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 border border-white/10">
-                <img
-                  src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1974&auto=format&fit=crop"
-                  alt="Hotel Colonial Iguaçu"
-                  className="w-full h-full object-cover brightness-90 hover:brightness-100 transition-all duration-1000"
-                />
-              </div>
+              <a
+                href="https://hotelcolonialfoz.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-sm"
+                title="Visitar site do Hotel Colonial Iguaçu (abre em nova aba)"
+              >
+                <div className="aspect-[4/5] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 border border-[#4a8a62]/50 hover:border-[#5a9d72]/65">
+                  <img
+                    src="/assets/hotel-colonial-iguacu.png"
+                    alt="Hotel Colonial Iguaçu — abrir site oficial"
+                    className="w-full h-full object-cover brightness-90 hover:brightness-100 transition-all duration-1000"
+                  />
+                </div>
+              </a>
             </div>
           </div>
         </div>

@@ -1,20 +1,28 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+<p align="center">
+  <br>
+  <img src="public/assets/logos/2.svg" alt="Méritum Hotéis" width="220">
+  <br><br>
+</p>
 
-# Run and deploy your AI Studio app
+<p align="center">
+  <strong>Gestão hoteleira operacional</strong><br>
+  <em>“Nosso mérito é o seu resultado.”</em>
+</p>
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/drive/1zC8VeoJUZIkLIBQFRTCre7QrZhEwdV4p
+A **Méritum Hotéis** nasce da experiência em campo e da visão estratégica: não somos apenas consultores com relatórios — somos operadores que assumem a gestão, organizam processos e respondem pela operação do hotel.
 
-## Run Locally
+Acreditamos que a hotelaria independente merece gestão profissional **sem perder identidade**: preservamos o nome e o caráter de cada empreendimento, com transparência para o proprietário e decisões alinhadas à realidade da operação.
 
-**Prerequisites:**  Node.js
+Este repositório é o **site institucional** da empresa: apresentação, visão de gestão, como atuamos, áreas de atuação, estudo de caso e contato.
 
+---
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+<p align="center">
+  <sub>React · TypeScript · Vite</sub>
+</p>
+
+<p align="center">
+  <code>npm install</code> e <code>npm run dev</code> para visualizar localmente.
+</p>
