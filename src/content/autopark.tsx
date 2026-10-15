@@ -2,7 +2,7 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import HeroImage, { HERO_MOBILE } from "@/components/HeroImage";
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 
 export function AutoparkHero({ children }: { children: ReactNode }) {
   return (

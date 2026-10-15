@@ -1,17 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SiteHeader from "./SiteHeader";
 import BookingWidget from "./BookingWidget";
 import HeroImage, { HERO_MOBILE } from "./HeroImage";
+import Link from "./LocaleLink";
 import { ROUTES } from "@/lib/site";
+import { useDict } from "@/i18n/LocaleProvider";
 
 const SLIDES = [
-  { src: "/assets/colonial-pergola-piscina.jpg", w: 2576, h: 1840, pos: "50% 62%", mobile: HERO_MOBILE.pergola, name: "Hotel Colonial Iguaçu", cap: "Hotel Colonial Iguaçu, Foz do Iguaçu", href: ROUTES.colonial, alt: "Pérgola com mesa de bilhar e piscina ao fundo no Hotel Colonial Iguaçu" },
-  { src: "/assets/pousada-piscina-pergolado.jpg", w: 2000, h: 1333, pos: "50% 60%", mobile: HERO_MOBILE.pousadaPergolado, name: "Pousada Cataratas", cap: "Pousada Cataratas, Foz do Iguaçu", href: ROUTES.pousada, alt: "Piscina da Pousada Cataratas sob o pergolado" },
-  { src: "/assets/villa-salao-noite.jpg", w: 2000, h: 1334, pos: "50% 50%", mobile: HERO_MOBILE.villaSalao, name: "Villa Colonial", cap: "Villa Colonial, Foz do Iguaçu", href: ROUTES.villa, alt: "Salão do restaurante Villa Colonial à noite" },
-  { src: "/assets/autopark-vista-aerea.jpg", w: 2000, h: 1333, pos: "50% 55%", mobile: HERO_MOBILE.autoparkAraucaria, name: "Colonial Autopark", cap: "Colonial Autopark, Foz do Iguaçu", href: ROUTES.autopark, alt: "Vista do estacionamento do Colonial Autopark" },
+  { src: "/assets/colonial-pergola-piscina.jpg", w: 2576, h: 1840, pos: "50% 62%", mobile: HERO_MOBILE.pergola, name: "Hotel Colonial Iguaçu", cap: "Hotel Colonial Iguaçu, Foz do Iguaçu", href: ROUTES.colonial },
+  { src: "/assets/pousada-piscina-pergolado.jpg", w: 2000, h: 1333, pos: "50% 60%", mobile: HERO_MOBILE.pousadaPergolado, name: "Pousada Cataratas", cap: "Pousada Cataratas, Foz do Iguaçu", href: ROUTES.pousada },
+  { src: "/assets/villa-salao-noite.jpg", w: 2000, h: 1334, pos: "50% 50%", mobile: HERO_MOBILE.villaSalao, name: "Villa Colonial", cap: "Villa Colonial, Foz do Iguaçu", href: ROUTES.villa },
+  { src: "/assets/autopark-vista-aerea.jpg", w: 2000, h: 1333, pos: "50% 55%", mobile: HERO_MOBILE.autoparkAraucaria, name: "Colonial Autopark", cap: "Colonial Autopark, Foz do Iguaçu", href: ROUTES.autopark },
 ];
 const INTERVAL = 6000;
 
@@ -20,6 +21,7 @@ export default function HomeHero() {
   const [gen, setGen] = useState(0);
   const timer = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
   const reduce = useRef(false);
+  const d = useDict().home;
 
   const start = useCallback(() => {
     clearInterval(timer.current);
@@ -54,7 +56,7 @@ export default function HomeHero() {
             desktop={{ src: s.src, width: s.w, height: s.h }}
             mobile={s.mobile}
             eager={k === 0}
-            alt={s.alt}
+            alt={d.slideAlts[k]}
             ariaHidden={!on}
             style={{ objectPosition: s.pos }}
           />
@@ -63,7 +65,7 @@ export default function HomeHero() {
       <div className="mn-hh__grad mn-hh__grad--top" aria-hidden="true" />
       <div className="mn-hh__grad mn-hh__grad--bottom" aria-hidden="true" />
       <div className="mn-hh__meta">
-        <div className="mn-hh__dots" role="group" aria-label="Fotos das propriedades">
+        <div className="mn-hh__dots" role="group" aria-label={d.photos}>
           {SLIDES.map((s, k) => (
             <button key={s.name} type="button" className={"mn-hh__dot " + (k === i ? "is-active " : "") + "g" + (gen % 2)} aria-label={s.name} aria-current={k === i} onClick={() => go(k)}>
               <span className="mn-hh__bar" />
@@ -82,8 +84,8 @@ export default function HomeHero() {
         <BookingWidget />
         <div className="mn-hh__content hh-center">
           <h1 className="mn-hh__title hh-title">
-            Hotéis com identidade.<br />
-            <em>Gestão com estratégia.</em>
+            {d.title1}<br />
+            <em>{d.title2}</em>
           </h1>
         </div>
       </SiteHeader>

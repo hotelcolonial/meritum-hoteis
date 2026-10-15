@@ -1,6 +1,8 @@
-import Link from "next/link";
+import Link from "./LocaleLink";
 import { Wordmark } from "./icons";
 import { HOTELS, ORG, ROUTES } from "@/lib/site";
+import type { Locale } from "@/i18n/config";
+import { getDict } from "@/i18n/dictionaries";
 
 const social = [
   {
@@ -17,15 +19,16 @@ const social = [
   },
 ] as const;
 
-export default function Footer() {
+export default function Footer({ locale }: { locale: Locale }) {
   const links = social.filter((s) => ORG.social[s.key]);
+  const d = getDict(locale);
   return (
     <>
       <footer id="mn-footer" className="ft">
         <div className="mn-ftgrid">
           <div className="ft__brand">
             <Link href="/" className="mn-focus" style={{ textDecoration: "none", alignSelf: "flex-start", display: "inline-flex" }}>
-              <Wordmark style={{ fontSize: "30px", color: "#052744" }} />
+              <Wordmark style={{ fontSize: "30px", color: "#052744" }} label={d.nav.homeLink} />
             </Link>
             <div className="mn-ftaddr">
               <address className="ft__addrblock" style={{ fontStyle: "normal" }}>
@@ -35,7 +38,7 @@ export default function Footer() {
                 <a className="ft__line" href={`mailto:${ORG.email}`}>{ORG.email}</a>
               </address>
               <div className="ft__addrblock">
-                <span className="ft__title">Nossas propriedades</span>
+                <span className="ft__title">{d.footer.properties}</span>
                 {HOTELS.map((h) => (
                   <Link key={h.key} href={h.href} className="mn-focus ft__prop">{h.name}</Link>
                 ))}
@@ -52,15 +55,15 @@ export default function Footer() {
             )}
           </div>
           <div className="ft__formcol">
-            <nav className="mn-ftnav" aria-label="Rodapé">
-              <Link href={ROUTES.meritum} className="mn-ftnav__link mn-focus">A Méritum</Link>
-              <Link href="/#portfolio" className="mn-ftnav__link mn-focus">Hotéis</Link>
-              <Link href={ROUTES.gestao} className="mn-ftnav__link mn-focus">Gestão</Link>
-              <Link href={ROUTES.bora} className="mn-ftnav__link mn-focus">Bora de Novo</Link>
-              <Link href={ROUTES.contato} className="mn-ftnav__link mn-focus">Contato</Link>
+            <nav className="mn-ftnav" aria-label={d.footer.label}>
+              <Link href={ROUTES.meritum} className="mn-ftnav__link mn-focus">{d.nav.meritum}</Link>
+              <Link href="/#portfolio" className="mn-ftnav__link mn-focus">{d.nav.hotels}</Link>
+              <Link href={ROUTES.gestao} className="mn-ftnav__link mn-focus">{d.nav.gestao}</Link>
+              <Link href={ROUTES.bora} className="mn-ftnav__link mn-focus">{d.footer.bora}</Link>
+              <Link href={ROUTES.contato} className="mn-ftnav__link mn-focus">{d.nav.contato}</Link>
             </nav>
             <Link href={ROUTES.contato + "#proprietarios"} className="mn-ftcta mn-focus">
-              Fale com a Méritum <span aria-hidden="true">→</span>
+              {d.nav.talk} <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
@@ -69,13 +72,14 @@ export default function Footer() {
         <div className="mn-ftbottom">
           <div className="ft__legal">
             {/* A CONFIRMAR: páginas de Política de Privacidade e Termos de Uso */}
-            <span>Política de Privacidade</span>
-            <span>Termos de Uso</span>
+            <span>{d.footer.privacy}</span>
+            <span>{d.footer.terms}</span>
           </div>
           <span className="ft__copy">
-            © {new Date().getFullYear()} {ORG.legalName} Todos os direitos reservados.<br />CNPJ {ORG.cnpj}
+            © {new Date().getFullYear()} {/* " " junto do texto: mesmo HTML de antes (um nó de texto a menos) */}
+            {ORG.legalName}{" " + d.footer.rights}<br />CNPJ {ORG.cnpj}
           </span>
-          <span className="ft__lang">PT</span>
+          <span className="ft__lang">{locale.toUpperCase()}</span>
         </div>
       </div>
     </>

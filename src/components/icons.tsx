@@ -52,14 +52,14 @@ export const CloseIcon = ({ size = 20 }: { size?: number }) => (
   </svg>
 );
 
-export function Wordmark({ style }: { style?: CSSProperties }) {
+export function Wordmark({ style, label = "Méritum Hotéis, página inicial" }: { style?: CSSProperties; label?: string }) {
   return (
     <>
       <span className="mn-wordmark" style={style} aria-hidden="true">
         <span className="mn-wordmark__a">Méritum</span>
         <span className="mn-wordmark__b">Hotéis</span>
       </span>
-      <span className="sr-only">Méritum Hotéis, página inicial</span>
+      <span className="sr-only">{label}</span>
     </>
   );
 }

@@ -37,6 +37,13 @@ describe("buildNiaraUrl", () => {
     expect(buildNiaraUrl({ ...base, promoCode: "  VERÃO 25&X " })).toMatch(/&enablePromoCode=true&promoCode=VER%C3%83O%2025%26X$/);
   });
 
+  it("idioma: locale antes do código; sem locale a URL não muda", () => {
+    const base = { hotelId: "X", checkIn: "2026-01-01", checkOut: "2026-01-02", rooms: [{ adults: 2, childrenAges: [] }] };
+    expect(buildNiaraUrl({ ...base, locale: "es-ES", promoCode: "COLONIAL25" }).split("#")[1]).toBe("startDate=2026-01-01&endDate=2026-01-02&rooms[]=a2&locale=es-ES&enablePromoCode=true&promoCode=COLONIAL25");
+    expect(buildNiaraUrl({ ...base, locale: "en-US" }).split("#")[1]).toBe("startDate=2026-01-01&endDate=2026-01-02&rooms[]=a2&locale=en-US");
+    expect(buildNiaraUrl({ ...base, locale: undefined })).not.toContain("locale");
+  });
+
   it("aceita Date e usa a data local (sem fuso)", () => {
     // 23h30 local: em UTC já seria o dia seguinte em fusos a oeste de Greenwich
     const checkIn = new Date(2026, 10, 13, 23, 30), checkOut = new Date(2026, 10, 15, 0, 5);

@@ -1,100 +1,111 @@
 import type { Metadata } from "next";
 import { ORG, ROUTES, SITE_URL } from "./site";
+import { HTML_LANG, LOCALES, OG_LOCALE, localePath, type Locale } from "@/i18n/config";
 
-type PageSeo = { path: string; title: string; description: string; image: string; imageAlt: string };
+type PageText = { title: string; description: string; imageAlt: string };
+
+/** Rota e imagem de compartilhamento de cada página (iguais em todos os idiomas). */
+export const PAGES = {
+  home: { path: ROUTES.home, image: "/og/home.jpg" },
+  meritum: { path: ROUTES.meritum, image: "/og/meritum.jpg" },
+  gestao: { path: ROUTES.gestao, image: "/og/gestao.jpg" },
+  contato: { path: ROUTES.contato, image: "/og/contato.jpg" },
+  colonial: { path: ROUTES.colonial, image: "/og/colonial.jpg" },
+  pousada: { path: ROUTES.pousada, image: "/og/pousada.jpg" },
+  villa: { path: ROUTES.villa, image: "/og/villa.jpg" },
+  autopark: { path: ROUTES.autopark, image: "/og/autopark.jpg" },
+  bora: { path: ROUTES.bora, image: "/og/bora.jpg" },
+  reserva: { path: ROUTES.reserva, image: "/og/reserva.jpg" },
+  hospede: { path: ROUTES.hospede, image: "/og/hospede.jpg" },
+} as const;
+export type SeoKey = keyof typeof PAGES;
 
 /** Títulos e descrições por página. Texto só com dados que já estão no site. */
-export const SEO = {
+const PT: Record<SeoKey, PageText> = {
   home: {
-    path: ROUTES.home,
     title: "Méritum Hotéis | Gestão hoteleira em Foz do Iguaçu",
     description: "Gestora hoteleira de Foz do Iguaçu. Gestão de hotéis independentes e das propriedades Hotel Colonial Iguaçu, Pousada Cataratas, Villa Colonial e Autopark.",
-    image: "/og/home.jpg",
     imageAlt: "Pérgola e piscina do Hotel Colonial Iguaçu",
   },
   meritum: {
-    path: ROUTES.meritum,
     title: "A Méritum | Méritum Hotéis",
     description: "Gestora hoteleira de Foz do Iguaçu que assume a gestão de hotéis independentes e desenvolve cada um de forma individual, respeitando sua identidade.",
-    image: "/og/meritum.jpg",
     imageAlt: "Jardim e área da piscina do Hotel Colonial Iguaçu",
   },
   gestao: {
-    path: ROUTES.gestao,
     title: "Gestão hoteleira e arrendamento | Méritum Hotéis",
     description: "Gestão operacional, comercial, de custos e de hospitalidade para hotéis independentes, nos modelos de gestão hoteleira e arrendamento de ativos.",
-    image: "/og/gestao.jpg",
     imageAlt: "Pérgola com mesa de bilhar e piscina no Hotel Colonial Iguaçu",
   },
   contato: {
-    path: ROUTES.contato,
     title: "Contato | Méritum Hotéis",
     description: "Fale com a Méritum sobre gestão ou arrendamento do seu hotel, ou encontre os contatos de reservas de cada propriedade em Foz do Iguaçu.",
-    image: "/og/contato.jpg",
     imageAlt: "Jardim do Hotel Colonial Iguaçu",
   },
   colonial: {
-    path: ROUTES.colonial,
     title: "Hotel Colonial Iguaçu | Rodovia das Cataratas, Foz do Iguaçu",
     description: "Hotel na Rodovia das Cataratas, a 1,2 km da entrada do Parque Nacional do Iguaçu. Desde 1970, com grande área verde, piscinas e o restaurante Villa Colonial.",
-    image: "/og/colonial.jpg",
     imageAlt: "Jardim e piscina do Hotel Colonial Iguaçu",
   },
   pousada: {
-    path: ROUTES.pousada,
     title: "Pousada Cataratas | Pousada no centro de Foz do Iguaçu",
     description: "Pousada com 27 apartamentos a 100 m da Avenida das Cataratas, em Foz do Iguaçu. Café da manhã incluso, piscina, estacionamento gratuito e recepção 24 h.",
-    image: "/og/pousada.jpg",
     imageAlt: "Piscina da Pousada Cataratas sob o pergolado",
   },
   villa: {
-    path: ROUTES.villa,
     title: "Villa Colonial | Restaurante e eventos em Foz do Iguaçu",
     description: "Restaurante do Hotel Colonial Iguaçu, na Rodovia das Cataratas. Buffet regional e internacional no café da manhã, almoço e jantar, e gastronomia para eventos.",
-    image: "/og/villa.jpg",
     imageAlt: "Salão do restaurante Villa Colonial à noite",
   },
   autopark: {
-    path: ROUTES.autopark,
     title: "Colonial Autopark | Estacionamento aeroporto Foz do Iguaçu",
     description: "Estacionamento 24 horas dentro do Hotel Colonial Iguaçu, com vaga monitorada e traslado gratuito de ida e volta ao Aeroporto Internacional de Foz do Iguaçu.",
-    image: "/og/autopark.jpg",
     imageAlt: "Vista do estacionamento do Colonial Autopark",
   },
   bora: {
-    path: ROUTES.bora,
     title: "Bora de Novo | Condições para quem volta à Méritum",
     description: "Já se hospedou em uma propriedade Méritum? O Bora de Novo oferece condições especiais para quem volta. Veja como funciona e tire suas dúvidas.",
-    image: "/og/bora.jpg",
     imageAlt: "Jardim e área da piscina do Hotel Colonial Iguaçu",
   },
   reserva: {
-    path: ROUTES.reserva,
     title: "Minha reserva | Méritum Hotéis",
     description: "Consulte, altere ou tire dúvidas sobre a sua reserva no Hotel Colonial Iguaçu ou na Pousada Cataratas direto com a equipe de cada propriedade.",
-    image: "/og/reserva.jpg",
     imageAlt: "Hotel Colonial Iguaçu",
   },
   hospede: {
-    path: ROUTES.hospede,
     title: "Área do hóspede | Méritum Hotéis",
     description: "Atalhos para hóspedes das propriedades Méritum: sua reserva, o programa Bora de Novo e os contatos de cada propriedade.",
-    image: "/og/hospede.jpg",
     imageAlt: "Hotel Colonial Iguaçu",
   },
-} satisfies Record<string, PageSeo>;
+};
 
-export function pageMetadata(key: keyof typeof SEO): Metadata {
-  const p = SEO[key];
+// Fase 1: espanhol e inglês ainda usam os textos em português
+const TEXT: Record<Locale, Record<SeoKey, PageText>> = { pt: PT, es: PT, en: PT };
+
+/** Título, descrição e imagem de uma página no idioma. */
+export const seoText = (key: SeoKey, locale: Locale) => ({ ...PAGES[key], ...TEXT[locale][key] });
+
+/** hreflang das três versões + x-default no português */
+export function languageAlternates(path: string): Record<string, string> {
+  const langs: Record<string, string> = {};
+  for (const l of LOCALES) langs[HTML_LANG[l]] = localePath(l, path);
+  langs["x-default"] = path;
+  return langs;
+}
+
+export function pageMetadata(key: SeoKey, locale: Locale): Metadata {
+  const p = seoText(key, locale);
+  const url = localePath(locale, p.path);
   return {
     title: { absolute: p.title },
     description: p.description,
-    alternates: { canonical: p.path },
+    alternates: { canonical: url, languages: languageAlternates(p.path) },
     openGraph: {
       type: "website",
-      locale: "pt_BR",
+      locale: OG_LOCALE[locale],
+      alternateLocale: LOCALES.filter((l) => l !== locale).map((l) => OG_LOCALE[l]),
       siteName: ORG.name,
-      url: p.path,
+      url,
       title: p.title,
       description: p.description,
       images: [{ url: p.image, width: 1200, height: 630, alt: p.imageAlt }],
@@ -107,6 +118,7 @@ export function pageMetadata(key: keyof typeof SEO): Metadata {
 
 const abs = (p: string) => SITE_URL + p;
 const ORG_ID = SITE_URL + "/#organization";
+const WEBSITE_ID = SITE_URL + "/#website";
 
 const colonialAddress = {
   "@type": "PostalAddress",
@@ -116,7 +128,7 @@ const colonialAddress = {
   addressCountry: "BR",
 };
 
-export function organizationLd() {
+export function organizationLd(locale: Locale) {
   const sameAs = Object.values(ORG.social).filter(Boolean);
   return {
     "@context": "https://schema.org",
@@ -128,7 +140,7 @@ export function organizationLd() {
     logo: abs("/assets/logo-full.svg"),
     email: ORG.email,
     taxID: ORG.cnpj,
-    description: SEO.home.description,
+    description: seoText("home", locale).description,
     address: {
       "@type": "PostalAddress",
       streetAddress: ORG.street,
@@ -150,15 +162,32 @@ export function organizationLd() {
   };
 }
 
-export function websiteLd() {
+export function websiteLd(locale: Locale) {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "@id": SITE_URL + "/#website",
-    url: SITE_URL,
+    "@id": WEBSITE_ID,
+    url: abs(localePath(locale, "/")).replace(/\/$/, ""),
     name: ORG.name,
-    inLanguage: "pt-BR",
+    inLanguage: HTML_LANG[locale],
     publisher: { "@id": ORG_ID },
+  };
+}
+
+/** A página em si, com o idioma (inLanguage) e o que ela descreve. */
+export function webPageLd(key: SeoKey, locale: Locale, about?: string) {
+  const p = seoText(key, locale);
+  const url = abs(localePath(locale, p.path));
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": url + "#webpage",
+    url,
+    name: p.title,
+    description: p.description,
+    inLanguage: HTML_LANG[locale],
+    isPartOf: { "@id": WEBSITE_ID },
+    ...(about ? { about: { "@id": about } } : {}),
   };
 }
 
@@ -178,15 +207,23 @@ const OFFICIAL = {
   villa: [] as string[],
   autopark: ["https://colonialautopark.com.br"],
 };
+export const ENTITY_ID = {
+  colonial: abs(ROUTES.colonial) + "#hotel",
+  pousada: abs(ROUTES.pousada) + "#hotel",
+  villa: abs(ROUTES.villa) + "#restaurant",
+  autopark: abs(ROUTES.autopark) + "#parking",
+};
 
-export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark") {
-  const url = abs(ROUTES[key]);
+export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark", locale: Locale) {
+  // O @id da entidade é o mesmo nos três idiomas (é o mesmo hotel); a url aponta para a página no idioma
+  const url = abs(localePath(locale, ROUTES[key]));
   const loc = key === "pousada" ? "pousada" : "colonial";
+  const text = seoText(key, locale);
   const base = {
     "@context": "https://schema.org",
     url,
     parentOrganization: { "@id": ORG_ID },
-    image: abs(SEO[key].image),
+    image: abs(text.image),
     geo: GEO[loc],
     hasMap: MAPS[loc],
     ...(OFFICIAL[key].length ? { sameAs: OFFICIAL[key] } : {}),
@@ -195,9 +232,9 @@ export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark") {
     return {
       ...base,
       "@type": "Hotel",
-      "@id": url + "#hotel",
+      "@id": ENTITY_ID.colonial,
       name: "Hotel Colonial Iguaçu",
-      description: SEO.colonial.description,
+      description: text.description,
       foundingDate: "1970",
       telephone: "0800 819 1993",
       email: "reservas@hotelcolonialfoz.com.br",
@@ -216,9 +253,9 @@ export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark") {
       ...base,
       "@type": "Hotel",
       additionalType: "https://schema.org/BedAndBreakfast",
-      "@id": url + "#hotel",
+      "@id": ENTITY_ID.pousada,
       name: "Pousada Cataratas",
-      description: SEO.pousada.description,
+      description: text.description,
       telephone: "0800 002 9215",
       email: "reservas@pousadacataratas.com.br",
       numberOfRooms: 27,
@@ -235,14 +272,14 @@ export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark") {
     return {
       ...base,
       "@type": "Restaurant",
-      "@id": url + "#restaurant",
+      "@id": ENTITY_ID.villa,
       name: "Villa Colonial",
-      description: SEO.villa.description,
+      description: text.description,
       servesCuisine: ["Regional", "Internacional"],
       telephone: "0800 819 1993",
       email: "reservas@hotelcolonialfoz.com.br",
       address: colonialAddress,
-      containedInPlace: { "@id": abs(ROUTES.colonial) + "#hotel" },
+      containedInPlace: { "@id": ENTITY_ID.colonial },
       openingHoursSpecification: [
         ["06:30", "10:00"], ["11:30", "16:00"], ["19:00", "22:30"],
       ].map(([opens, closes]) => ({
@@ -255,12 +292,12 @@ export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark") {
   return {
     ...base,
     "@type": "ParkingFacility",
-    "@id": url + "#parking",
+    "@id": ENTITY_ID.autopark,
     name: "Colonial Autopark",
-    description: SEO.autopark.description,
+    description: text.description,
     telephone: "(45) 3529 7711",
     address: colonialAddress,
-    containedInPlace: { "@id": abs(ROUTES.colonial) + "#hotel" },
+    containedInPlace: { "@id": ENTITY_ID.colonial },
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -270,20 +307,21 @@ export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark") {
   };
 }
 
-export function breadcrumbLd(items: { name: string; path: string }[]) {
+export function breadcrumbLd(items: { name: string; path: string }[], locale: Locale, homeName: string) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [{ name: "Início", path: "/" }, ...items].map((it, i) => ({
-      "@type": "ListItem", position: i + 1, name: it.name, item: abs(it.path),
+    itemListElement: [{ name: homeName, path: "/" }, ...items].map((it, i) => ({
+      "@type": "ListItem", position: i + 1, name: it.name, item: abs(localePath(locale, it.path)),
     })),
   };
 }
 
-export function faqLd(qa: { q: string; a: string }[]) {
+export function faqLd(qa: { q: string; a: string }[], locale: Locale) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    inLanguage: HTML_LANG[locale],
     mainEntity: qa.map(({ q, a }) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
   };
 }

@@ -1,5 +1,5 @@
 import { SITE_URL, ORG } from "@/lib/site";
-import { SEO } from "@/lib/seo";
+import { PAGES as SEO } from "@/lib/seo";
 
 // Resumo do site em Markdown para assistentes de IA (padrão llms.txt).
 export const dynamic = "force-static";

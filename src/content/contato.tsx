@@ -1,6 +1,6 @@
 /* Gerado a partir do export do Claude Design (tools/convert.py). */
 import type { ReactNode } from "react";
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 
 export function ContatoHero({ children }: { children: ReactNode }) {
   return (

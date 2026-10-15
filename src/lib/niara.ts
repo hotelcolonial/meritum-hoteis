@@ -2,6 +2,7 @@
  * Motor de reservas Niara / OTA Builder.
  * Formato: https://app.otabuilder.com/meritumhoteis/hotels/{HOTEL_ID}#startDate=…&endDate=…&rooms[]=…
  * Os parâmetros vão depois do "#" (não na query string).
+ * Idioma: locale=es-ES ou locale=en-US muda a interface do motor (sem o parâmetro ele fica em português).
  */
 export const NIARA_BASE = "https://app.otabuilder.com/meritumhoteis/hotels";
 
@@ -23,15 +24,18 @@ function roomParam(r: NiaraRoom) {
   return "rooms[]=a" + r.adults + (r.childrenAges.length ? "c" + r.childrenAges.join(",") : "");
 }
 
-export function buildNiaraUrl({ hotelId, checkIn, checkOut, rooms, promoCode }: {
+export function buildNiaraUrl({ hotelId, checkIn, checkOut, rooms, promoCode, locale }: {
   hotelId: string;
   checkIn: Date | string;
   checkOut: Date | string;
   rooms: NiaraRoom[];
   promoCode?: string;
+  /** idioma do motor, ex.: "es-ES"; omitido em português */
+  locale?: string;
 }): string {
   // Montado à mão: URLSearchParams codificaria os colchetes de rooms[]
   const parts = ["startDate=" + toLocalIsoDate(checkIn), "endDate=" + toLocalIsoDate(checkOut), ...rooms.map(roomParam)];
+  if (locale) parts.push("locale=" + encodeURIComponent(locale));
   const code = promoCode?.trim();
   if (code) parts.push("enablePromoCode=true", "promoCode=" + encodeURIComponent(code));
   return `${NIARA_BASE}/${hotelId}#${parts.join("&")}`;

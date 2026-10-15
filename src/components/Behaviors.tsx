@@ -7,6 +7,11 @@
  */
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { HTML_LANG, type Locale } from "@/i18n/config";
+import { useDict, useLocale } from "@/i18n/LocaleProvider";
+import { fill, type Dict } from "@/i18n/dictionaries";
+
+type FormMsgs = Dict["form"];
 
 type Pic = { src: string; alt: string };
 
@@ -189,20 +194,20 @@ function phoneMask(el: HTMLInputElement) {
   el.value = v;
 }
 
-function validate(form: HTMLFormElement) {
+function validate(form: HTMLFormElement, t: FormMsgs) {
   const els = form.elements as unknown as Record<string, HTMLInputElement | undefined>;
   const req = ["nome", "email", "whatsapp", "hotel", "cidade", "quartos"].concat(els["cargo"] ? ["cargo"] : []);
   const errors: Record<string, string> = {};
-  req.forEach((k) => { const el = els[k]; if (!el || !String(el.value || "").trim()) errors[k] = "Preencha este campo"; });
+  req.forEach((k) => { const el = els[k]; if (!el || !String(el.value || "").trim()) errors[k] = t.required; });
   const em = els.email;
-  if (em && em.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em.value.trim())) errors.email = "Informe um e-mail válido";
+  if (em && em.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em.value.trim())) errors.email = t.email;
   const wa = els.whatsapp;
-  if (wa && wa.value.trim() && wa.value.replace(/\D/g, "").length < 10) errors.whatsapp = "Informe um WhatsApp válido";
-  if (els.privacidade && !els.privacidade.checked) errors.privacidade = "Preencha este campo";
+  if (wa && wa.value.trim() && wa.value.replace(/\D/g, "").length < 10) errors.whatsapp = t.whatsapp;
+  if (els.privacidade && !els.privacidade.checked) errors.privacidade = t.required;
   return errors;
 }
 
-function initForms(page: string): () => void {
+function initForms(page: string, t: FormMsgs, locale: Locale): () => void {
   const cleanups: (() => void)[] = [];
   document.querySelectorAll<HTMLFormElement>("form.mn-join__form").forEach((form) => {
     const input = (e: Event) => { const t = e.target as HTMLInputElement; if (t.name === "whatsapp") phoneMask(t); };
@@ -211,7 +216,7 @@ function initForms(page: string): () => void {
       if (form.dataset.sending) return;
       form.querySelectorAll(".mn-join__err").forEach((n) => n.remove());
       form.querySelectorAll(".is-invalid").forEach((n) => { n.classList.remove("is-invalid"); n.setAttribute("aria-invalid", "false"); });
-      const errors = validate(form);
+      const errors = validate(form, t);
       const order = ["nome", "cargo", "email", "whatsapp", "hotel", "cidade", "quartos", "privacidade"];
       const keys = order.filter((k) => errors[k]);
       if (keys.length) {
@@ -232,16 +237,16 @@ function initForms(page: string): () => void {
       const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
       const label = btn?.textContent || "";
       form.dataset.sending = "1";
-      if (btn) { btn.disabled = true; btn.textContent = "Enviando..."; }
+      if (btn) { btn.disabled = true; btn.textContent = t.sending; }
       const data = Object.fromEntries(new FormData(form).entries());
       const status = form.parentElement?.querySelector(".mn-join__status");
       try {
-        const r = await fetch("/api/contato", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, origem: page }) });
+        const r = await fetch("/api/contato", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, origem: page, idioma: HTML_LANG[locale] }) });
         if (!r.ok) throw new Error(String(r.status));
         form.style.display = "none";
-        if (status) status.innerHTML = '<div class="mn-join__success"><p class="mn-join__ok-title">Obrigado.</p><p class="mn-join__ok-text">Recebemos as informações do seu hotel. Nossa equipe vai entrar em contato em breve.</p></div>';
+        if (status) status.innerHTML = `<div class="mn-join__success"><p class="mn-join__ok-title">${t.okTitle}</p><p class="mn-join__ok-text">${t.okText}</p></div>`;
       } catch {
-        if (status) status.innerHTML = '<p class="mn-join__err" style="margin-top:16px">Não foi possível enviar agora. Tente novamente em alguns minutos.</p>';
+        if (status) status.innerHTML = `<p class="mn-join__err" style="margin-top:16px">${t.fail}</p>`;
         if (btn) { btn.disabled = false; btn.textContent = label; }
       } finally {
         delete form.dataset.sending;
@@ -256,6 +261,8 @@ function initForms(page: string): () => void {
 
 export default function Behaviors() {
   const pathname = usePathname();
+  const locale = useLocale();
+  const dict = useDict();
   const [lb, setLb] = useState<{ pics: Pic[]; i: number } | null>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
   const modal = useRef<HTMLDivElement>(null);
@@ -277,7 +284,7 @@ export default function Behaviors() {
     const c1 = initReveal();
     const c2 = initSubnav();
     const c3 = initGallery(openLb);
-    const c4 = initForms(pathname);
+    const c4 = initForms(pathname, dict.form, locale);
     // Âncora na chegada: desconta o cabeçalho
     const id = decodeURIComponent(location.hash.slice(1));
     const t = id ? setTimeout(() => { const el = document.getElementById(id); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 120 }); }, 120) : undefined;
@@ -295,7 +302,7 @@ export default function Behaviors() {
     };
     document.addEventListener("click", click);
     return () => { c1(); c2(); c3(); c4(); clearTimeout(t); document.removeEventListener("click", click); };
-  }, [pathname, openLb]);
+  }, [pathname, openLb, dict, locale]);
 
   useEffect(() => {
     if (!lb) return;
@@ -309,7 +316,7 @@ export default function Behaviors() {
       className="ph-modal"
       role="dialog"
       aria-modal="true"
-      aria-label="Galeria ampliada"
+      aria-label={dict.lightbox.label}
       ref={modal}
       onClick={(e) => { if (e.target === e.currentTarget) closeLb(); }}
       // No celular não há setas: deslizar para o lado troca a foto
@@ -333,12 +340,12 @@ export default function Behaviors() {
         }
       }}
     >
-      <button className="ph-modal__close" type="button" aria-label="Fechar" onClick={closeLb}>×</button>
-      <button className="ph-modal__nav ph-modal__nav--prev" type="button" aria-label="Foto anterior" onClick={() => stepLb(-1)}>‹</button>
+      <button className="ph-modal__close" type="button" aria-label={dict.lightbox.close} onClick={closeLb}>×</button>
+      <button className="ph-modal__nav ph-modal__nav--prev" type="button" aria-label={dict.lightbox.prev} onClick={() => stepLb(-1)}>‹</button>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className="ph-modal__img" src={cur.src} alt={cur.alt} />
-      <button className="ph-modal__nav ph-modal__nav--next" type="button" aria-label="Próxima foto" onClick={() => stepLb(1)}>›</button>
-      <p className="ph-modal__count">{lb.i + 1} de {lb.pics.length}</p>
+      <button className="ph-modal__nav ph-modal__nav--next" type="button" aria-label={dict.lightbox.next} onClick={() => stepLb(1)}>›</button>
+      <p className="ph-modal__count">{fill(dict.lightbox.count, { i: lb.i + 1, n: lb.pics.length })}</p>
     </div>
   );
 }

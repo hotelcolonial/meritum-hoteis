@@ -3,18 +3,17 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent as RKE, type MouseEvent as RME } from "react";
 import { CalIcon, ChevWhite, CheckIcon, CloseIcon, PersonIcon } from "./icons";
 import { buildNiaraUrl, NIARA_HOTEL_ID } from "@/lib/niara";
+import { NIARA_LOCALE } from "@/i18n/config";
+import { useDict, useLocale } from "@/i18n/LocaleProvider";
+import { fill, plural as pl } from "@/i18n/dictionaries";
 
 type Prop = "colonial" | "pousada";
 type Panel = "prop" | "dates" | "guests" | null;
 /** Idade null = ainda não escolhida (obrigatória para buscar). */
 type Room = { adults: number; ages: (number | null)[] };
 
-const MES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
-const MES_C = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 const iso = (y: number, m: number, d: number) => `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 const todayIso = () => { const d = new Date(); return iso(d.getFullYear(), d.getMonth(), d.getDate()); };
-const fmt = (s: string) => { const [y, m, d] = s.split("-").map(Number); return `${d} ${MES_C[m - 1]} ${y}`; };
-const pl = (v: number, a: string, b: string) => `${v} ${v === 1 ? a : b}`;
 const PROP_NAME: Record<Prop, string> = { colonial: "Hotel Colonial Iguaçu", pousada: "Pousada Cataratas" };
 const AGES = Array.from({ length: 18 }, (_, i) => i);
 const MAX_ROOMS = 5, MAX_ADULTS = 6, MAX_CHILDREN = 4;
@@ -32,6 +31,9 @@ function useMedia(q: string) {
 }
 
 export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sentinelSelector?: string }) {
+  const t = useDict().booking;
+  const locale = useLocale();
+  const fmt = (s: string) => { const [y, m, d] = s.split("-").map(Number); return fill(t.dateShort, { d, m: t.monthsShort[m - 1], y }); };
   const isMobile = useMedia("(max-width: 1023px)");
   const oneMonth = useMedia("(max-width: 767px)");
   const [prop, setProp] = useState<Prop>("colonial");
@@ -149,7 +151,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   // O erro some sozinho quando o campo é corrigido
   const datesBad = invalid === "dates" && !(bkIn && bkOut);
   const agesBad = invalid === "ages" && missingAge;
-  const err = datesBad ? "Selecione as datas da estadia" : agesBad ? "Informe a idade de cada criança" : "";
+  const err = datesBad ? t.errDates : agesBad ? t.errAges : "";
 
   const submit = (e: RME<HTMLElement>) => {
     if (!bkIn || !bkOut || bkIn < today) {
@@ -164,6 +166,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
       checkOut: bkOut,
       rooms: roomList.map((r) => ({ adults: r.adults, childrenAges: r.ages as number[] })),
       promoCode: code,
+      locale: NIARA_LOCALE[locale],
     }));
   };
 
@@ -191,7 +194,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   };
 
   const propList = (
-    <div className="bk-list" role="listbox" aria-label="Propriedade" onKeyDown={listKey}>
+    <div className="bk-list" role="listbox" aria-label={t.property} onKeyDown={listKey}>
       {(["colonial", "pousada"] as Prop[]).map((p) => (
         <button key={p} type="button" role="option" className={"bk-opt" + (prop === p ? " is-selected" : "")} aria-selected={prop === p} onClick={() => { setProp(p); close(true); }}>
           <span>{PROP_NAME[p]}</span>
@@ -204,22 +207,22 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   const calendar = (
     <div className="bk-cal">
       <div className="bk-cal__nav">
-        <button type="button" className="bk-cal__arrow" disabled={prevDisabled} aria-label="Mês anterior" onClick={() => setView(v.m === 0 ? { y: v.y - 1, m: 11 } : { y: v.y, m: v.m - 1 })}>‹</button>
-        <button type="button" className="bk-cal__arrow" aria-label="Próximo mês" onClick={() => setView(v.m === 11 ? { y: v.y + 1, m: 0 } : { y: v.y, m: v.m + 1 })}>›</button>
+        <button type="button" className="bk-cal__arrow" disabled={prevDisabled} aria-label={t.prevMonth} onClick={() => setView(v.m === 0 ? { y: v.y - 1, m: 11 } : { y: v.y, m: v.m - 1 })}>‹</button>
+        <button type="button" className="bk-cal__arrow" aria-label={t.nextMonth} onClick={() => setView(v.m === 11 ? { y: v.y + 1, m: 0 } : { y: v.y, m: v.m + 1 })}>›</button>
       </div>
       <div className="bk-cal__months">
         {months.map(({ y, m, first, len }) => (
           <div className="bk-cal__month" key={`${y}-${m}`}>
-            <p className="bk-cal__title">{MES[m]} {y}</p>
+            <p className="bk-cal__title">{t.months[m]} {y}</p>
             <div className="bk-cal__grid">
-              {["D", "S", "T", "Q", "Q", "S", "S"].map((w, i) => <span key={"w" + i} className="bk-cal__wd" aria-hidden="true">{w}</span>)}
+              {t.weekdays.map((w, i) => <span key={"w" + i} className="bk-cal__wd" aria-hidden="true">{w}</span>)}
               {Array.from({ length: first }, (_, k) => <button key={"e" + k} type="button" className="bk-cal__day is-empty" disabled tabIndex={-1} aria-hidden="true" />)}
               {Array.from({ length: len }, (_, k) => {
                 const d = k + 1, s = iso(y, m, d);
                 const past = s < today, isStart = s === bkIn, isEnd = s === bkOut, inRange = !!(bkIn && bkOut && s > bkIn && s < bkOut);
                 const cls = ["bk-cal__day", past && "is-past", isStart && "is-start", isEnd && "is-end", inRange && "is-range"].filter(Boolean).join(" ");
                 return (
-                  <button key={s} type="button" className={cls} disabled={past} tabIndex={past ? -1 : 0} aria-label={`${d} de ${MES[m]} de ${y}`} aria-pressed={isStart || isEnd} onClick={() => pick(s)}>
+                  <button key={s} type="button" className={cls} disabled={past} tabIndex={past ? -1 : 0} aria-label={fill(t.dayLabel, { d, m: t.months[m], y })} aria-pressed={isStart || isEnd} onClick={() => pick(s)}>
                     {d}
                   </button>
                 );
@@ -228,7 +231,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
           </div>
         ))}
       </div>
-      <p className="bk-cal__nights">{nights > 0 ? pl(nights, "noite", "noites") : bkIn ? "Selecione a data de check-out" : "Selecione a data de check-in"}</p>
+      <p className="bk-cal__nights">{nights > 0 ? pl(nights, t.night) : bkIn ? t.pickCheckout : t.pickCheckin}</p>
     </div>
   );
 
@@ -244,19 +247,19 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   );
   const guests = (
     <div className="bk-guests">
-      {stepper("Quartos", roomList.length, setRoomCount, 1, MAX_ROOMS, "Remover quarto", "Adicionar quarto")}
+      {stepper(t.rooms, roomList.length, setRoomCount, 1, MAX_ROOMS, t.removeRoom, t.addRoom)}
       {roomList.map((r, i) => {
-        const q = roomList.length > 1 ? ` do quarto ${i + 1}` : "";
+        const q = roomList.length > 1 ? fill(t.ofRoom, { n: i + 1 }) : "";
         return (
-          <div className="bk-room" key={i} role="group" aria-label={`Quarto ${i + 1}`}>
-            {roomList.length > 1 && <p className="bk-room__title">Quarto {i + 1}</p>}
-            {stepper("Adultos", r.adults, (n) => updRoom(i, (x) => ({ ...x, adults: n })), 1, MAX_ADULTS, "Remover adulto" + q, "Adicionar adulto" + q)}
-            {stepper("Crianças", r.ages.length, (n) => setKids(i, n), 0, MAX_CHILDREN, "Remover criança" + q, "Adicionar criança" + q)}
+          <div className="bk-room" key={i} role="group" aria-label={fill(t.roomN, { n: i + 1 })}>
+            {roomList.length > 1 && <p className="bk-room__title">{fill(t.roomN, { n: i + 1 })}</p>}
+            {stepper(t.adults, r.adults, (n) => updRoom(i, (x) => ({ ...x, adults: n })), 1, MAX_ADULTS, t.removeAdult + q, t.addAdult + q)}
+            {stepper(t.children, r.ages.length, (n) => setKids(i, n), 0, MAX_CHILDREN, t.removeChild + q, t.addChild + q)}
             {r.ages.length > 0 && (
               <div className="bk-ages">
                 {r.ages.map((a, k) => (
                   <label className="bk-age" key={k}>
-                    <span className="bk-age__label">Idade da criança {k + 1}</span>
+                    <span className="bk-age__label">{fill(t.childAge, { n: k + 1 })}</span>
                     <select
                       className={"bk-age__select" + (agesBad && a === null ? " is-invalid" : "")}
                       value={a ?? ""}
@@ -264,8 +267,8 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
                       aria-invalid={agesBad && a === null}
                       onChange={(e) => setAge(i, k, e.target.value === "" ? null : Number(e.target.value))}
                     >
-                      <option value="" disabled>Selecionar</option>
-                      {AGES.map((n) => <option key={n} value={n}>{pl(n, "ano", "anos")}</option>)}
+                      <option value="" disabled>{t.select}</option>
+                      {AGES.map((n) => <option key={n} value={n}>{pl(n, t.year)}</option>)}
                     </select>
                   </label>
                 ))}
@@ -275,18 +278,18 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
         );
       })}
       {agesBad && <p className="bk-guests__err" role="alert">{err}</p>}
-      <button type="button" className="bk-guests__apply" onClick={() => close(true)}>Aplicar</button>
+      <button type="button" className="bk-guests__apply" onClick={() => close(true)}>{t.apply}</button>
     </div>
   );
 
-  const guestsLabel = `${pl(roomList.length, "Quarto", "Quartos")} · ${pl(totalAdults, "Adulto", "Adultos")} · ${pl(totalChildren, "Criança", "Crianças")}`;
+  const guestsLabel = `${pl(roomList.length, t.room)} · ${pl(totalAdults, t.adult)} · ${pl(totalChildren, t.child)}`;
   // Versão curta para a barra em telas intermediárias (o CSS escolhe qual mostrar)
-  const guestsShort = `${pl(roomList.length, "Quarto", "Quartos")} · ${pl(totalAdults + totalChildren, "Hóspede", "Hóspedes")}`;
+  const guestsShort = `${pl(roomList.length, t.room)} · ${pl(totalAdults + totalChildren, t.guest)}`;
   const bad = (on: boolean) => (on ? " is-invalid" : "");
   // No painel de hóspedes a mensagem aparece dentro dele
   const barErr = panel === "guests" ? "" : err;
-  const inLabel = bkIn ? fmt(bkIn) : "Selecionar data";
-  const outLabel = bkOut ? fmt(bkOut) : "Selecionar data";
+  const inLabel = bkIn ? fmt(bkIn) : t.selectDate;
+  const outLabel = bkOut ? fmt(bkOut) : t.selectDate;
   const popDir = fixed ? " bk-pop--up" : "";
 
   const codeField = codeEditing ? (
@@ -295,8 +298,8 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
       ref={(el) => { if (el && document.activeElement !== el) setTimeout(() => el.focus(), 0); }}
       type="text"
       value={code}
-      placeholder="Código promocional"
-      aria-label="Código promocional"
+      placeholder={t.promoCode}
+      aria-label={t.promoCode}
       onChange={(e) => setCode(e.target.value.toUpperCase().replace(/\s+/g, ""))}
       onKeyDown={(e) => {
         if (e.key === "Escape") { e.stopPropagation(); setCodeEditing(false); setCode(""); }
@@ -306,11 +309,11 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
     />
   ) : (
     <button type="button" className="mn-code mn-focus bk-code__btn bk-codebtn" onClick={() => { setCodeEditing(true); setPanel(null); }}>
-      {code ? "Código: " + code : "Tenho um código"}
+      {code ? t.code + code : t.hasCode}
     </button>
   );
 
-  const sheetTitle = panel === "prop" ? "Propriedade" : panel === "dates" ? "Datas da estadia" : "Hóspedes";
+  const sheetTitle = panel === "prop" ? t.property : panel === "dates" ? t.stayDates : t.guests;
 
   return (
     <div className="bk-wrap">
@@ -320,7 +323,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
         <div className={"bk-desk bk-desk-bar" + (fixed ? " is-fixed mn-barup" : "") + (fixed && hidden ? " is-hidden" : "")}>
           <div className="bk-seg">
             <button type="button" data-bk-trigger className="mn-focus bk-segbtn" aria-haspopup="listbox" aria-expanded={panel === "prop"} onClick={(e) => open("prop", e)}>
-              <div className="bk-textcol"><span className="bk-label">Propriedade</span><span className="bk-value">{PROP_NAME[prop]}</span></div>
+              <div className="bk-textcol"><span className="bk-label">{t.property}</span><span className="bk-value">{PROP_NAME[prop]}</span></div>
               <ChevWhite />
             </button>
             {!isMobile && panel === "prop" && <div className={"bk-pop mn-pop" + popDir} data-bk-panel>{propList}</div>}
@@ -328,65 +331,65 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
           <div className="bk-seg">
             <button type="button" data-bk-trigger className={"mn-focus bk-segbtn" + bad(datesBad)} aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
               <CalIcon />
-              <div className="bk-textcol"><span className="bk-label">Check-in</span><span className={"bk-value" + (bkIn ? "" : " is-dim")}>{inLabel}</span></div>
+              <div className="bk-textcol"><span className="bk-label">{t.checkin}</span><span className={"bk-value" + (bkIn ? "" : " is-dim")}>{inLabel}</span></div>
               <ChevWhite />
             </button>
-            {!isMobile && panel === "dates" && <div className={"bk-pop bk-pop--cal mn-pop" + popDir} data-bk-panel role="dialog" aria-label="Datas da estadia">{calendar}</div>}
+            {!isMobile && panel === "dates" && <div className={"bk-pop bk-pop--cal mn-pop" + popDir} data-bk-panel role="dialog" aria-label={t.stayDates}>{calendar}</div>}
           </div>
           <div className="bk-seg">
             <button type="button" data-bk-trigger className={"mn-focus bk-segbtn" + bad(datesBad)} aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
               <CalIcon />
-              <div className="bk-textcol"><span className="bk-label">Check-out</span><span className={"bk-value" + (bkOut ? "" : " is-dim")}>{outLabel}</span></div>
+              <div className="bk-textcol"><span className="bk-label">{t.checkout}</span><span className={"bk-value" + (bkOut ? "" : " is-dim")}>{outLabel}</span></div>
               <ChevWhite />
             </button>
           </div>
           <div className="bk-seg">
-            <button type="button" data-bk-trigger className={"mn-focus bk-segbtn" + bad(agesBad)} aria-label={`Hóspedes: ${guestsLabel}`} aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
+            <button type="button" data-bk-trigger className={"mn-focus bk-segbtn" + bad(agesBad)} aria-label={`${t.guests}: ${guestsLabel}`} aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
               <PersonIcon />
-              <div className="bk-textcol"><span className="bk-label">Hóspedes</span><span className="bk-value"><span className="bk-gfull">{guestsLabel}</span><span className="bk-gshort">{guestsShort}</span></span></div>
+              <div className="bk-textcol"><span className="bk-label">{t.guests}</span><span className="bk-value"><span className="bk-gfull">{guestsLabel}</span><span className="bk-gshort">{guestsShort}</span></span></div>
               <ChevWhite />
             </button>
-            {!isMobile && panel === "guests" && <div className={"bk-pop bk-pop--guests mn-pop" + popDir} data-bk-panel role="dialog" aria-label="Hóspedes">{guests}</div>}
+            {!isMobile && panel === "guests" && <div className={"bk-pop bk-pop--guests mn-pop" + popDir} data-bk-panel role="dialog" aria-label={t.guests}>{guests}</div>}
           </div>
           <div className="bk-segcode">{!isMobile && codeField}</div>
-          <button type="button" className="mn-focus bk-submit bk-go" onClick={submit}>Ver disponibilidade</button>
+          <button type="button" className="mn-focus bk-submit bk-go" onClick={submit}>{t.search}</button>
           {!!barErr && !isMobile && <p className={"bk-err" + (fixed ? " bk-err--up" : "")} role="alert">{barErr}</p>}
         </div>
       </div>
 
       {/* Mobile */}
       <div className="bk-fixbar">
-        <span className="bk-fixbar__text">{PROP_NAME[prop]} · {bkIn && bkOut ? "Datas selecionadas" : "Selecionar datas"}</span>
-        <button type="button" className="bk-fixbar__btn mn-focus" aria-haspopup="dialog" aria-expanded={mob} onClick={() => setMob(true)}>Ver disponibilidade</button>
+        <span className="bk-fixbar__text">{PROP_NAME[prop]} · {bkIn && bkOut ? t.datesSelected : t.selectDates}</span>
+        <button type="button" className="bk-fixbar__btn mn-focus" aria-haspopup="dialog" aria-expanded={mob} onClick={() => setMob(true)}>{t.search}</button>
       </div>
-      <div className={"bk-mobwrap" + (mob ? " is-open" : "")} role={mob ? "dialog" : "group"} aria-label="Reservar">
+      <div className={"bk-mobwrap" + (mob ? " is-open" : "")} role={mob ? "dialog" : "group"} aria-label={t.book}>
         <div className="bk-mobwrap__head">
-          <p className="bk-mobwrap__title">Reservar</p>
-          <button type="button" className="bk-mobwrap__close mn-focus" aria-label="Fechar" onClick={() => { setMob(false); setPanel(null); }}><CloseIcon /></button>
+          <p className="bk-mobwrap__title">{t.book}</p>
+          <button type="button" className="bk-mobwrap__close mn-focus" aria-label={t.close} onClick={() => { setMob(false); setPanel(null); }}><CloseIcon /></button>
         </div>
         <div className="bk-mob-bar">
           <button type="button" data-bk-trigger className="mn-focus bk-msegbtn" aria-haspopup="listbox" aria-expanded={panel === "prop"} onClick={(e) => open("prop", e)}>
-            <span className="bk-textcol"><span className="bk-label">Propriedade</span><span className="bk-value">{PROP_NAME[prop]}</span></span><ChevWhite />
+            <span className="bk-textcol"><span className="bk-label">{t.property}</span><span className="bk-value">{PROP_NAME[prop]}</span></span><ChevWhite />
           </button>
           <button type="button" data-bk-trigger className={"mn-focus bk-msegbtn" + bad(datesBad)} aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
-            <span><CalIcon /><span className="bk-textcol"><span className="bk-label">Check-in</span><span className={"bk-value" + (bkIn ? "" : " is-dim")}>{inLabel}</span></span></span><ChevWhite />
+            <span><CalIcon /><span className="bk-textcol"><span className="bk-label">{t.checkin}</span><span className={"bk-value" + (bkIn ? "" : " is-dim")}>{inLabel}</span></span></span><ChevWhite />
           </button>
           <button type="button" data-bk-trigger className={"mn-focus bk-msegbtn" + bad(datesBad)} aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
-            <span><CalIcon /><span className="bk-textcol"><span className="bk-label">Check-out</span><span className={"bk-value" + (bkOut ? "" : " is-dim")}>{outLabel}</span></span></span><ChevWhite />
+            <span><CalIcon /><span className="bk-textcol"><span className="bk-label">{t.checkout}</span><span className={"bk-value" + (bkOut ? "" : " is-dim")}>{outLabel}</span></span></span><ChevWhite />
           </button>
           <button type="button" data-bk-trigger className={"mn-focus bk-msegbtn" + bad(agesBad)} aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
-            <span><PersonIcon /><span className="bk-textcol"><span className="bk-label">Hóspedes</span><span className="bk-value">{guestsLabel}</span></span></span><ChevWhite />
+            <span><PersonIcon /><span className="bk-textcol"><span className="bk-label">{t.guests}</span><span className="bk-value">{guestsLabel}</span></span></span><ChevWhite />
           </button>
           <div className="bk-msegcode">{isMobile && codeField}</div>
           {!!barErr && isMobile && <p className="bk-err bk-err--static" role="alert">{barErr}</p>}
-          <button type="button" className="mn-focus bk-submit bk-go bk-go--mob" onClick={submit}>Ver disponibilidade</button>
+          <button type="button" className="mn-focus bk-submit bk-go bk-go--mob" onClick={submit}>{t.search}</button>
         </div>
       </div>
       {isMobile && panel && (
         <div className="bk-sheet" data-bk-panel role="dialog" aria-modal="true" aria-label={sheetTitle}>
           <div className="bk-sheet__head">
             <p className="bk-sheet__title">{sheetTitle}</p>
-            <button type="button" className="bk-sheet__close" onClick={() => close(true)}>Fechar</button>
+            <button type="button" className="bk-sheet__close" onClick={() => close(true)}>{t.close}</button>
           </div>
           <div className="bk-sheet__body">
             {panel === "prop" && propList}

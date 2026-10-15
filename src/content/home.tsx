@@ -1,6 +1,6 @@
 /* Gerado a partir do export do Claude Design (tools/convert.py). */
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 
 export default function HomeContent() {
   return (

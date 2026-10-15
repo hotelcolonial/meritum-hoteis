@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { HTML_LANG, LANG_NAME, LOCALES } from "@/i18n/config";
 
 /**
  * Recebe o formulário "Fale com a Méritum".
@@ -11,7 +12,13 @@ import { NextResponse } from "next/server";
 
 const FIELDS: Record<string, string> = {
   nome: "Nome", cargo: "Cargo", email: "E-mail", whatsapp: "WhatsApp", hotel: "Hotel",
-  cidade: "Cidade", quartos: "Quartos", desafio: "Maior desafio", origem: "Página",
+  cidade: "Cidade", quartos: "Quartos", desafio: "Maior desafio", origem: "Página", idioma: "Idioma do site",
+};
+
+// "es" → "Español (es)"; valor desconhecido fica como veio
+const langName = (code: string) => {
+  const l = LOCALES.find((x) => HTML_LANG[x] === code);
+  return l ? `${LANG_NAME[l]} (${code})` : code;
 };
 
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
@@ -35,10 +42,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "not_configured" }, { status: 503 });
   }
 
+  const value = (k: string) => (k === "idioma" ? langName(v(k)) : v(k));
   const rows = Object.entries(FIELDS)
     .filter(([k]) => v(k))
-    .map(([k, label]) => `<tr><td style="padding:4px 12px 4px 0;color:#5B6672">${label}</td><td style="padding:4px 0">${esc(v(k))}</td></tr>`)
+    .map(([k, label]) => `<tr><td style="padding:4px 12px 4px 0;color:#5B6672">${label}</td><td style="padding:4px 0">${esc(value(k))}</td></tr>`)
     .join("");
+  // Contatos vindos das versões em espanhol ou inglês ficam marcados no assunto
+  const tag = v("idioma") && v("idioma") !== "pt-BR" ? `[${v("idioma").toUpperCase()}] ` : "";
 
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -47,7 +57,7 @@ export async function POST(req: Request) {
       from,
       to: to.split(",").map((s) => s.trim()),
       reply_to: v("email"),
-      subject: `Novo contato pelo site: ${v("hotel")} (${v("cidade")})`,
+      subject: `${tag}Novo contato pelo site: ${v("hotel")} (${v("cidade")})`,
       html: `<table style="font-family:Arial,sans-serif;font-size:14px">${rows}</table>`,
     }),
   });
