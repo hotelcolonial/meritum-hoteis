@@ -8,78 +8,78 @@ export const SEO = {
   home: {
     path: ROUTES.home,
     title: "Méritum Hotéis | Gestão hoteleira em Foz do Iguaçu",
-    description: "Gestora hoteleira de Foz do Iguaçu. A Méritum assume a gestão de hotéis independentes e cuida do Hotel Colonial Iguaçu, da Pousada Cataratas, do Villa Colonial e do Colonial Autopark.",
-    image: "/assets/colonial-pergola-piscina.jpg",
+    description: "Gestora hoteleira de Foz do Iguaçu. Gestão de hotéis independentes e das propriedades Hotel Colonial Iguaçu, Pousada Cataratas, Villa Colonial e Autopark.",
+    image: "/og/home.jpg",
     imageAlt: "Pérgola e piscina do Hotel Colonial Iguaçu",
   },
   meritum: {
     path: ROUTES.meritum,
     title: "A Méritum | Méritum Hotéis",
-    description: "A Méritum Hotéis é uma gestora hoteleira de Foz do Iguaçu. Assumimos a gestão de hotéis independentes e desenvolvemos cada um de forma individual, respeitando sua identidade.",
-    image: "/assets/web/join-hotel-colonial.jpg",
+    description: "Gestora hoteleira de Foz do Iguaçu que assume a gestão de hotéis independentes e desenvolve cada um de forma individual, respeitando sua identidade.",
+    image: "/og/meritum.jpg",
     imageAlt: "Jardim e área da piscina do Hotel Colonial Iguaçu",
   },
   gestao: {
     path: ROUTES.gestao,
     title: "Gestão hoteleira e arrendamento | Méritum Hotéis",
-    description: "Gestão operacional, comercial, de custos e de hospitalidade para hotéis independentes. Conheça como a Méritum atua, do diagnóstico ao desenvolvimento, nos modelos de gestão e de arrendamento.",
-    image: "/assets/colonial-pergola-piscina.jpg",
+    description: "Gestão operacional, comercial, de custos e de hospitalidade para hotéis independentes, nos modelos de gestão hoteleira e arrendamento de ativos.",
+    image: "/og/gestao.jpg",
     imageAlt: "Pérgola com mesa de bilhar e piscina no Hotel Colonial Iguaçu",
   },
   contato: {
     path: ROUTES.contato,
     title: "Contato | Méritum Hotéis",
-    description: "Fale com a Méritum sobre gestão ou arrendamento do seu hotel, ou encontre os contatos de reservas do Hotel Colonial Iguaçu, da Pousada Cataratas e do Colonial Autopark.",
-    image: "/assets/web/join-hotel-colonial.jpg",
+    description: "Fale com a Méritum sobre gestão ou arrendamento do seu hotel, ou encontre os contatos de reservas de cada propriedade em Foz do Iguaçu.",
+    image: "/og/contato.jpg",
     imageAlt: "Jardim do Hotel Colonial Iguaçu",
   },
   colonial: {
     path: ROUTES.colonial,
     title: "Hotel Colonial Iguaçu | Rodovia das Cataratas, Foz do Iguaçu",
-    description: "Hotel na Rodovia das Cataratas, km 20, a 1,2 km da entrada do Parque Nacional do Iguaçu. Recebendo hóspedes desde 1970, com grande área verde, piscinas e o restaurante Villa Colonial.",
-    image: "/assets/web/join-hotel-colonial.jpg",
+    description: "Hotel na Rodovia das Cataratas, a 1,2 km da entrada do Parque Nacional do Iguaçu. Desde 1970, com grande área verde, piscinas e o restaurante Villa Colonial.",
+    image: "/og/colonial.jpg",
     imageAlt: "Jardim e piscina do Hotel Colonial Iguaçu",
   },
   pousada: {
     path: ROUTES.pousada,
     title: "Pousada Cataratas | Pousada no centro de Foz do Iguaçu",
-    description: "Pousada com 27 apartamentos a 100 metros da Avenida das Cataratas, em Foz do Iguaçu. Café da manhã incluso, piscina, estacionamento gratuito e recepção 24 horas.",
-    image: "/assets/pousada-piscina-pergolado.jpg",
+    description: "Pousada com 27 apartamentos a 100 m da Avenida das Cataratas, em Foz do Iguaçu. Café da manhã incluso, piscina, estacionamento gratuito e recepção 24 h.",
+    image: "/og/pousada.jpg",
     imageAlt: "Piscina da Pousada Cataratas sob o pergolado",
   },
   villa: {
     path: ROUTES.villa,
     title: "Villa Colonial | Restaurante e eventos em Foz do Iguaçu",
-    description: "Restaurante do Hotel Colonial Iguaçu, na Rodovia das Cataratas. Buffet de culinária regional e internacional no café da manhã, almoço e jantar, e gastronomia para eventos.",
-    image: "/assets/villa-salao-noite.jpg",
+    description: "Restaurante do Hotel Colonial Iguaçu, na Rodovia das Cataratas. Buffet regional e internacional no café da manhã, almoço e jantar, e gastronomia para eventos.",
+    image: "/og/villa.jpg",
     imageAlt: "Salão do restaurante Villa Colonial à noite",
   },
   autopark: {
     path: ROUTES.autopark,
-    title: "Colonial Autopark | Estacionamento perto do aeroporto de Foz do Iguaçu",
-    description: "Estacionamento aberto 24 horas, 7 dias por semana, dentro do Hotel Colonial Iguaçu, com vaga monitorada e traslado gratuito de ida e volta ao Aeroporto Internacional de Foz do Iguaçu.",
-    image: "/assets/autopark-vista-aerea.jpg",
+    title: "Colonial Autopark | Estacionamento aeroporto Foz do Iguaçu",
+    description: "Estacionamento 24 horas dentro do Hotel Colonial Iguaçu, com vaga monitorada e traslado gratuito de ida e volta ao Aeroporto Internacional de Foz do Iguaçu.",
+    image: "/og/autopark.jpg",
     imageAlt: "Vista do estacionamento do Colonial Autopark",
   },
   bora: {
     path: ROUTES.bora,
-    title: "Bora de Novo | Programa para quem volta às propriedades Méritum",
+    title: "Bora de Novo | Condições para quem volta à Méritum",
     description: "Já se hospedou em uma propriedade Méritum? O Bora de Novo oferece condições especiais para quem volta. Veja como funciona e tire suas dúvidas.",
-    image: "/assets/web/join-hotel-colonial.jpg",
+    image: "/og/bora.jpg",
     imageAlt: "Jardim e área da piscina do Hotel Colonial Iguaçu",
   },
   reserva: {
     path: ROUTES.reserva,
     title: "Minha reserva | Méritum Hotéis",
     description: "Consulte, altere ou tire dúvidas sobre a sua reserva no Hotel Colonial Iguaçu ou na Pousada Cataratas direto com a equipe de cada propriedade.",
-    image: "/assets/colonial-pergola-piscina.jpg",
+    image: "/og/reserva.jpg",
     imageAlt: "Hotel Colonial Iguaçu",
   },
   hospede: {
     path: ROUTES.hospede,
     title: "Área do hóspede | Méritum Hotéis",
     description: "Atalhos para hóspedes das propriedades Méritum: sua reserva, o programa Bora de Novo e os contatos de cada propriedade.",
-    image: "/assets/colonial-pergola-piscina.jpg",
+    image: "/og/hospede.jpg",
     imageAlt: "Hotel Colonial Iguaçu",
   },
 } satisfies Record<string, PageSeo>;
@@ -97,7 +97,7 @@ export function pageMetadata(key: keyof typeof SEO): Metadata {
       url: p.path,
       title: p.title,
       description: p.description,
-      images: [{ url: p.image, alt: p.imageAlt }],
+      images: [{ url: p.image, width: 1200, height: 630, alt: p.imageAlt }],
     },
     twitter: { card: "summary_large_image", title: p.title, description: p.description, images: [p.image] },
   };
@@ -137,7 +137,8 @@ export function organizationLd() {
       postalCode: ORG.postalCode,
       addressCountry: ORG.country,
     },
-    areaServed: "Foz do Iguaçu, PR",
+    areaServed: { "@type": "City", name: "Foz do Iguaçu" },
+    contactPoint: { "@type": "ContactPoint", contactType: "Atendimento a proprietários de hotéis", email: ORG.email, availableLanguage: ["Portuguese"] },
     knowsAbout: ["Gestão hoteleira", "Arrendamento de hotéis", "Gestão comercial hoteleira", "Hospitalidade"],
     subOrganization: [
       { "@id": abs(ROUTES.colonial) + "#hotel" },
@@ -161,9 +162,35 @@ export function websiteLd() {
   };
 }
 
+// Coordenadas conferidas no Google Maps (perfil de cada propriedade)
+const GEO = {
+  colonial: { "@type": "GeoCoordinates", latitude: -25.6068039, longitude: -54.4904086 },
+  pousada: { "@type": "GeoCoordinates", latitude: -25.5555564, longitude: -54.5682326 },
+};
+const MAPS = {
+  colonial: "https://www.google.com/maps/search/?api=1&query=Hotel+Colonial+Igua%C3%A7u&query_place_id=ChIJx9E1YWyQ9pQRvNj2RIhE0w8",
+  pousada: "https://www.google.com/maps/search/?api=1&query=Pousada+Cataratas&query_place_id=ChIJ_V6_F6eR9pQR64BHj3DskoE",
+};
+// Sites oficiais de cada propriedade (ajudam o Google a ligar as entidades)
+const OFFICIAL = {
+  colonial: ["https://hotelcolonialfoz.com.br"],
+  pousada: ["https://pousadacataratas.com.br"],
+  villa: [] as string[],
+  autopark: ["https://colonialautopark.com.br"],
+};
+
 export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark") {
   const url = abs(ROUTES[key]);
-  const base = { "@context": "https://schema.org", url, parentOrganization: { "@id": ORG_ID }, image: abs(SEO[key].image) };
+  const loc = key === "pousada" ? "pousada" : "colonial";
+  const base = {
+    "@context": "https://schema.org",
+    url,
+    parentOrganization: { "@id": ORG_ID },
+    image: abs(SEO[key].image),
+    geo: GEO[loc],
+    hasMap: MAPS[loc],
+    ...(OFFICIAL[key].length ? { sameAs: OFFICIAL[key] } : {}),
+  };
   if (key === "colonial") {
     return {
       ...base,

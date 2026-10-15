@@ -6,7 +6,7 @@ import Link from "next/link";
 export function GestaoHero({ children }: { children: ReactNode }) {
   return (
     <section className="mn-hh mn-hh--sub" style={{ position: "relative", height: "64svh", minHeight: "520px", background: "rgb(5, 39, 68)", overflow: "hidden" }}>
-      <Image src="/assets/colonial-pergola-piscina.jpg" width={2576} height={1840} sizes="100vw" priority className="mn-hh__img" alt="Pérgola com mesa de bilhar e piscina ao fundo no Hotel Colonial Iguaçu" style={{ objectPosition: "50% 40%" }} />
+      <Image src="/assets/colonial-pergola-piscina.jpg" width={2576} height={1840} sizes="100vw" preload fetchPriority="high" loading="eager" className="mn-hh__img" alt="Pérgola com mesa de bilhar e piscina ao fundo no Hotel Colonial Iguaçu" style={{ objectPosition: "50% 40%" }} />
       <div className="mn-hh__grad mn-hh__grad--top" aria-hidden="true"></div>
       <div className="mn-hh__grad mn-hh__grad--bottom" aria-hidden="true"></div>
       <p className="mn-hh__caption">

@@ -286,32 +286,6 @@ export default function ContatoContent() {
               contato@meritumhoteis.com.br
             </a>
             {" "}
-            <div className="ct-inst__social">
-              <div style={{ display: "flex", gap: "1.25rem", marginTop: "40px" }}>
-                <a href="#" className="mn-focus scp2" aria-label="Instagram [LINK A CONFIRMAR]" style={{ display: "inline-flex", color: "rgb(5, 39, 68)", transition: "color 0.2s" }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                    <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-                    <circle cx="12" cy="12" r="4"></circle>
-                    <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"></circle>
-                  </svg>
-                </a>
-                {" "}
-                <a href="#" className="mn-focus scp2" aria-label="Facebook [LINK A CONFIRMAR]" style={{ display: "inline-flex", color: "rgb(5, 39, 68)", transition: "color 0.2s" }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                    <path d="M15 3h-2.5C10.6 3 10 4.6 10 6v2H8v3h2v10h3V11h2.5l.5-3H13V6.2c0-.6.2-1.2 1-1.2h2V3z"></path>
-                  </svg>
-                </a>
-                {" "}
-                <a href="#" className="mn-focus scp2" aria-label="LinkedIn [LINK A CONFIRMAR]" style={{ display: "inline-flex", color: "rgb(5, 39, 68)", transition: "color 0.2s" }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                    <path d="M11.5 17v-3.4c0-1.4.9-2.4 2.2-2.4s2.1 1 2.1 2.4V17"></path>
-                    <line x1="7.5" y1="10.5" x2="7.5" y2="17"></line>
-                    <circle cx="7.5" cy="7.3" r="0.6" fill="currentColor" stroke="none"></circle>
-                  </svg>
-                </a>
-              </div>
-            </div>
           </div>
         </div>
       </section>

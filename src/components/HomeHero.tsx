@@ -55,7 +55,9 @@ export default function HomeHero() {
             width={s.w}
             height={s.h}
             sizes="100vw"
-            priority={k === 0}
+            preload={k === 0}
+            fetchPriority={k === 0 ? "high" : "auto"}
+            loading={k === 0 ? "eager" : "lazy"}
             alt={s.alt}
             aria-hidden={!on}
             style={{ objectPosition: s.pos }}

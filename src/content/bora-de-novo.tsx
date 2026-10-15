@@ -15,7 +15,7 @@ export default function BoraDeNovoContent() {
     <>
       <section className="bn-hero">
         <figure className="bn-hero__media">
-          <Image src="/assets/web/join-hotel-colonial.jpg" width={1024} height={682} sizes="(max-width: 1023px) 100vw, 50vw" priority alt="Piscina cercada de jardins ao entardecer" />
+          <Image src="/assets/web/join-hotel-colonial.jpg" width={1024} height={682} sizes="(max-width: 1023px) 100vw, 50vw" preload fetchPriority="high" alt="Piscina cercada de jardins ao entardecer" />
         </figure>
         {" "}
         <div className="bn-hero__text">

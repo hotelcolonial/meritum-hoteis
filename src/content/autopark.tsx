@@ -6,7 +6,7 @@ import Link from "next/link";
 export function AutoparkHero({ children }: { children: ReactNode }) {
   return (
     <section className="ph-hh" style={{ position: "relative", height: "78svh", minHeight: "560px", background: "rgb(5, 39, 68)", overflow: "hidden" }}>
-      <Image src="/assets/autopark-vista-aerea.jpg" width={2000} height={1333} sizes="100vw" priority className="ph-hero__bg" alt="Vista do estacionamento do Colonial Autopark com a fonte e a mata ao fundo" style={{ objectPosition: "50% 55%" }} />
+      <Image src="/assets/autopark-vista-aerea.jpg" width={2000} height={1333} sizes="100vw" preload fetchPriority="high" loading="eager" className="ph-hero__bg" alt="Vista do estacionamento do Colonial Autopark com a fonte e a mata ao fundo" style={{ objectPosition: "50% 55%" }} />
       <div className="mn-hh__grad mn-hh__grad--top" aria-hidden="true"></div>
       <div className="mn-hh__grad mn-hh__grad--bottom" aria-hidden="true"></div>
       <p className="mn-hh__caption">
@@ -265,11 +265,11 @@ export default function AutoparkContent() {
             </p>
             {" "}
             <div className="ph-book__actions">
-              <a className="ph-book__btn" href="#" target="_blank" rel="noopener">
+              <a className="ph-book__btn" href="https://colonialautopark.com.br" target="_blank" rel="noopener">
                 Reservar vaga
               </a>
               {" "}
-              <a className="ph-book__link" href="#" target="_blank" rel="noopener">
+              <a className="ph-book__link" href="https://wa.me/558008191993" target="_blank" rel="noopener">
                 Falar pelo WhatsApp
               </a>
             </div>

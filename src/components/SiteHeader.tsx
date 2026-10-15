@@ -96,7 +96,7 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
         </div>
       )}
       <header className="sh-header" style={{ background: bg }}>
-        <Link href="/" className="mn-focus" aria-label="Méritum Hotéis" style={{ display: "flex", alignItems: "center" }} onClick={closeAll}>
+        <Link href="/" className="mn-focus" style={{ display: "flex", alignItems: "center" }} onClick={closeAll}>
           <Wordmark style={{ color: "#FFFFFF" }} />
         </Link>
         <nav className="sh-nav sh-desk" aria-label="Principal">
@@ -140,7 +140,7 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
       {menuOpen && (
         <div className="mn-menu sh-menu" role="dialog" aria-modal="true" aria-label="Menu">
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "40px" }}>
-            <Link href="/" className="mn-focus" aria-label="Méritum Hotéis" style={{ textDecoration: "none", display: "inline-flex" }} onClick={closeAll}>
+            <Link href="/" className="mn-focus" style={{ textDecoration: "none", display: "inline-flex" }} onClick={closeAll}>
               <Wordmark style={{ fontSize: "15px", color: "#FFFFFF" }} />
             </Link>
             <button type="button" aria-label="Fechar menu" onClick={() => setMenuOpen(false)} className="mn-focus sh-close" autoFocus>

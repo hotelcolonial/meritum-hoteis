@@ -6,7 +6,7 @@ import Link from "next/link";
 export function ColonialHero({ children }: { children: ReactNode }) {
   return (
     <section className="ph-hh" style={{ position: "relative", height: "78svh", minHeight: "560px", background: "rgb(5, 39, 68)", overflow: "hidden" }}>
-      <Image src="/assets/web/join-hotel-colonial.jpg" width={1024} height={682} sizes="100vw" priority className="ph-hero__bg" alt="Jardim e piscina do Hotel Colonial Iguaçu cercados de vegetação" />
+      <Image src="/assets/web/join-hotel-colonial.jpg" width={1024} height={682} sizes="100vw" preload fetchPriority="high" loading="eager" className="ph-hero__bg" alt="Jardim e piscina do Hotel Colonial Iguaçu cercados de vegetação" />
       <div className="mn-hh__grad mn-hh__grad--top" aria-hidden="true"></div>
       <div className="mn-hh__grad mn-hh__grad--bottom" aria-hidden="true"></div>
       <p className="mn-hh__caption">
@@ -286,11 +286,11 @@ export default function ColonialContent() {
             </p>
             {" "}
             <div className="ph-book__actions">
-              <a className="ph-book__btn" href="#" target="_blank" rel="noopener">
+              <a className="ph-book__btn" href="https://hotelcolonialfoz.com.br" target="_blank" rel="noopener">
                 Ver disponibilidade
               </a>
               {" "}
-              <a className="ph-book__link" href="#" target="_blank" rel="noopener">
+              <a className="ph-book__link" href="https://wa.me/558008191993" target="_blank" rel="noopener">
                 Falar pelo WhatsApp
               </a>
             </div>

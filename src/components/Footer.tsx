@@ -24,7 +24,7 @@ export default function Footer() {
       <footer id="mn-footer" className="ft">
         <div className="mn-ftgrid">
           <div className="ft__brand">
-            <Link href="/" className="mn-focus" aria-label="Méritum Hotéis" style={{ textDecoration: "none", alignSelf: "flex-start", display: "inline-flex" }}>
+            <Link href="/" className="mn-focus" style={{ textDecoration: "none", alignSelf: "flex-start", display: "inline-flex" }}>
               <Wordmark style={{ fontSize: "30px", color: "#052744" }} />
             </Link>
             <div className="mn-ftaddr">

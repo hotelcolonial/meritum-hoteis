@@ -7,6 +7,7 @@ const PRIORITY: Record<string, number> = { home: 1, colonial: 0.9, pousada: 0.9,
 export default function sitemap(): MetadataRoute.Sitemap {
   return Object.entries(SEO).map(([k, p]) => ({
     url: SITE_URL + (p.path === "/" ? "" : p.path),
+    lastModified: new Date(),
     changeFrequency: "monthly",
     priority: PRIORITY[k] ?? 0.5,
     images: [SITE_URL + p.image],

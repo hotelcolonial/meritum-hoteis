@@ -17,6 +17,5 @@ export default function robots(): MetadataRoute.Robots {
       ...AI_BOTS.map((ua) => ({ userAgent: ua, allow: "/", disallow: ["/api/"] })),
     ],
     sitemap: SITE_URL + "/sitemap.xml",
-    host: SITE_URL,
   };
 }
