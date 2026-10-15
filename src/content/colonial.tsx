@@ -7,7 +7,7 @@ import Link from "next/link";
 export function ColonialHero({ children }: { children: ReactNode }) {
   return (
     <section className="ph-hh" style={{ position: "relative", height: "78svh", minHeight: "560px", background: "rgb(5, 39, 68)", overflow: "hidden" }}>
-      <HeroImage desktop={{ src: "/assets/web/join-hotel-colonial.jpg", width: 1024, height: 682 }} mobile={HERO_MOBILE.pergola} eager className="ph-hero__bg" alt="Jardim e piscina do Hotel Colonial Iguaçu cercados de vegetação" />
+      <HeroImage desktop={{ src: "/assets/colonial-jardim-piscina.jpg", width: 2576, height: 1717 }} mobile={HERO_MOBILE.colonialJardim} eager className="ph-hero__bg" alt="Jardim e piscina do Hotel Colonial Iguaçu cercados de vegetação" />
       <div className="mn-hh__grad mn-hh__grad--top" aria-hidden="true"></div>
       <div className="mn-hh__grad mn-hh__grad--bottom" aria-hidden="true"></div>
       <p className="mn-hh__caption">

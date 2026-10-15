@@ -6,6 +6,7 @@ type Src = { src: string; width: number; height: number };
 /** Recortes verticais do hero para celular (até 767px), em /assets/mobile. */
 export const HERO_MOBILE = {
   pergola: { src: "/assets/mobile/colonial-pergola-piscina.jpg", width: 1035, height: 1840 },
+  colonialJardim: { src: "/assets/mobile/colonial-jardim-piscina.jpg", width: 1288, height: 1717 },
   pousadaPergolado: { src: "/assets/mobile/pousada-piscina-pergolado.jpg", width: 1000, height: 1333 },
   pousadaPiscina: { src: "/assets/mobile/pousada-cataratas-piscina.jpg", width: 1288, height: 1717 },
   villaSalao: { src: "/assets/mobile/villa-salao-noite.jpg", width: 1000, height: 1333 },
