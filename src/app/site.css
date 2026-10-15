@@ -148,3 +148,6 @@ a.sh-menu__item::before { content: ""; position: absolute; inset: -1px 0; }
 }
 /* Até 639px os pontos e a legenda ficam empilhados a 20px da base */
 @media (max-width: 639px) { .mn-hh:not(.mn-hh--sub) .mn-hh__content.hh-center { padding-bottom: 119px !important; } }
+
+/* Seletor de idioma dentro do menu do celular, 24px abaixo dos links de Fidelidade, Minha reserva e Área do hóspede */
+.mn-menu__langs { margin-top: 24px; }

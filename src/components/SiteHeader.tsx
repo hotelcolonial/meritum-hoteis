@@ -20,20 +20,25 @@ const PROPERTY_PAGES: PageKey[] = ["colonial", "pousada", "villa", "autopark"];
 
 const LANG_ORDER: Locale[] = ["pt", "en", "es"];
 
+// No menu do celular cada idioma tem área de toque de 44px
+// (padding lateral de 12px, compensado no grupo, para o texto ficar alinhado aos outros itens do menu)
+const langTap: CSSProperties = { display: "inline-flex", alignItems: "center", justifyContent: "flex-start", minWidth: "44px", minHeight: "44px", padding: "0 12px", boxSizing: "border-box", fontSize: "16px" };
+
 /** PT | EN | ES: cada item leva à mesma página no outro idioma; o idioma atual fica marcado. */
-function Langs() {
+function Langs({ menu = false }: { menu?: boolean }) {
   const locale = useLocale();
   const { path } = splitLocale(usePathname() || "/");
+  const tap = menu ? langTap : undefined;
   return (
-    <div style={{ display: "inline-flex", alignItems: "center", gap: "8px" }} role="group" aria-label={useDict().nav.languages}>
+    <div style={{ display: "inline-flex", alignItems: "center", gap: menu ? "0" : "8px", marginLeft: menu ? "-12px" : undefined }} role="group" aria-label={useDict().nav.languages}>
       {LANG_ORDER.map((l, i) => (
         <Fragment key={l}>
           {i > 0 && <span style={langPipe} aria-hidden="true">|</span>}
           {l === locale ? (
-            <span style={langActive} aria-current="true" lang={HTML_LANG[l]}>{l.toUpperCase()}</span>
+            <span style={{ ...langActive, ...tap }} aria-current="true" lang={HTML_LANG[l]}>{l.toUpperCase()}</span>
           ) : (
             // <a> comum (não next/link): trocar de idioma recarrega a página com o <html lang> certo
-            <a href={localePath(l, path)} hrefLang={HTML_LANG[l]} lang={HTML_LANG[l]} title={LANG_NAME[l]} style={langOff}>{l.toUpperCase()}</a>
+            <a href={localePath(l, path)} hrefLang={HTML_LANG[l]} lang={HTML_LANG[l]} title={LANG_NAME[l]} style={{ ...langOff, ...tap }}>{l.toUpperCase()}</a>
           )}
         </Fragment>
       ))}
@@ -149,6 +154,8 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
           </div>
           <Link href={ROUTES.gestao} className={"mn-link mn-focus" + active("gestao")} style={navLink}>{d.gestao}</Link>
           <Link href={ROUTES.contato} className={"mn-link mn-focus" + active("contato")} style={navLink}>{d.contato}</Link>
+          {/* Gestão e A Méritum não têm a barra superior: o seletor de idioma fica no fim do menu (gap de 32px da nav) */}
+          {!showUtil && <Langs />}
         </nav>
         <button ref={burgerRef} type="button" aria-label={d.openMenu} aria-expanded={menuOpen} onClick={() => setMenuOpen(true)} className="mn-focus sh-burger sh-mob">
           <span />
@@ -187,6 +194,9 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
             <Link href={ROUTES.bora} className="mn-focus mn-menu__utillink" onClick={closeAll}>{d.loyalty}</Link>
             <Link href={ROUTES.reserva} className="mn-focus mn-menu__utillink" onClick={closeAll}>{d.reservation}</Link>
             <Link href={ROUTES.hospede} className="mn-focus mn-menu__utillink" onClick={closeAll}>{d.guestArea}</Link>
+          </div>
+          <div className="mn-menu__langs">
+            <Langs menu />
           </div>
           <div className="sh-menu__footer">
             <Link href={ROUTES.contato + "#proprietarios"} className="mn-focus sh-menu__cta" onClick={closeAll}>
