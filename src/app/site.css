@@ -102,6 +102,14 @@ html { scroll-padding-top: 120px; }
   .bk-go { padding: 0 20px; }
   .bk-value { font-size: 14px; }
 }
+/* Resumo de hóspedes: curto entre 1024 e 1279px, completo nos demais (troca só por CSS, sem salto ao carregar).
+   Nessa faixa os ícones e as setas dos campos saem para caber o resumo inteiro. */
+.bk-gshort { display: none; }
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .bk-gfull { display: none; }
+  .bk-gshort { display: inline; }
+  .bk-desk .bk-segbtn > svg { display: none; }
+}
 .bk-mob-bar { background: #093B6B; display: flex; flex-direction: column; }
 .bk-msegbtn { display: flex; align-items: center; gap: 10px; height: 56px; width: 100%; padding: 0 20px; background: transparent; border: 0; border-bottom: 1px solid rgba(255,255,255,0.2); cursor: pointer; justify-content: space-between; text-align: left; }
 .bk-msegbtn > span:first-child { display: flex; align-items: center; gap: 10px; }

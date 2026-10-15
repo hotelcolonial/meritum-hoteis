@@ -280,6 +280,8 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   );
 
   const guestsLabel = `${pl(roomList.length, "Quarto", "Quartos")} · ${pl(totalAdults, "Adulto", "Adultos")} · ${pl(totalChildren, "Criança", "Crianças")}`;
+  // Versão curta para a barra em telas intermediárias (o CSS escolhe qual mostrar)
+  const guestsShort = `${pl(roomList.length, "Quarto", "Quartos")} · ${pl(totalAdults + totalChildren, "Hóspede", "Hóspedes")}`;
   const bad = (on: boolean) => (on ? " is-invalid" : "");
   // No painel de hóspedes a mensagem aparece dentro dele
   const barErr = panel === "guests" ? "" : err;
@@ -339,9 +341,9 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
             </button>
           </div>
           <div className="bk-seg">
-            <button type="button" data-bk-trigger className={"mn-focus bk-segbtn" + bad(agesBad)} aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
+            <button type="button" data-bk-trigger className={"mn-focus bk-segbtn" + bad(agesBad)} aria-label={`Hóspedes: ${guestsLabel}`} aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
               <PersonIcon />
-              <div className="bk-textcol"><span className="bk-label">Hóspedes</span><span className="bk-value">{guestsLabel}</span></div>
+              <div className="bk-textcol"><span className="bk-label">Hóspedes</span><span className="bk-value"><span className="bk-gfull">{guestsLabel}</span><span className="bk-gshort">{guestsShort}</span></span></div>
               <ChevWhite />
             </button>
             {!isMobile && panel === "guests" && <div className={"bk-pop bk-pop--guests mn-pop" + popDir} data-bk-panel role="dialog" aria-label="Hóspedes">{guests}</div>}
