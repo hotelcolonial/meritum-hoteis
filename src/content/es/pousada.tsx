@@ -36,7 +36,7 @@ export default function PousadaContent() {
     <>
       <nav className="ph-subnav" aria-label="Secciones de la página">
         <a href="#visao-geral" className="is-active">
-          Panorama
+          Vista general
         </a>
         {" "}
         <a href="#diferenciais">
@@ -423,7 +423,7 @@ export default function PousadaContent() {
               </span>
               {" "}
               <span className="mn-pf__text">
-                Estacionamiento dentro del Hotel Colonial Iguaçu, en la Rodovia das Cataratas, muy cerca del Aeropuerto Internacional de Foz do Iguaçu, con lugar monitoreado.
+                Estacionamiento dentro del Hotel Colonial Iguaçu, en la Rodovia das Cataratas, muy cerca del Aeropuerto Internacional de Foz do Iguaçu, con espacio monitoreado.
               </span>
               {" "}
               <span className="mn-pf__link">

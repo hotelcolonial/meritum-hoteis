@@ -36,7 +36,7 @@ export default function AutoparkContent() {
     <>
       <nav className="ph-subnav" aria-label="Secciones de la página">
         <a href="#visao-geral" className="is-active">
-          Panorama
+          Vista general
         </a>
         {" "}
         <a href="#como-funciona">
@@ -106,7 +106,7 @@ export default function AutoparkContent() {
           {" "}
           <div className="ph-stat">
             <p className="ph-stat__label">
-              lugar seguro
+              espacio seguro
             </p>
             <p className="ph-stat__value">
               Monitoreado
@@ -257,18 +257,18 @@ export default function AutoparkContent() {
           <h2 className="ph-book__title ph-in">
             Reserva tu{" "}
             <em>
-              lugar
+              espacio
             </em>
           </h2>
           {" "}
           <div className="ph-book__side ph-in">
             <p className="ph-book__body">
-              Asegura tu lugar antes de viajar y habla directamente con nuestro equipo. Abierto las 24 horas, 7 días a la semana, con WhatsApp 0800 819 1993.
+              Asegura tu espacio antes de viajar y habla directamente con nuestro equipo. Abierto las 24 horas, 7 días a la semana, con WhatsApp 0800 819 1993.
             </p>
             {" "}
             <div className="ph-book__actions">
               <a className="ph-book__btn" href="https://colonialautopark.com.br" target="_blank" rel="noopener">
-                Reservar lugar
+                Reservar espacio
               </a>
               {" "}
               <a className="ph-book__link" href="https://wa.me/558008191993" target="_blank" rel="noopener">

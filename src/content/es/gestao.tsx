@@ -24,7 +24,7 @@ export function GestaoHero({ children }: { children: ReactNode }) {
         </h1>
         {" "}
         <p className="gs-hero__lead">
-          Cada hotel tiene una historia, una estructura, un equipo y un mercado distintos. Nuestro trabajo parte de la realidad del proyecto hotelero y respeta su identidad.
+          Cada hotel tiene una historia, una estructura, un equipo y un mercado distintos. Nuestro trabajo parte de la realidad del establecimiento y respeta su identidad.
         </p>
         {" "}
         <a className="gs-hero__cta mn-focus" href="#formulario">
@@ -257,14 +257,14 @@ export default function GestaoContent() {
         <div className="mn-join__panel">
           <div className="mn-join__content">
             <h2 className="mn-join__title" id="mn-join-title">
-              Conversemos sobre{" "}
+              Hablemos de{" "}
               <em>
                 tu hotel.
               </em>
             </h2>
             {" "}
             <p className="mn-join__text">
-              Cada proyecto empieza con el entendimiento de la realidad del hotel. Cuéntanos un poco sobre tu proyecto hotelero y agendamos una primera conversación.
+              Cada proyecto empieza con el entendimiento de la realidad del hotel. Cuéntanos un poco sobre tu establecimiento y agendamos una primera conversación.
             </p>
             {" "}
             <form className="mn-join__form" noValidate>
@@ -373,7 +373,7 @@ export default function GestaoContent() {
               {" "}
               <div className="mn-join__full gs-join__notes">
                 <p className="gs-join__note">
-                  No hacemos propuestas comerciales sin un diagnóstico previo. A partir de tu contacto, agendamos una visita técnica al proyecto hotelero.
+                  No hacemos propuestas comerciales sin un diagnóstico previo. A partir de tu contacto, agendamos una visita técnica al establecimiento.
                 </p>
                 {" "}
                 <p className="gs-join__note">

@@ -118,7 +118,7 @@ const ES: Record<SeoKey, PageText> = {
   },
   autopark: {
     title: "Colonial Autopark | Estacionamiento aeropuerto Foz do Iguaçu",
-    description: "Estacionamiento las 24 horas dentro del Hotel Colonial Iguaçu, con lugar monitoreado y traslado gratuito de ida y vuelta al Aeropuerto Internacional de Foz do Iguaçu.",
+    description: "Estacionamiento las 24 horas dentro del Hotel Colonial Iguaçu, con espacio monitoreado y traslado gratuito de ida y vuelta al Aeropuerto Internacional de Foz do Iguaçu.",
     imageAlt: "Vista del estacionamiento del Colonial Autopark",
   },
   bora: {

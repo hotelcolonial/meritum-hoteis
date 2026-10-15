@@ -12,7 +12,7 @@ export const isLocale = (s: string): s is Locale => (LOCALES as readonly string[
  * Idiomas prontos para o Google. Os que não estão aqui ficam no ar, mas com noindex, fora do sitemap e sem hreflang.
  * Ao terminar a tradução de um idioma, basta acrescentá-lo a esta lista.
  */
-export const LOCALES_PUBLISHED: readonly Locale[] = ["pt"];
+export const LOCALES_PUBLISHED: readonly Locale[] = ["pt", "es"];
 export const isPublished = (l: Locale) => LOCALES_PUBLISHED.includes(l);
 
 /** <html lang> e hreflang */

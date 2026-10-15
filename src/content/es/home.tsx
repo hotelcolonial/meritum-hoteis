@@ -68,7 +68,7 @@ export default function HomeContent() {
               </span>
               {" "}
               <span className="mn-pf__text">
-                En la Rodovia das Cataratas, km 20, en medio de la Mata Atlántica preservada. Piscina climatizada y piscina exterior, sendero ecológico, salas de eventos para hasta 180 personas y traslado gratuito al aeropuerto en las reservas directas.
+                En la Rodovia das Cataratas, km 20, en medio de la Mata Atlántica preservada. Piscina climatizada y piscina exterior, sendero ecológico, salones de eventos para hasta 180 personas y traslado gratuito al aeropuerto en las reservas directas.
               </span>
               {" "}
               <span className="mn-pf__link">
@@ -188,7 +188,7 @@ export default function HomeContent() {
               </span>
               {" "}
               <span className="mn-pf__text">
-                Estacionamiento dentro del Hotel Colonial Iguaçu, en la Rodovia das Cataratas, muy cerca del Aeropuerto Internacional de Foz do Iguaçu, con lugar monitoreado.
+                Estacionamiento dentro del Hotel Colonial Iguaçu, en la Rodovia das Cataratas, muy cerca del Aeropuerto Internacional de Foz do Iguaçu, con espacio monitoreado.
               </span>
               {" "}
               <span className="mn-pf__link">
@@ -275,7 +275,7 @@ export default function HomeContent() {
           {" "}
           <div className="mn-pq__body mn-rv">
             <p className="mn-pq__text">
-              Trabajamos con hoteles independientes y proyectos hoteleros que buscan gestión profesional, organización operativa y apoyo estratégico.
+              Trabajamos con hoteles independientes y establecimientos hoteleros que buscan gestión profesional, organización operativa y apoyo estratégico.
             </p>
             {" "}
             <Link className="mn-qs__link mn-focus" href="/gestao#pilares">

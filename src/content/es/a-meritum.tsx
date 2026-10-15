@@ -110,7 +110,7 @@ export default function AMeritumContent() {
                 Independencia de marca
               </h3>
               <p className="ix-row__text">
-                Preservamos el nombre, la historia y la identidad de cada hotel. La gestión de Méritum ocurre tras bastidores, sin desvirtuar el proyecto hotelero.
+                Preservamos el nombre, la historia y la identidad de cada hotel. La gestión de Méritum ocurre tras bastidores, sin desvirtuar el establecimiento.
               </p>
             </div>
             {" "}

@@ -36,7 +36,7 @@ export default function ColonialContent() {
     <>
       <nav className="ph-subnav" aria-label="Secciones de la página">
         <a href="#visao-geral" className="is-active">
-          Panorama
+          Vista general
         </a>
         {" "}
         <a href="#diferenciais">
@@ -106,7 +106,7 @@ export default function ColonialContent() {
           {" "}
           <div className="ph-stat">
             <p className="ph-stat__label">
-              personas en la sala de eventos más grande
+              personas en el salón de eventos más grande
             </p>
             <p className="ph-stat__value">
               180
@@ -368,7 +368,7 @@ export default function ColonialContent() {
                     3
                   </span>
                   <span className="mn-pf__desc">
-                    comidas por día, todos los días
+                    comidas al día, todos los días
                   </span>
                 </span>
                 <span className="mn-pf__stat">
@@ -422,7 +422,7 @@ export default function ColonialContent() {
               </span>
               {" "}
               <span className="mn-pf__text">
-                Estacionamiento dentro del Hotel Colonial Iguaçu, en la Rodovia das Cataratas, muy cerca del Aeropuerto Internacional de Foz do Iguaçu, con lugar monitoreado.
+                Estacionamiento dentro del Hotel Colonial Iguaçu, en la Rodovia das Cataratas, muy cerca del Aeropuerto Internacional de Foz do Iguaçu, con espacio monitoreado.
               </span>
               {" "}
               <span className="mn-pf__link">

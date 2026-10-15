@@ -53,7 +53,7 @@ export default function ContatoContent() {
             </h2>
             {" "}
             <p className="ct-owners__body">
-              Gestión hotelera o arrendamiento de activos. Cuéntanos un poco sobre el emprendimiento y nuestro equipo te contactará para agendar una conversación. Todo intercambio inicial de información es confidencial.
+              Gestión hotelera o arrendamiento de activos. Cuéntanos un poco sobre el establecimiento y nuestro equipo te contactará para agendar una conversación. Todo intercambio inicial de información es confidencial.
             </p>
             {" "}
             <Link className="ct-link mn-focus" href="/gestao">
@@ -162,7 +162,7 @@ export default function ContatoContent() {
                 {" "}
                 <button type="submit" className="mn-join__submit mn-join__full">
                   <span className="sc-interp">
-                    Quiero hablar con Méritum
+                    Quiero conversar con Méritum
                   </span>
                 </button>
               </form>
