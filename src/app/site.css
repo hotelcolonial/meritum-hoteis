@@ -93,6 +93,15 @@ html { scroll-padding-top: 120px; }
 .bk-go { white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-weight: 500; font-size: 15px; line-height: 1; background: #FFFFFF; color: #052744; border: none; border-radius: 0; cursor: pointer; transition: background-color .2s cubic-bezier(0.16,1,0.3,1); padding: 0 28px; height: 72px; }
 .bk-go:hover { background: #C9A24A; }
 .bk-go--mob { width: 100%; padding: 18px; height: auto; }
+/* Telas intermediárias: datas e propriedade com largura natural; só o resumo de hóspedes encolhe (com "…"),
+   para o botão nunca sair da barra. O !important vence a regra antiga de globals.css. */
+@media (min-width: 1024px) and (max-width: 1365px) {
+  .bk-desk-bar { grid-template-columns: auto auto auto minmax(0,1fr) auto auto; }
+  .bk-desk .bk-segbtn { padding: 0 14px !important; gap: 8px; }
+  .bk-segcode { padding: 0 14px; }
+  .bk-go { padding: 0 20px; }
+  .bk-value { font-size: 14px; }
+}
 .bk-mob-bar { background: #093B6B; display: flex; flex-direction: column; }
 .bk-msegbtn { display: flex; align-items: center; gap: 10px; height: 56px; width: 100%; padding: 0 20px; background: transparent; border: 0; border-bottom: 1px solid rgba(255,255,255,0.2); cursor: pointer; justify-content: space-between; text-align: left; }
 .bk-msegbtn > span:first-child { display: flex; align-items: center; gap: 10px; }
