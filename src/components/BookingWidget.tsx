@@ -51,7 +51,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   const [view, setView] = useState<{ y: number; m: number } | null>(null);
   const [err, setErr] = useState("");
   const [mob, setMob] = useState(false);
-  const [fixed, setFixed] = useState(false);
+  const [fixedRaw, setFixed] = useState(false);
   const [hidden, setHidden] = useState(false);
   const sentinel = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLElement | null>(null);
@@ -115,7 +115,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
 
   // Barra fixa no rodapé da janela depois que o herói sai de vista (desktop)
   useEffect(() => {
-    if (isMobile) { setFixed(false); return; }
+    if (isMobile) return;
     const on = () => {
       const s = sentinel.current;
       if (!s) return;
@@ -148,6 +148,8 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
     if (url) { window.open(url, "_blank", "noopener"); setErr(""); }
     else setErr("Motor de reservas ainda não configurado");
   };
+
+  const fixed = !isMobile && fixedRaw;
 
   // Calendário
   const today = todayIso();

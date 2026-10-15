@@ -1,6 +1,6 @@
 # Méritum Hotéis (site)
 
-Site institucional da Méritum Hotéis em Next.js 15 (App Router), gerado a partir do design feito no Claude Design.
+Site institucional da Méritum Hotéis em Next.js 16 (App Router), gerado a partir do design feito no Claude Design.
 
 ## Rodar no computador
 
