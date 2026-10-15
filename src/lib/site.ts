@@ -1,5 +1,8 @@
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.meritumhoteis.com.br").replace(/\/$/, "");
 
+/** Ambientes de teste: NEXT_PUBLIC_NOINDEX=true bloqueia a indexação (robots.txt e meta robots). Lido no build. */
+export const NOINDEX = process.env.NEXT_PUBLIC_NOINDEX === "true";
+
 export type PageKey =
   | "home" | "meritum" | "gestao" | "contato" | "colonial" | "pousada" | "villa" | "autopark"
   | "bora" | "reserva" | "hospede" | "404";

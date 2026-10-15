@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL } from "@/lib/site";
+import { NOINDEX, SITE_URL } from "@/lib/site";
 
 // Buscadores e assistentes de IA liberados de forma explícita, para que o site
 // possa ser lido, citado e recomendado em respostas (ChatGPT, Claude, Perplexity, Gemini).
@@ -11,6 +11,8 @@ const AI_BOTS = [
 ];
 
 export default function robots(): MetadataRoute.Robots {
+  // Ambiente de teste: bloqueia tudo e não divulga o sitemap
+  if (NOINDEX) return { rules: [{ userAgent: "*", disallow: "/" }] };
   return {
     rules: [
       { userAgent: "*", allow: "/", disallow: ["/api/"] },

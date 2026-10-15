@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import Behaviors from "@/components/Behaviors";
 import HashRedirect from "@/components/HashRedirect";
 import JsonLd from "@/components/JsonLd";
-import { SITE_URL } from "@/lib/site";
+import { NOINDEX, SITE_URL } from "@/lib/site";
 import { organizationLd, websiteLd, SEO } from "@/lib/seo";
 
 const serif = localFont({
@@ -39,7 +39,9 @@ export const metadata: Metadata = {
   description: SEO.home.description,
   applicationName: "Méritum Hotéis",
   formatDetection: { telephone: false },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
+  robots: NOINDEX
+    ? { index: false, follow: false }
+    : { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
   verification: {
     // Preencher depois de cadastrar o domínio no Google Search Console e no Bing Webmaster Tools
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined,
