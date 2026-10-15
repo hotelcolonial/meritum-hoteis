@@ -1,0 +1,30 @@
+[
+ {
+  "q": "Quem pode participar do Bora de Novo?",
+  "a": "Hóspedes que já se hospedaram anteriormente em uma propriedade Méritum e desejam retornar em uma nova estadia, aproveitando as condições especiais oferecidas."
+ },
+ {
+  "q": "Quais são os benefícios para quem volta?",
+  "a": "Cada propriedade define as suas condições especiais para quem retorna. Consulte os benefícios disponíveis nos canais oficiais da propriedade onde você se hospedou."
+ },
+ {
+  "q": "Como é confirmado que eu já fui hóspede?",
+  "a": "A confirmação pode ser feita por meio de dados como CPF, e-mail, telefone, nome do titular da reserva ou comprovante de uma hospedagem anterior. A equipe de reservas faz a verificação antes da confirmação final do benefício."
+ },
+ {
+  "q": "E se eu não encontrar o comprovante da hospedagem anterior?",
+  "a": "Não tem problema. A equipe pode tentar localizar a sua reserva anterior por meio de outros dados, como CPF, e-mail, telefone ou nome completo do titular. Caso não seja possível confirmar a hospedagem anterior, o benefício pode não ser aplicado."
+ },
+ {
+  "q": "Posso usar o Bora de Novo em feriados ou pacotes especiais?",
+  "a": "Não. O programa não é cumulativo com pacotes, feriados, promoções sazonais ou outras condições especiais. Ele é voltado para novas reservas em períodos elegíveis, conforme disponibilidade informada pela equipe de reservas."
+ },
+ {
+  "q": "Como faço para reservar com essa condição?",
+  "a": "Entre em contato diretamente com a propriedade pelos canais oficiais, informe que deseja aproveitar o Bora de Novo e envie os dados necessários para a verificação da hospedagem anterior."
+ },
+ {
+  "q": "Preciso ter feito a reserva anterior diretamente com a propriedade?",
+  "a": "Não necessariamente. Se você já se hospedou anteriormente, a equipe pode verificar o histórico da estadia por meio dos dados informados. O benefício é concedido conforme disponibilidade e validação da reserva anterior."
+ }
+]

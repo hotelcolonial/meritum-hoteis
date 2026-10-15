@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Méritum Hotéis (site)
 
-## Getting Started
+Site institucional da Méritum Hotéis em Next.js 15 (App Router), gerado a partir do design feito no Claude Design.
 
-First, run the development server:
+## Rodar no computador
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # preencher as variáveis
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Estrutura
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `src/app` rotas, metadados, `sitemap.xml`, `robots.txt`, `llms.txt` e a API do formulário (`/api/contato`)
+- `src/content` o conteúdo de cada página (HTML estático renderizado no servidor)
+- `src/components` cabeçalho, herói da home, barra de reservas, rodapé e comportamentos (galeria, formulário, animações)
+- `src/lib/site.ts` dados da empresa, rotas e URLs dos motores de reserva
+- `src/lib/seo.ts` títulos, descrições e dados estruturados (schema.org)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## SEO e IA
 
-## Learn More
+Cada página tem título, descrição, URL canônica e Open Graph próprios. O site publica dados estruturados
+(Organization, Hotel, Restaurant, ParkingFacility, FAQPage, BreadcrumbList), `sitemap.xml`, `robots.txt`
+com os robôs de IA liberados (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended e outros)
+e um resumo em `/llms.txt`.
 
-To learn more about Next.js, take a look at the following resources:
+## Pendências
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- URLs dos motores de reserva (`NEXT_PUBLIC_BOOKING_*`)
+- E-mail que recebe o formulário e conta no Resend
+- Links oficiais das redes sociais (`src/lib/site.ts`, hoje ocultos no rodapé)
+- Páginas de Política de Privacidade e Termos de Uso
+- Foto do herói do Hotel Colonial em resolução maior (a atual tem 1024 px)
