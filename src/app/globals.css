@@ -334,6 +334,20 @@ img { display: block; max-width: 100%; border-radius: var(--radius-none); }
     .bk-step__num{ font-family:var(--font-sans); font-size:16px; min-width:20px; text-align:center; }
     .bk-guests__apply{ width:100%; margin-top:8px; padding:14px; background:#052744; color:#FFFFFF; border:0; border-radius:0; font-family:var(--font-sans); font-weight:500; font-size:13px; text-transform:uppercase; letter-spacing:0.12em; cursor:pointer; }
     .bk-guests__apply:hover{ background:#093B6B; }
+    .bk-pop--guests{ max-height:min(72vh, 600px); overflow-y:auto; overscroll-behavior:contain; }
+    .bk-room{ border-top:1px solid #DDE2E7; }
+    .bk-room__title{ margin:14px 0 0; font-family:var(--font-sans); font-weight:500; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#5B6672; }
+    .bk-ages{ display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:2px 0 16px; }
+    .bk-age{ display:flex; flex-direction:column; gap:6px; min-width:0; }
+    .bk-age__label{ font-family:var(--font-sans); font-size:12px; color:#5B6672; }
+    .bk-age__select{ width:100%; height:40px; padding:0 10px; border:1px solid #A7ADB3; border-radius:0; background:#FFFFFF; color:#14202C; font-family:var(--font-sans); font-size:14px; cursor:pointer; }
+    .bk-age__select:hover{ border-color:#052744; }
+    .bk-age__select:focus-visible{ outline:2px solid #093B6B; outline-offset:1px; }
+    .bk-age__select.is-invalid{ border-color:#B42318; box-shadow:0 0 0 1px #B42318; }
+    .bk-guests__err{ margin:8px 0 0; font-family:var(--font-sans); font-size:13px; color:#B42318; }
+    .bk-segbtn.is-invalid, .bk-msegbtn.is-invalid{ box-shadow:inset 0 -3px 0 #F97066; }
+    .bk-segbtn.is-invalid .bk-label, .bk-msegbtn.is-invalid .bk-label{ color:#FDA29B; }
+    .bk-sheet .bk-age__select{ height:44px; font-size:16px; }
     .bk-code__btn{ background:transparent; border:0; padding:0; cursor:pointer; }
     .bk-code__input{ width:170px; background:transparent; border:0; border-bottom:1px solid rgba(255,255,255,0.5); border-radius:0; color:#FFFFFF; font-family:var(--font-sans); font-size:13px; letter-spacing:0.08em; text-transform:uppercase; padding:6px 0; }
     .bk-code__input::placeholder{ color:rgba(255,255,255,0.55); text-transform:none; letter-spacing:0; }

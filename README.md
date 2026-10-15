@@ -8,6 +8,7 @@ Site institucional da Méritum Hotéis em Next.js 16 (App Router), gerado a part
 npm install
 cp .env.example .env.local   # preencher as variáveis
 npm run dev                  # http://localhost:3000
+npm test                     # testes unitários (vitest)
 ```
 
 ## Estrutura
@@ -27,7 +28,6 @@ e um resumo em `/llms.txt`.
 
 ## Pendências
 
-- URLs dos motores de reserva (`NEXT_PUBLIC_BOOKING_*`)
 - E-mail que recebe o formulário e conta no Resend
 - Links oficiais das redes sociais (`src/lib/site.ts`, hoje ocultos no rodapé)
 - Páginas de Política de Privacidade e Termos de Uso

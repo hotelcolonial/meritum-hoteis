@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent as RKE, type MouseEvent as RME } from "react";
 import { CalIcon, ChevWhite, CheckIcon, CloseIcon, PersonIcon } from "./icons";
-import { BOOKING_BASES } from "@/lib/site";
+import { buildNiaraUrl, NIARA_HOTEL_ID } from "@/lib/niara";
 
 type Prop = "colonial" | "pousada";
 type Panel = "prop" | "dates" | "guests" | null;
+/** Idade null = ainda não escolhida (obrigatória para buscar). */
+type Room = { adults: number; ages: (number | null)[] };
 
 const MES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 const MES_C = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
@@ -14,15 +16,8 @@ const todayIso = () => { const d = new Date(); return iso(d.getFullYear(), d.get
 const fmt = (s: string) => { const [y, m, d] = s.split("-").map(Number); return `${d} ${MES_C[m - 1]} ${y}`; };
 const pl = (v: number, a: string, b: string) => `${v} ${v === 1 ? a : b}`;
 const PROP_NAME: Record<Prop, string> = { colonial: "Hotel Colonial Iguaçu", pousada: "Pousada Cataratas" };
-
-/** Monta a URL do motor de reservas. Se o motor usar outros nomes de parâmetro, ajustar aqui. */
-export function buildBookingUrl(prop: Prop, d: { checkin: string; checkout: string; rooms: number; adults: number; children: number; promocode?: string }) {
-  const base = BOOKING_BASES[prop];
-  if (!base) return "";
-  const params = new URLSearchParams({ checkin: d.checkin, checkout: d.checkout, rooms: String(d.rooms), adults: String(d.adults), children: String(d.children) });
-  if (d.promocode) params.set("promocode", d.promocode);
-  return base + (base.includes("?") ? "&" : "?") + params.toString();
-}
+const AGES = Array.from({ length: 18 }, (_, i) => i);
+const MAX_ROOMS = 5, MAX_ADULTS = 6, MAX_CHILDREN = 4;
 
 function useMedia(q: string) {
   const [m, setM] = useState(false);
@@ -43,13 +38,11 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   const [panel, setPanel] = useState<Panel>(null);
   const [bkIn, setIn] = useState<string | null>(null);
   const [bkOut, setOut] = useState<string | null>(null);
-  const [rooms, setRooms] = useState(2);
-  const [adults, setAdults] = useState(2);
-  const [children, setChildren] = useState(0);
+  const [roomList, setRoomList] = useState<Room[]>([{ adults: 2, ages: [] }]);
   const [code, setCode] = useState("");
   const [codeEditing, setCodeEditing] = useState(false);
   const [view, setView] = useState<{ y: number; m: number } | null>(null);
-  const [err, setErr] = useState("");
+  const [invalid, setInvalid] = useState<"dates" | "ages" | null>(null);
   const [mob, setMob] = useState(false);
   const [fixedRaw, setFixed] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -91,7 +84,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
       if (panel && e.key === "Tab") {
         const el = document.querySelector("[data-bk-panel]");
         if (el) {
-          const f = Array.from(el.querySelectorAll<HTMLElement>("button, input, [tabindex]")).filter((x) => !(x as HTMLButtonElement).disabled && x.tabIndex !== -1 && x.offsetParent !== null);
+          const f = Array.from(el.querySelectorAll<HTMLElement>("button, input, select, [tabindex]")).filter((x) => !(x as HTMLButtonElement).disabled && x.tabIndex !== -1 && x.offsetParent !== null);
           if (f.length) {
             const first = f[0], last = f[f.length - 1];
             if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
@@ -138,21 +131,45 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
 
   const pick = (d: string) => {
     if (!bkIn || bkOut || d <= bkIn) { setIn(d); setOut(null); return; }
-    setOut(d); setErr("");
+    setOut(d);
     setTimeout(() => close(true), 260);
   };
 
+  // Hóspedes por quarto
+  const setRoomCount = (n: number) => setRoomList((l) => (n > l.length ? [...l, ...Array.from({ length: n - l.length }, () => ({ adults: 1, ages: [] }))] : l.slice(0, n)));
+  const updRoom = (i: number, f: (r: Room) => Room) => setRoomList((l) => l.map((r, j) => (j === i ? f(r) : r)));
+  const setKids = (i: number, n: number) => updRoom(i, (r) => ({ ...r, ages: n > r.ages.length ? [...r.ages, ...Array<null>(n - r.ages.length).fill(null)] : r.ages.slice(0, n) }));
+  const setAge = (i: number, k: number, a: number | null) => updRoom(i, (r) => ({ ...r, ages: r.ages.map((x, j) => (j === k ? a : x)) }));
+  const totalAdults = roomList.reduce((s, r) => s + r.adults, 0);
+  const totalChildren = roomList.reduce((s, r) => s + r.ages.length, 0);
+  const missingAge = roomList.some((r) => r.ages.includes(null));
+
+  const today = todayIso();
+
+  // O erro some sozinho quando o campo é corrigido
+  const datesBad = invalid === "dates" && !(bkIn && bkOut);
+  const agesBad = invalid === "ages" && missingAge;
+  const err = datesBad ? "Selecione as datas da estadia" : agesBad ? "Informe a idade de cada criança" : "";
+
   const submit = (e: RME<HTMLElement>) => {
-    if (!bkIn || !bkOut) { setErr("Selecione as datas da estadia"); open("dates", e); return; }
-    const url = buildBookingUrl(prop, { checkin: bkIn, checkout: bkOut, rooms, adults, children, promocode: code.trim() });
-    if (url) { window.open(url, "_blank", "noopener"); setErr(""); }
-    else setErr("Motor de reservas ainda não configurado");
+    if (!bkIn || !bkOut || bkIn < today) {
+      if (bkIn && bkIn < today) { setIn(null); setOut(null); }
+      setInvalid("dates"); if (panel !== "dates") open("dates", e); return;
+    }
+    if (missingAge) { setInvalid("ages"); if (panel !== "guests") open("guests", e); return; }
+    setInvalid(null);
+    window.location.assign(buildNiaraUrl({
+      hotelId: NIARA_HOTEL_ID[prop],
+      checkIn: bkIn,
+      checkOut: bkOut,
+      rooms: roomList.map((r) => ({ adults: r.adults, childrenAges: r.ages as number[] })),
+      promoCode: code,
+    }));
   };
 
   const fixed = !isMobile && fixedRaw;
 
   // Calendário
-  const today = todayIso();
   const tY = Number(today.slice(0, 4)), tM = Number(today.slice(5, 7)) - 1;
   const v = view || { y: tY, m: tM };
   const nMonths = oneMonth ? 1 : 2;
@@ -227,14 +244,45 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   );
   const guests = (
     <div className="bk-guests">
-      {stepper("Quartos", rooms, setRooms, 1, 5, "Remover quarto", "Adicionar quarto")}
-      {stepper("Adultos", adults, setAdults, 1, 10, "Remover adulto", "Adicionar adulto")}
-      {stepper("Crianças", children, setChildren, 0, 6, "Remover criança", "Adicionar criança")}
+      {stepper("Quartos", roomList.length, setRoomCount, 1, MAX_ROOMS, "Remover quarto", "Adicionar quarto")}
+      {roomList.map((r, i) => {
+        const q = roomList.length > 1 ? ` do quarto ${i + 1}` : "";
+        return (
+          <div className="bk-room" key={i} role="group" aria-label={`Quarto ${i + 1}`}>
+            {roomList.length > 1 && <p className="bk-room__title">Quarto {i + 1}</p>}
+            {stepper("Adultos", r.adults, (n) => updRoom(i, (x) => ({ ...x, adults: n })), 1, MAX_ADULTS, "Remover adulto" + q, "Adicionar adulto" + q)}
+            {stepper("Crianças", r.ages.length, (n) => setKids(i, n), 0, MAX_CHILDREN, "Remover criança" + q, "Adicionar criança" + q)}
+            {r.ages.length > 0 && (
+              <div className="bk-ages">
+                {r.ages.map((a, k) => (
+                  <label className="bk-age" key={k}>
+                    <span className="bk-age__label">Idade da criança {k + 1}</span>
+                    <select
+                      className={"bk-age__select" + (agesBad && a === null ? " is-invalid" : "")}
+                      value={a ?? ""}
+                      required
+                      aria-invalid={agesBad && a === null}
+                      onChange={(e) => setAge(i, k, e.target.value === "" ? null : Number(e.target.value))}
+                    >
+                      <option value="" disabled>Selecionar</option>
+                      {AGES.map((n) => <option key={n} value={n}>{pl(n, "ano", "anos")}</option>)}
+                    </select>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+      {agesBad && <p className="bk-guests__err" role="alert">{err}</p>}
       <button type="button" className="bk-guests__apply" onClick={() => close(true)}>Aplicar</button>
     </div>
   );
 
-  const guestsLabel = `${pl(rooms, "Quarto", "Quartos")} · ${pl(adults, "Adulto", "Adultos")} · ${pl(children, "Criança", "Crianças")}`;
+  const guestsLabel = `${pl(roomList.length, "Quarto", "Quartos")} · ${pl(totalAdults, "Adulto", "Adultos")} · ${pl(totalChildren, "Criança", "Crianças")}`;
+  const bad = (on: boolean) => (on ? " is-invalid" : "");
+  // No painel de hóspedes a mensagem aparece dentro dele
+  const barErr = panel === "guests" ? "" : err;
   const inLabel = bkIn ? fmt(bkIn) : "Selecionar data";
   const outLabel = bkOut ? fmt(bkOut) : "Selecionar data";
   const popDir = fixed ? " bk-pop--up" : "";
@@ -276,7 +324,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
             {!isMobile && panel === "prop" && <div className={"bk-pop mn-pop" + popDir} data-bk-panel>{propList}</div>}
           </div>
           <div className="bk-seg">
-            <button type="button" data-bk-trigger className="mn-focus bk-segbtn" aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
+            <button type="button" data-bk-trigger className={"mn-focus bk-segbtn" + bad(datesBad)} aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
               <CalIcon />
               <div className="bk-textcol"><span className="bk-label">Check-in</span><span className={"bk-value" + (bkIn ? "" : " is-dim")}>{inLabel}</span></div>
               <ChevWhite />
@@ -284,14 +332,14 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
             {!isMobile && panel === "dates" && <div className={"bk-pop bk-pop--cal mn-pop" + popDir} data-bk-panel role="dialog" aria-label="Datas da estadia">{calendar}</div>}
           </div>
           <div className="bk-seg">
-            <button type="button" data-bk-trigger className="mn-focus bk-segbtn" aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
+            <button type="button" data-bk-trigger className={"mn-focus bk-segbtn" + bad(datesBad)} aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
               <CalIcon />
               <div className="bk-textcol"><span className="bk-label">Check-out</span><span className={"bk-value" + (bkOut ? "" : " is-dim")}>{outLabel}</span></div>
               <ChevWhite />
             </button>
           </div>
           <div className="bk-seg">
-            <button type="button" data-bk-trigger className="mn-focus bk-segbtn" aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
+            <button type="button" data-bk-trigger className={"mn-focus bk-segbtn" + bad(agesBad)} aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
               <PersonIcon />
               <div className="bk-textcol"><span className="bk-label">Hóspedes</span><span className="bk-value">{guestsLabel}</span></div>
               <ChevWhite />
@@ -300,7 +348,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
           </div>
           <div className="bk-segcode">{!isMobile && codeField}</div>
           <button type="button" className="mn-focus bk-submit bk-go" onClick={submit}>Ver disponibilidade</button>
-          {!!err && !isMobile && <p className={"bk-err" + (fixed ? " bk-err--up" : "")} role="alert">{err}</p>}
+          {!!barErr && !isMobile && <p className={"bk-err" + (fixed ? " bk-err--up" : "")} role="alert">{barErr}</p>}
         </div>
       </div>
 
@@ -318,17 +366,17 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
           <button type="button" data-bk-trigger className="mn-focus bk-msegbtn" aria-haspopup="listbox" aria-expanded={panel === "prop"} onClick={(e) => open("prop", e)}>
             <span className="bk-textcol"><span className="bk-label">Propriedade</span><span className="bk-value">{PROP_NAME[prop]}</span></span><ChevWhite />
           </button>
-          <button type="button" data-bk-trigger className="mn-focus bk-msegbtn" aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
+          <button type="button" data-bk-trigger className={"mn-focus bk-msegbtn" + bad(datesBad)} aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
             <span><CalIcon /><span className="bk-textcol"><span className="bk-label">Check-in</span><span className={"bk-value" + (bkIn ? "" : " is-dim")}>{inLabel}</span></span></span><ChevWhite />
           </button>
-          <button type="button" data-bk-trigger className="mn-focus bk-msegbtn" aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
+          <button type="button" data-bk-trigger className={"mn-focus bk-msegbtn" + bad(datesBad)} aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
             <span><CalIcon /><span className="bk-textcol"><span className="bk-label">Check-out</span><span className={"bk-value" + (bkOut ? "" : " is-dim")}>{outLabel}</span></span></span><ChevWhite />
           </button>
-          <button type="button" data-bk-trigger className="mn-focus bk-msegbtn" aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
+          <button type="button" data-bk-trigger className={"mn-focus bk-msegbtn" + bad(agesBad)} aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
             <span><PersonIcon /><span className="bk-textcol"><span className="bk-label">Hóspedes</span><span className="bk-value">{guestsLabel}</span></span></span><ChevWhite />
           </button>
           <div className="bk-msegcode">{isMobile && codeField}</div>
-          {!!err && isMobile && <p className="bk-err bk-err--static" role="alert">{err}</p>}
+          {!!barErr && isMobile && <p className="bk-err bk-err--static" role="alert">{barErr}</p>}
           <button type="button" className="mn-focus bk-submit bk-go bk-go--mob" onClick={submit}>Ver disponibilidade</button>
         </div>
       </div>

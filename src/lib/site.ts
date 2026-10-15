@@ -40,12 +40,3 @@ export const ORG = {
   // A CONFIRMAR: preencher com os perfis oficiais; vazio esconde nada, apenas não entra no schema
   social: { instagram: "", facebook: "", linkedin: "" },
 };
-
-/**
- * URLs dos motores de reserva. Definir nas variáveis de ambiente da hospedagem:
- * NEXT_PUBLIC_BOOKING_COLONIAL_URL e NEXT_PUBLIC_BOOKING_POUSADA_URL.
- */
-export const BOOKING_BASES: Record<"colonial" | "pousada", string> = {
-  colonial: process.env.NEXT_PUBLIC_BOOKING_COLONIAL_URL || "",
-  pousada: process.env.NEXT_PUBLIC_BOOKING_POUSADA_URL || "",
-};
