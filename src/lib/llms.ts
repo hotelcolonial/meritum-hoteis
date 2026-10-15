@@ -68,7 +68,40 @@ Razón social: ${ORG.legalName}. CNPJ ${ORG.cnpj}. Dirección: ${ORG.street}, ${
 ## Otros idiomas
 
 - [Português](${SITE_URL}/llms.txt)
-`;
+${LOCALES_PUBLISHED.includes("en") ? `- [English](${SITE_URL}/en/llms.txt)\n` : ""}`;
+}
+
+function en(): string {
+  const u = (k: keyof typeof PAGES) => url("en", k);
+  return `# ${ORG.name}
+
+> Hotel management company in Foz do Iguaçu (Paraná, Brazil). It takes over the management of independent hotels and develops each one individually, respecting its identity. It works under two models: hotel management and asset leasing.
+
+Legal name: ${ORG.legalName}. CNPJ ${ORG.cnpj}. Address: ${ORG.street}, ${ORG.city}, ${ORG.region}, ${ORG.postalCode}.
+
+## Properties
+
+- [Hotel Colonial Iguaçu](${u("colonial")}): hotel on Rodovia das Cataratas, km 20, 11237, 1.2 km from the entrance to Iguaçu National Park. Welcoming guests since 1970. Large green area, pools and event rooms for up to 180 people. Check-in 2 PM, check-out 12 PM. Reservations: 0800 819 1993, reservas@hotelcolonialfoz.com.br.
+- [Pousada Cataratas](${u("pousada")}): inn with 27 rooms on Rua Parigot de Souza, 180, 100 m from Avenida das Cataratas. Breakfast included, pool, free parking and a 24-hour front desk. Double (13 m²), Triple (18 m²), Quadruple (22 m²) and Quintuple (26 m²) rooms. Reservations: 0800 002 9215, reservas@pousadacataratas.com.br.
+- [Villa Colonial](${u("villa")}): restaurant inside Hotel Colonial Iguaçu. Regional and international buffet. Breakfast from 6:30 AM to 10 AM, lunch from 11:30 AM to 4 PM and dinner from 7 PM to 10:30 PM. Catering for events.
+- [Colonial Autopark](${u("autopark")}): parking inside Hotel Colonial Iguaçu, open 24 hours a day, 7 days a week, with a monitored parking space and a free shuttle to and from Foz do Iguaçu International Airport (IGU). Reservations center (45) 3529 7711.
+
+## For hotel owners
+
+- [Management](${u("gestao")}): operational, commercial, cost and process, and hospitality management. Hotel management and asset leasing models.
+- [About Méritum](${u("meritum")}): history, portfolio and values.
+- [Contact](${u("contato")}): form for hotel owners and reservation contacts for each property.
+
+## For guests
+
+- [Bora de Novo](${u("bora")}): special terms for guests who have already stayed at a Méritum property.
+- [My reservation](${u("reserva")}): how to check or change a reservation.
+- [Guest area](${u("hospede")})
+
+## Other languages
+
+- [Português](${SITE_URL}/llms.txt)
+${LOCALES_PUBLISHED.includes("es") ? `- [Español](${SITE_URL}/es/llms.txt)\n` : ""}`;
 }
 
 /** Texto do llms.txt no idioma, ou null se ainda não existe ou não está publicado. */
@@ -76,5 +109,5 @@ export function llmsText(locale: Locale): string | null {
   if (!LOCALES_PUBLISHED.includes(locale)) return null;
   if (locale === "pt") return pt();
   if (locale === "es") return es();
-  return null; // inglês: fase 3
+  return en();
 }

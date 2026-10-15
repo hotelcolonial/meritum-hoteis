@@ -138,8 +138,65 @@ const ES: Record<SeoKey, PageText> = {
   },
 };
 
-// Inglês ainda usa os textos em português (fase 3)
-const TEXT: Record<Locale, Record<SeoKey, PageText>> = { pt: PT, es: ES, en: PT };
+const EN: Record<SeoKey, PageText> = {
+  home: {
+    title: "Méritum Hotéis | Hotel management in Foz do Iguaçu",
+    description: "Hotel management company in Foz do Iguaçu. Management of independent hotels and of the properties Hotel Colonial Iguaçu, Pousada Cataratas, Villa Colonial and Autopark.",
+    imageAlt: "Pergola and pool at Hotel Colonial Iguaçu",
+  },
+  meritum: {
+    title: "About Méritum | Méritum Hotéis",
+    description: "Hotel management company in Foz do Iguaçu that takes over the management of independent hotels and develops each one individually, respecting its identity.",
+    imageAlt: "Garden and pool area at Hotel Colonial Iguaçu",
+  },
+  gestao: {
+    title: "Hotel management and leasing | Méritum Hotéis",
+    description: "Operational, commercial, cost and hospitality management for independent hotels, under hotel management and asset leasing models.",
+    imageAlt: "Pergola with a pool table and the pool at Hotel Colonial Iguaçu",
+  },
+  contato: {
+    title: "Contact | Méritum Hotéis",
+    description: "Talk to Méritum about managing or leasing your hotel, or find the reservation contacts for each property in Foz do Iguaçu.",
+    imageAlt: "Garden at Hotel Colonial Iguaçu",
+  },
+  colonial: {
+    title: "Hotel Colonial Iguaçu | Rodovia das Cataratas, Foz do Iguaçu",
+    description: "Hotel on Rodovia das Cataratas, 1.2 km from the entrance to Iguaçu National Park. Since 1970, with a large green area, pools and the Villa Colonial restaurant.",
+    imageAlt: "Garden and pool at Hotel Colonial Iguaçu",
+  },
+  pousada: {
+    title: "Pousada Cataratas | Inn in downtown Foz do Iguaçu",
+    description: "Inn with 27 rooms 100 m from Avenida das Cataratas, in Foz do Iguaçu. Breakfast included, pool, free parking and a 24-hour front desk.",
+    imageAlt: "Pousada Cataratas pool under the pergola",
+  },
+  villa: {
+    title: "Villa Colonial | Restaurant and events in Foz do Iguaçu",
+    description: "Restaurant at Hotel Colonial Iguaçu, on Rodovia das Cataratas. Regional and international buffet for breakfast, lunch and dinner, and catering for events.",
+    imageAlt: "Villa Colonial restaurant dining room at night",
+  },
+  autopark: {
+    title: "Colonial Autopark | Foz do Iguaçu airport parking",
+    description: "24-hour parking inside Hotel Colonial Iguaçu, with a monitored parking space and a free shuttle to and from Foz do Iguaçu International Airport.",
+    imageAlt: "View of the Colonial Autopark parking lot",
+  },
+  bora: {
+    title: "Bora de Novo | Special terms for returning Méritum guests",
+    description: "Have you stayed at a Méritum property before? Bora de Novo offers special terms for returning guests. See how it works and get your questions answered.",
+    imageAlt: "Garden and pool area at Hotel Colonial Iguaçu",
+  },
+  reserva: {
+    title: "My reservation | Méritum Hotéis",
+    description: "Check, change or ask about your reservation at Hotel Colonial Iguaçu or Pousada Cataratas directly with each property’s team.",
+    imageAlt: "Hotel Colonial Iguaçu",
+  },
+  hospede: {
+    title: "Guest area | Méritum Hotéis",
+    description: "Shortcuts for guests of Méritum properties: your reservation, the Bora de Novo program and the contacts for each property.",
+    imageAlt: "Hotel Colonial Iguaçu",
+  },
+};
+
+const TEXT: Record<Locale, Record<SeoKey, PageText>> = { pt: PT, es: ES, en: EN };
 
 /** Textos dos dados estruturados (schema.org) que dependem do idioma */
 const LD_PT = {
@@ -156,7 +213,14 @@ const LD_ES: typeof LD_PT = {
   pousadaAmenities: ["Desayuno incluido", "Piscina", "Estacionamiento gratuito", "Recepción las 24 horas"],
   cuisine: ["Regional", "Internacional"],
 };
-const LD_TEXT: Record<Locale, typeof LD_PT> = { pt: LD_PT, es: LD_ES, en: LD_PT };
+const LD_EN: typeof LD_PT = {
+  contactType: "Hotel owner relations",
+  knowsAbout: ["Hotel management", "Hotel leasing", "Hotel commercial management", "Hospitality"],
+  colonialAmenities: ["Pool", "Restaurant", "Event rooms for up to 180 people"],
+  pousadaAmenities: ["Breakfast included", "Pool", "Free parking", "24-hour front desk"],
+  cuisine: ["Regional", "International"],
+};
+const LD_TEXT: Record<Locale, typeof LD_PT> = { pt: LD_PT, es: LD_ES, en: LD_EN };
 const amenities = (names: string[]) => names.map((name) => ({ "@type": "LocationFeatureSpecification", name, value: true }));
 
 /** Título, descrição e imagem de uma página no idioma. */
