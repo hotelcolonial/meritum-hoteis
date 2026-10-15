@@ -4,6 +4,7 @@ import "./globals.css";
 import "./site.css";
 import Footer from "@/components/Footer";
 import Behaviors from "@/components/Behaviors";
+import HashRedirect from "@/components/HashRedirect";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL } from "@/lib/site";
 import { organizationLd, websiteLd, SEO } from "@/lib/seo";
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Footer />
         </div>
         <Behaviors />
+        <HashRedirect />
       </body>
     </html>
   );
