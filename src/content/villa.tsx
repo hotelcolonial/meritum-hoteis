@@ -1,12 +1,13 @@
 /* Gerado a partir do export do Claude Design (tools/convert.py). */
 import type { ReactNode } from "react";
 import Image from "next/image";
+import HeroImage, { HERO_MOBILE } from "@/components/HeroImage";
 import Link from "next/link";
 
 export function VillaHero({ children }: { children: ReactNode }) {
   return (
     <section className="ph-hh" style={{ position: "relative", height: "78svh", minHeight: "560px", background: "rgb(5, 39, 68)", overflow: "hidden" }}>
-      <Image src="/assets/villa-salao-noite.jpg" width={2000} height={1334} sizes="100vw" preload fetchPriority="high" loading="eager" className="ph-hero__bg" alt="Salão do restaurante Villa Colonial à noite, com mesas postas" style={{ objectPosition: "50% 50%" }} />
+      <HeroImage desktop={{ src: "/assets/villa-salao-noite.jpg", width: 2000, height: 1334 }} mobile={HERO_MOBILE.villaSalao} eager className="ph-hero__bg" alt="Salão do restaurante Villa Colonial à noite, com mesas postas" style={{ objectPosition: "50% 50%" }} />
       <div className="mn-hh__grad mn-hh__grad--top" aria-hidden="true"></div>
       <div className="mn-hh__grad mn-hh__grad--bottom" aria-hidden="true"></div>
       <p className="mn-hh__caption">

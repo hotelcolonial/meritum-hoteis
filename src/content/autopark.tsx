@@ -1,12 +1,13 @@
 /* Gerado a partir do export do Claude Design (tools/convert.py). */
 import type { ReactNode } from "react";
 import Image from "next/image";
+import HeroImage, { HERO_MOBILE } from "@/components/HeroImage";
 import Link from "next/link";
 
 export function AutoparkHero({ children }: { children: ReactNode }) {
   return (
     <section className="ph-hh" style={{ position: "relative", height: "78svh", minHeight: "560px", background: "rgb(5, 39, 68)", overflow: "hidden" }}>
-      <Image src="/assets/autopark-vista-aerea.jpg" width={2000} height={1333} sizes="100vw" preload fetchPriority="high" loading="eager" className="ph-hero__bg" alt="Vista do estacionamento do Colonial Autopark com a fonte e a mata ao fundo" style={{ objectPosition: "50% 55%" }} />
+      <HeroImage desktop={{ src: "/assets/autopark-vista-aerea.jpg", width: 2000, height: 1333 }} mobile={HERO_MOBILE.autoparkAraucaria} eager className="ph-hero__bg" alt="Vista do estacionamento do Colonial Autopark com a fonte e a mata ao fundo" style={{ objectPosition: "50% 55%" }} />
       <div className="mn-hh__grad mn-hh__grad--top" aria-hidden="true"></div>
       <div className="mn-hh__grad mn-hh__grad--bottom" aria-hidden="true"></div>
       <p className="mn-hh__caption">

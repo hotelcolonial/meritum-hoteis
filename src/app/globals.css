@@ -1131,7 +1131,7 @@ img { display: block; max-width: 100%; border-radius: var(--radius-none); }
     }
     /* Fase 9 · UI e UX */
     .bk-fixbar, .bk-mobwrap__head{ display:none; }
-    @media (max-width:767px){
+    @media (max-width:1023px){
       .bk-fixbar{ display:flex; position:fixed; left:0; right:0; bottom:0; height:64px; z-index:250; background:#052744; align-items:center; justify-content:space-between; gap:12px; padding:0 12px 0 20px; box-sizing:border-box; }
       .bk-fixbar__text{ font-family:var(--font-sans); font-weight:400; font-size:14px; color:#FFFFFF; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
       .bk-fixbar__btn{ flex:0 0 auto; height:44px; padding:0 18px; background:#FFFFFF; color:#052744; border:0; border-radius:0; font-family:var(--font-sans); font-weight:500; font-size:15px; white-space:nowrap; cursor:pointer; }

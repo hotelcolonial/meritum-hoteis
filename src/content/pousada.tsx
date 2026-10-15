@@ -1,12 +1,13 @@
 /* Gerado a partir do export do Claude Design (tools/convert.py). */
 import type { ReactNode } from "react";
 import Image from "next/image";
+import HeroImage, { HERO_MOBILE } from "@/components/HeroImage";
 import Link from "next/link";
 
 export function PousadaHero({ children }: { children: ReactNode }) {
   return (
     <section className="ph-hh" style={{ position: "relative", height: "78svh", minHeight: "560px", background: "rgb(5, 39, 68)", overflow: "hidden" }}>
-      <Image src="/assets/pousada-piscina-pergolado.jpg" width={2000} height={1333} sizes="100vw" preload fetchPriority="high" loading="eager" className="ph-hero__bg" alt="Piscina da Pousada Cataratas sob o pergolado com espreguiçadeiras" style={{ objectPosition: "50% 60%" }} />
+      <HeroImage desktop={{ src: "/assets/pousada-piscina-pergolado.jpg", width: 2000, height: 1333 }} mobile={HERO_MOBILE.pousadaPergolado} eager className="ph-hero__bg" alt="Piscina da Pousada Cataratas sob o pergolado com espreguiçadeiras" style={{ objectPosition: "50% 60%" }} />
       <div className="mn-hh__grad mn-hh__grad--top" aria-hidden="true"></div>
       <div className="mn-hh__grad mn-hh__grad--bottom" aria-hidden="true"></div>
       <p className="mn-hh__caption">

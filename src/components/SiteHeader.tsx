@@ -45,6 +45,8 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
   const [mobHotels, setMobHotels] = useState(false);
   const hotelsRef = useRef<HTMLDivElement>(null);
   const leaveT = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const burgerRef = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
 
   useEffect(() => {
     const down = (e: PointerEvent) => {
@@ -68,6 +70,9 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
 
   useEffect(() => {
     document.documentElement.style.overflow = menuOpen ? "hidden" : "";
+    // Ao fechar o menu (X, Escape ou link), o foco volta ao botão ☰
+    if (!menuOpen && wasOpen.current) burgerRef.current?.focus({ preventScroll: true });
+    wasOpen.current = menuOpen;
     return () => { document.documentElement.style.overflow = ""; };
   }, [menuOpen]);
 
@@ -131,7 +136,7 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
           <Link href={ROUTES.gestao} className={"mn-link mn-focus" + active("gestao")} style={navLink}>Gestão</Link>
           <Link href={ROUTES.contato} className={"mn-link mn-focus" + active("contato")} style={navLink}>Contato</Link>
         </nav>
-        <button type="button" aria-label="Abrir menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)} className="mn-focus sh-burger sh-mob">
+        <button ref={burgerRef} type="button" aria-label="Abrir menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)} className="mn-focus sh-burger sh-mob">
           <span />
           <span />
         </button>

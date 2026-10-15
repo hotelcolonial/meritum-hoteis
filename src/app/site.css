@@ -128,4 +128,8 @@ html { scroll-padding-top: 120px; }
 a.sh-menu__item::before { content: ""; position: absolute; inset: -1px 0; }
 .bk-step__btn::before { content: ""; position: absolute; inset: -6px; }
 /* Home no celular: o campo focado não fica embaixo da barra fixa de reservas */
-@media (max-width: 767px) { html:has(.bk-fixbar) { scroll-padding-bottom: 80px; } }
+@media (max-width: 1023px) { html:has(.bk-fixbar) { scroll-padding-bottom: 80px; } }
+/* Lightbox: o deslizar horizontal troca a foto; sem isso o navegador o toma como gesto de "voltar" */
+.ph-modal { touch-action: pan-y pinch-zoom; overscroll-behavior: contain; }
+/* Hero no celular: o recorte vertical já vem enquadrado, então fica centralizado */
+@media (max-width: 767px) { .hero-art { object-position: 50% 50% !important; } }

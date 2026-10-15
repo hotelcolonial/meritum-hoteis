@@ -1,17 +1,17 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SiteHeader from "./SiteHeader";
 import BookingWidget from "./BookingWidget";
+import HeroImage, { HERO_MOBILE } from "./HeroImage";
 import { ROUTES } from "@/lib/site";
 
 const SLIDES = [
-  { src: "/assets/colonial-pergola-piscina.jpg", w: 2576, h: 1840, pos: "50% 62%", name: "Hotel Colonial Iguaçu", cap: "Hotel Colonial Iguaçu, Foz do Iguaçu", href: ROUTES.colonial, alt: "Pérgola com mesa de bilhar e piscina ao fundo no Hotel Colonial Iguaçu" },
-  { src: "/assets/pousada-piscina-pergolado.jpg", w: 2000, h: 1333, pos: "50% 60%", name: "Pousada Cataratas", cap: "Pousada Cataratas, Foz do Iguaçu", href: ROUTES.pousada, alt: "Piscina da Pousada Cataratas sob o pergolado" },
-  { src: "/assets/villa-salao-noite.jpg", w: 2000, h: 1334, pos: "50% 50%", name: "Villa Colonial", cap: "Villa Colonial, Foz do Iguaçu", href: ROUTES.villa, alt: "Salão do restaurante Villa Colonial à noite" },
-  { src: "/assets/autopark-vista-aerea.jpg", w: 2000, h: 1333, pos: "50% 55%", name: "Colonial Autopark", cap: "Colonial Autopark, Foz do Iguaçu", href: ROUTES.autopark, alt: "Vista do estacionamento do Colonial Autopark" },
+  { src: "/assets/colonial-pergola-piscina.jpg", w: 2576, h: 1840, pos: "50% 62%", mobile: HERO_MOBILE.pergola, name: "Hotel Colonial Iguaçu", cap: "Hotel Colonial Iguaçu, Foz do Iguaçu", href: ROUTES.colonial, alt: "Pérgola com mesa de bilhar e piscina ao fundo no Hotel Colonial Iguaçu" },
+  { src: "/assets/pousada-piscina-pergolado.jpg", w: 2000, h: 1333, pos: "50% 60%", mobile: HERO_MOBILE.pousadaPergolado, name: "Pousada Cataratas", cap: "Pousada Cataratas, Foz do Iguaçu", href: ROUTES.pousada, alt: "Piscina da Pousada Cataratas sob o pergolado" },
+  { src: "/assets/villa-salao-noite.jpg", w: 2000, h: 1334, pos: "50% 50%", mobile: HERO_MOBILE.villaSalao, name: "Villa Colonial", cap: "Villa Colonial, Foz do Iguaçu", href: ROUTES.villa, alt: "Salão do restaurante Villa Colonial à noite" },
+  { src: "/assets/autopark-vista-aerea.jpg", w: 2000, h: 1333, pos: "50% 55%", mobile: HERO_MOBILE.autoparkAraucaria, name: "Colonial Autopark", cap: "Colonial Autopark, Foz do Iguaçu", href: ROUTES.autopark, alt: "Vista do estacionamento do Colonial Autopark" },
 ];
 const INTERVAL = 6000;
 
@@ -48,18 +48,14 @@ export default function HomeHero() {
       {SLIDES.map((s, k) => {
         const on = k === i;
         return (
-          <Image
+          <HeroImage
             key={s.src}
             className={"mn-hh__img mn-hh__slide " + (on ? "is-active " : "") + "g" + (gen % 2)}
-            src={s.src}
-            width={s.w}
-            height={s.h}
-            sizes="100vw"
-            preload={k === 0}
-            fetchPriority={k === 0 ? "high" : "auto"}
-            loading={k === 0 ? "eager" : "lazy"}
+            desktop={{ src: s.src, width: s.w, height: s.h }}
+            mobile={s.mobile}
+            eager={k === 0}
             alt={s.alt}
-            aria-hidden={!on}
+            ariaHidden={!on}
             style={{ objectPosition: s.pos }}
           />
         );

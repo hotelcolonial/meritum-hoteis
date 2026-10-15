@@ -55,10 +55,34 @@ function initSubnav(): () => void {
   const nav = document.querySelector(".ph-subnav");
   const secs = document.querySelectorAll(".ph-sec");
   if (!nav || !secs.length) return () => {};
-  const setActive = (id: string) => nav.querySelectorAll("a").forEach((a) => a.classList.toggle("is-active", a.getAttribute("href") === "#" + id));
-  setActive(secs[0].id);
-  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && e.target.id) setActive(e.target.id); }), { rootMargin: "-140px 0px -55% 0px", threshold: 0 });
-  secs.forEach((s) => io.observe(s));
+  let current = "";
+  const setActive = (id: string) => {
+    if (id === current) return;
+    current = id;
+    let on: HTMLElement | null = null;
+    nav.querySelectorAll<HTMLElement>("a").forEach((a) => { const hit = a.getAttribute("href") === "#" + id; a.classList.toggle("is-active", hit); if (hit) on = a; });
+    // No celular a subnavegação rola na horizontal: traz o link ativo para a vista
+    const el = on as HTMLElement | null;
+    if (el && nav.scrollWidth > nav.clientWidth) {
+      nav.scrollTo({ left: el.offsetLeft - (nav.clientWidth - el.offsetWidth) / 2, behavior: reducedMotion() ? "auto" : "smooth" });
+    }
+  };
+  // Seção ativa = a última cujo topo já passou da linha logo abaixo da subnavegação fixa.
+  // No fim da página vale a última seção (as seções curtas do final nunca chegam à linha).
+  const LINE = 150;
+  let raf = 0;
+  const update = () => {
+    raf = 0;
+    const list = Array.from(secs);
+    let id = list[0].id;
+    for (const s of list) if (s.getBoundingClientRect().top <= LINE) id = s.id;
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) id = list[list.length - 1].id;
+    if (id) setActive(id);
+  };
+  const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+  update();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
   const click = (e: Event) => {
     const a = (e.target as Element).closest("a");
     if (!a) return;
@@ -71,7 +95,12 @@ function initSubnav(): () => void {
     history.replaceState(null, "", "#" + id);
   };
   nav.addEventListener("click", click);
-  return () => { io.disconnect(); nav.removeEventListener("click", click); };
+  return () => {
+    cancelAnimationFrame(raf);
+    window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("resize", onScroll);
+    nav.removeEventListener("click", click);
+  };
 }
 
 function initGallery(open: (pics: Pic[], i: number) => void): () => void {
@@ -230,6 +259,7 @@ export default function Behaviors() {
   const [lb, setLb] = useState<{ pics: Pic[]; i: number } | null>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
   const modal = useRef<HTMLDivElement>(null);
+  const touch = useRef<{ x: number; y: number } | null>(null);
 
   const openLb = useCallback((pics: Pic[], i: number) => {
     lastFocus.current = document.activeElement as HTMLElement;
@@ -282,6 +312,14 @@ export default function Behaviors() {
       aria-label="Galeria ampliada"
       ref={modal}
       onClick={(e) => { if (e.target === e.currentTarget) closeLb(); }}
+      // No celular não há setas: deslizar para o lado troca a foto
+      onTouchStart={(e) => { const t = e.touches[0]; touch.current = { x: t.clientX, y: t.clientY }; }}
+      onTouchEnd={(e) => {
+        const s = touch.current; touch.current = null;
+        if (!s) return;
+        const t = e.changedTouches[0], dx = t.clientX - s.x, dy = t.clientY - s.y;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) stepLb(dx < 0 ? 1 : -1);
+      }}
       onKeyDown={(e) => {
         if (e.key === "Escape") { e.preventDefault(); closeLb(); return; }
         if (e.key === "ArrowLeft") { e.preventDefault(); stepLb(-1); return; }

@@ -1,11 +1,12 @@
 /* Gerado a partir do export do Claude Design (tools/convert.py). */
 import type { ReactNode } from "react";
 import Image from "next/image";
+import HeroImage, { HERO_MOBILE } from "@/components/HeroImage";
 
 export function AMeritumHero({ children }: { children: ReactNode }) {
   return (
     <section className="mn-hh mn-hh--sub" style={{ position: "relative", height: "64svh", minHeight: "520px", background: "rgb(5, 39, 68)", overflow: "hidden" }}>
-      <Image src="/assets/web/join-hotel-colonial.jpg" width={1024} height={682} sizes="100vw" preload fetchPriority="high" loading="eager" className="mn-hh__img" alt="Jardim e área da piscina do Hotel Colonial Iguaçu" />
+      <HeroImage desktop={{ src: "/assets/web/join-hotel-colonial.jpg", width: 1024, height: 682 }} mobile={HERO_MOBILE.pousadaPiscina} eager className="mn-hh__img" alt="Jardim e área da piscina do Hotel Colonial Iguaçu" />
       <div className="mn-hh__grad mn-hh__grad--top" aria-hidden="true"></div>
       <div className="mn-hh__grad mn-hh__grad--bottom" aria-hidden="true"></div>
       <p className="mn-hh__caption">

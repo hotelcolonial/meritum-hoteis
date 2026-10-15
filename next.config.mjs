@@ -4,6 +4,8 @@ const nextConfig = {
     // AVIF primeiro (arquivos menores), WebP como alternativa
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30,
+    // 90 só nas fotos do hero (HeroImage); o resto usa 75
+    qualities: [75, 90],
   },
   async redirects() {
     return [
