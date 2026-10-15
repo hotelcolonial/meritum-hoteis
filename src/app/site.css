@@ -137,3 +137,14 @@ a.sh-menu__item::before { content: ""; position: absolute; inset: -1px 0; }
 .mq-mobile { display: none; }
 @media (max-width: 767px) { .mq-mobile { display: inline; } .mq-desktop, .hero-d { display: none; } }
 @media (min-width: 768px) { .hero-m { display: none; } }
+
+/* Home no celular e tablet: o hero tem altura mínima (não fixa), então a coluna interna não esticava e o
+   título ficava colado no cabeçalho. Com o hero em coluna flex, o título desce para a base, como no desktop. */
+@media (max-width: 1023px) {
+  .mn-hh:not(.mn-hh--sub) { display: flex; flex-direction: column; }
+  .mn-hh:not(.mn-hh--sub) > .sh-col { flex: 1 0 auto; }
+  /* Base do título 32px acima dos pontos/legenda do slider (que ficam a 32px da base, em linha) */
+  .mn-hh:not(.mn-hh--sub) .mn-hh__content.hh-center { padding: 0 20px 107px !important; }
+}
+/* Até 639px os pontos e a legenda ficam empilhados a 20px da base */
+@media (max-width: 639px) { .mn-hh:not(.mn-hh--sub) .mn-hh__content.hh-center { padding-bottom: 119px !important; } }
