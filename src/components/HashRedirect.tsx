@@ -30,6 +30,12 @@ export default function HashRedirect() {
   const router = useRouter();
 
   useEffect(() => {
+    // _r vem de public/assets/index-CMgD8xj8.js (cache do site antigo): tira da barra de endereço
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("_r")) {
+      url.searchParams.delete("_r");
+      window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+    }
     const hash = window.location.hash;
     if (!hash.startsWith("#/")) return;
     // "#/atuacao/financeiro/?x=1" -> "/atuacao/financeiro"

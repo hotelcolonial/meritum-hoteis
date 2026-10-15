@@ -31,4 +31,5 @@ e um resumo em `/llms.txt`.
 - E-mail que recebe o formulário e conta no Resend
 - Links oficiais das redes sociais (`src/lib/site.ts`, hoje ocultos no rodapé)
 - Páginas de Política de Privacidade e Termos de Uso
+- Remover public/assets/index-CMgD8xj8.js depois de 2026-12-15 (recupera quem ainda tem o site antigo em cache)
 - Foto do herói do Hotel Colonial em resolução maior (a atual tem 1024 px)
