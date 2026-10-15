@@ -80,8 +80,84 @@ const PT: Record<SeoKey, PageText> = {
   },
 };
 
-// Fase 1: espanhol e inglês ainda usam os textos em português
-const TEXT: Record<Locale, Record<SeoKey, PageText>> = { pt: PT, es: PT, en: PT };
+const ES: Record<SeoKey, PageText> = {
+  home: {
+    title: "Méritum Hotéis | Gestión hotelera en Foz do Iguaçu",
+    description: "Administradora hotelera de Foz do Iguaçu. Gestión de hoteles independientes y de las propiedades Hotel Colonial Iguaçu, Pousada Cataratas, Villa Colonial y Autopark.",
+    imageAlt: "Pérgola y piscina del Hotel Colonial Iguaçu",
+  },
+  meritum: {
+    title: "Sobre Méritum | Méritum Hotéis",
+    description: "Administradora hotelera de Foz do Iguaçu que asume la gestión de hoteles independientes y desarrolla cada uno de forma individual, respetando su identidad.",
+    imageAlt: "Jardín y área de la piscina del Hotel Colonial Iguaçu",
+  },
+  gestao: {
+    title: "Gestión hotelera y arrendamiento | Méritum Hotéis",
+    description: "Gestión operativa, comercial, de costos y de hospitalidad para hoteles independientes, en los modelos de gestión hotelera y arrendamiento de activos.",
+    imageAlt: "Pérgola con mesa de billar y piscina en el Hotel Colonial Iguaçu",
+  },
+  contato: {
+    title: "Contacto | Méritum Hotéis",
+    description: "Habla con Méritum sobre la gestión o el arrendamiento de tu hotel, o encuentra los contactos de reservas de cada propiedad en Foz do Iguaçu.",
+    imageAlt: "Jardín del Hotel Colonial Iguaçu",
+  },
+  colonial: {
+    title: "Hotel Colonial Iguaçu | Rodovia das Cataratas, Foz do Iguaçu",
+    description: "Hotel en la Rodovia das Cataratas, a 1,2 km de la entrada del Parque Nacional do Iguaçu. Desde 1970, con una gran área verde, piscinas y el restaurante Villa Colonial.",
+    imageAlt: "Jardín y piscina del Hotel Colonial Iguaçu",
+  },
+  pousada: {
+    title: "Pousada Cataratas | Posada en el centro de Foz do Iguaçu",
+    description: "Posada con 27 habitaciones a 100 m de la Avenida das Cataratas, en Foz do Iguaçu. Desayuno incluido, piscina, estacionamiento gratuito y recepción las 24 h.",
+    imageAlt: "Piscina de la Pousada Cataratas bajo la pérgola",
+  },
+  villa: {
+    title: "Villa Colonial | Restaurante y eventos en Foz do Iguaçu",
+    description: "Restaurante del Hotel Colonial Iguaçu, en la Rodovia das Cataratas. Buffet regional e internacional en el desayuno, el almuerzo y la cena, y gastronomía para eventos.",
+    imageAlt: "Salón del restaurante Villa Colonial de noche",
+  },
+  autopark: {
+    title: "Colonial Autopark | Estacionamiento aeropuerto Foz do Iguaçu",
+    description: "Estacionamiento las 24 horas dentro del Hotel Colonial Iguaçu, con lugar monitoreado y traslado gratuito de ida y vuelta al Aeropuerto Internacional de Foz do Iguaçu.",
+    imageAlt: "Vista del estacionamiento del Colonial Autopark",
+  },
+  bora: {
+    title: "Bora de Novo | Condiciones para quienes vuelven a Méritum",
+    description: "¿Ya te hospedaste en una propiedad Méritum? Bora de Novo ofrece condiciones especiales para quienes vuelven. Mira cómo funciona y resuelve tus dudas.",
+    imageAlt: "Jardín y área de la piscina del Hotel Colonial Iguaçu",
+  },
+  reserva: {
+    title: "Mi reserva | Méritum Hotéis",
+    description: "Consulta, modifica o resuelve tus dudas sobre tu reserva en el Hotel Colonial Iguaçu o en la Pousada Cataratas directamente con el equipo de cada propiedad.",
+    imageAlt: "Hotel Colonial Iguaçu",
+  },
+  hospede: {
+    title: "Área del huésped | Méritum Hotéis",
+    description: "Accesos rápidos para huéspedes de las propiedades Méritum: tu reserva, el programa Bora de Novo y los contactos de cada propiedad.",
+    imageAlt: "Hotel Colonial Iguaçu",
+  },
+};
+
+// Inglês ainda usa os textos em português (fase 3)
+const TEXT: Record<Locale, Record<SeoKey, PageText>> = { pt: PT, es: ES, en: PT };
+
+/** Textos dos dados estruturados (schema.org) que dependem do idioma */
+const LD_PT = {
+  contactType: "Atendimento a proprietários de hotéis",
+  knowsAbout: ["Gestão hoteleira", "Arrendamento de hotéis", "Gestão comercial hoteleira", "Hospitalidade"],
+  colonialAmenities: ["Piscina", "Restaurante", "Salas de eventos para até 180 pessoas"],
+  pousadaAmenities: ["Café da manhã incluso", "Piscina", "Estacionamento gratuito", "Recepção 24 horas"],
+  cuisine: ["Regional", "Internacional"],
+};
+const LD_ES: typeof LD_PT = {
+  contactType: "Atención a propietarios de hoteles",
+  knowsAbout: ["Gestión hotelera", "Arrendamiento de hoteles", "Gestión comercial hotelera", "Hospitalidad"],
+  colonialAmenities: ["Piscina", "Restaurante", "Salones de eventos para hasta 180 personas"],
+  pousadaAmenities: ["Desayuno incluido", "Piscina", "Estacionamiento gratuito", "Recepción las 24 horas"],
+  cuisine: ["Regional", "Internacional"],
+};
+const LD_TEXT: Record<Locale, typeof LD_PT> = { pt: LD_PT, es: LD_ES, en: LD_PT };
+const amenities = (names: string[]) => names.map((name) => ({ "@type": "LocationFeatureSpecification", name, value: true }));
 
 /** Título, descrição e imagem de uma página no idioma. */
 export const seoText = (key: SeoKey, locale: Locale) => ({ ...PAGES[key], ...TEXT[locale][key] });
@@ -157,8 +233,8 @@ export function organizationLd(locale: Locale) {
       addressCountry: ORG.country,
     },
     areaServed: { "@type": "City", name: "Foz do Iguaçu" },
-    contactPoint: { "@type": "ContactPoint", contactType: "Atendimento a proprietários de hotéis", email: ORG.email, availableLanguage: ["Portuguese"] },
-    knowsAbout: ["Gestão hoteleira", "Arrendamento de hotéis", "Gestão comercial hoteleira", "Hospitalidade"],
+    contactPoint: { "@type": "ContactPoint", contactType: LD_TEXT[locale].contactType, email: ORG.email, availableLanguage: ["Portuguese"] },
+    knowsAbout: LD_TEXT[locale].knowsAbout,
     subOrganization: [
       { "@id": abs(ROUTES.colonial) + "#hotel" },
       { "@id": abs(ROUTES.pousada) + "#hotel" },
@@ -248,11 +324,7 @@ export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark", l
       address: colonialAddress,
       checkinTime: "14:00",
       checkoutTime: "12:00",
-      amenityFeature: [
-        { "@type": "LocationFeatureSpecification", name: "Piscina", value: true },
-        { "@type": "LocationFeatureSpecification", name: "Restaurante", value: true },
-        { "@type": "LocationFeatureSpecification", name: "Salas de eventos para até 180 pessoas", value: true },
-      ],
+      amenityFeature: amenities(LD_TEXT[locale].colonialAmenities),
     };
   }
   if (key === "pousada") {
@@ -267,12 +339,7 @@ export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark", l
       email: "reservas@pousadacataratas.com.br",
       numberOfRooms: 27,
       address: { "@type": "PostalAddress", streetAddress: "Rua Parigot de Souza, 180", addressLocality: "Foz do Iguaçu", addressRegion: "PR", addressCountry: "BR" },
-      amenityFeature: [
-        { "@type": "LocationFeatureSpecification", name: "Café da manhã incluso", value: true },
-        { "@type": "LocationFeatureSpecification", name: "Piscina", value: true },
-        { "@type": "LocationFeatureSpecification", name: "Estacionamento gratuito", value: true },
-        { "@type": "LocationFeatureSpecification", name: "Recepção 24 horas", value: true },
-      ],
+      amenityFeature: amenities(LD_TEXT[locale].pousadaAmenities),
     };
   }
   if (key === "villa") {
@@ -282,7 +349,7 @@ export function propertyLd(key: "colonial" | "pousada" | "villa" | "autopark", l
       "@id": ENTITY_ID.villa,
       name: "Villa Colonial",
       description: text.description,
-      servesCuisine: ["Regional", "Internacional"],
+      servesCuisine: LD_TEXT[locale].cuisine,
       telephone: "0800 819 1993",
       email: "reservas@hotelcolonialfoz.com.br",
       address: colonialAddress,

@@ -12,6 +12,18 @@ import BoraDeNovoContent, { BoraDeNovoHero } from "./bora-de-novo";
 import MinhaReservaContent, { MinhaReservaHero } from "./minha-reserva";
 import AreaDoHospedeContent, { AreaDoHospedeHero } from "./area-do-hospede";
 import faqPt from "./bora-faq.json";
+import HomeContentEs from "./es/home";
+import AMeritumContentEs, { AMeritumHero as AMeritumHeroEs } from "./es/a-meritum";
+import GestaoContentEs, { GestaoHero as GestaoHeroEs } from "./es/gestao";
+import ContatoContentEs, { ContatoHero as ContatoHeroEs } from "./es/contato";
+import ColonialContentEs, { ColonialHero as ColonialHeroEs } from "./es/colonial";
+import PousadaContentEs, { PousadaHero as PousadaHeroEs } from "./es/pousada";
+import VillaContentEs, { VillaHero as VillaHeroEs } from "./es/villa";
+import AutoparkContentEs, { AutoparkHero as AutoparkHeroEs } from "./es/autopark";
+import BoraDeNovoContentEs, { BoraDeNovoHero as BoraDeNovoHeroEs } from "./es/bora-de-novo";
+import MinhaReservaContentEs, { MinhaReservaHero as MinhaReservaHeroEs } from "./es/minha-reserva";
+import AreaDoHospedeContentEs, { AreaDoHospedeHero as AreaDoHospedeHeroEs } from "./es/area-do-hospede";
+import faqEs from "./es/bora-faq.json";
 
 type Hero = ComponentType<{ children: ReactNode }>;
 export type Section = { Hero: Hero; Content: ComponentType };
@@ -47,5 +59,20 @@ const pt: SiteContent = {
   faq: faqPt,
 };
 
-// Fase 1: espanhol e inglês ainda mostram o conteúdo em português
-export const CONTENT: Record<Locale, SiteContent> = { pt, es: pt, en: pt };
+const es: SiteContent = {
+  home: HomeContentEs,
+  meritum: { Hero: AMeritumHeroEs, Content: AMeritumContentEs },
+  gestao: { Hero: GestaoHeroEs, Content: GestaoContentEs },
+  contato: { Hero: ContatoHeroEs, Content: ContatoContentEs },
+  colonial: { Hero: ColonialHeroEs, Content: ColonialContentEs },
+  pousada: { Hero: PousadaHeroEs, Content: PousadaContentEs },
+  villa: { Hero: VillaHeroEs, Content: VillaContentEs },
+  autopark: { Hero: AutoparkHeroEs, Content: AutoparkContentEs },
+  bora: { Hero: BoraDeNovoHeroEs, Content: BoraDeNovoContentEs },
+  reserva: { Hero: MinhaReservaHeroEs, Content: MinhaReservaContentEs },
+  hospede: { Hero: AreaDoHospedeHeroEs, Content: AreaDoHospedeContentEs },
+  faq: faqEs,
+};
+
+// Inglês ainda mostra o conteúdo em português (fase 3)
+export const CONTENT: Record<Locale, SiteContent> = { pt, es, en: pt };

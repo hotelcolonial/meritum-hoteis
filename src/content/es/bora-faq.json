@@ -1,0 +1,30 @@
+[
+ {
+  "q": "¿Quién puede participar en el Bora de Novo?",
+  "a": "Huéspedes que ya se hospedaron anteriormente en una propiedad Méritum y desean regresar para una nueva estadía, aprovechando las condiciones especiales ofrecidas."
+ },
+ {
+  "q": "¿Cuáles son los beneficios para quien vuelve?",
+  "a": "Cada propiedad define sus condiciones especiales para quien regresa. Consulta los beneficios disponibles en los canales oficiales de la propiedad donde te hospedaste."
+ },
+ {
+  "q": "¿Cómo se confirma que ya fui huésped?",
+  "a": "La confirmación puede hacerse mediante datos como CPF, correo electrónico, teléfono, nombre del titular de la reserva o comprobante de un hospedaje anterior. El equipo de reservas hace la verificación antes de la confirmación final del beneficio."
+ },
+ {
+  "q": "¿Y si no encuentro el comprobante del hospedaje anterior?",
+  "a": "No hay problema. El equipo puede intentar localizar tu reserva anterior mediante otros datos, como CPF, correo electrónico, teléfono o nombre completo del titular. Si no es posible confirmar el hospedaje anterior, es posible que el beneficio no se aplique."
+ },
+ {
+  "q": "¿Puedo usar el Bora de Novo en feriados o paquetes especiales?",
+  "a": "No. El programa no es acumulable con paquetes, feriados, promociones de temporada u otras condiciones especiales. Está pensado para nuevas reservas en períodos elegibles, según la disponibilidad que informe el equipo de reservas."
+ },
+ {
+  "q": "¿Cómo reservo con esta condición?",
+  "a": "Comunícate directamente con la propiedad por los canales oficiales, indica que quieres aprovechar el Bora de Novo y envía los datos necesarios para verificar el hospedaje anterior."
+ },
+ {
+  "q": "¿Necesito haber hecho la reserva anterior directamente con la propiedad?",
+  "a": "No necesariamente. Si ya te hospedaste anteriormente, el equipo puede verificar el historial de la estadía mediante los datos que informes. El beneficio se otorga según la disponibilidad y la validación de la reserva anterior."
+ }
+]
