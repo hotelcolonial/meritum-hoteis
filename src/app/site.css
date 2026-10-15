@@ -133,3 +133,7 @@ a.sh-menu__item::before { content: ""; position: absolute; inset: -1px 0; }
 .ph-modal { touch-action: pan-y pinch-zoom; overscroll-behavior: contain; }
 /* Hero no celular: o recorte vertical já vem enquadrado, então fica centralizado */
 @media (max-width: 767px) { .hero-art { object-position: 50% 50% !important; } }
+/* Texto ou foto que muda com a largura (ex.: A Méritum mostra a Pousada no celular) */
+.mq-mobile { display: none; }
+@media (max-width: 767px) { .mq-mobile { display: inline; } .mq-desktop, .hero-d { display: none; } }
+@media (min-width: 768px) { .hero-m { display: none; } }

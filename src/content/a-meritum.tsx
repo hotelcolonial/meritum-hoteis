@@ -6,11 +6,12 @@ import HeroImage, { HERO_MOBILE } from "@/components/HeroImage";
 export function AMeritumHero({ children }: { children: ReactNode }) {
   return (
     <section className="mn-hh mn-hh--sub" style={{ position: "relative", height: "64svh", minHeight: "520px", background: "rgb(5, 39, 68)", overflow: "hidden" }}>
-      <HeroImage desktop={{ src: "/assets/web/join-hotel-colonial.jpg", width: 1024, height: 682 }} mobile={HERO_MOBILE.pousadaPiscina} eager className="mn-hh__img" alt="Jardim e área da piscina do Hotel Colonial Iguaçu" />
+      <HeroImage desktop={{ src: "/assets/web/join-hotel-colonial.jpg", width: 1024, height: 682 }} mobile={HERO_MOBILE.pousadaPiscina} eager className="mn-hh__img" alt="Jardim e área da piscina do Hotel Colonial Iguaçu" mobileAlt="Piscina da Pousada Cataratas vista de cima" />
       <div className="mn-hh__grad mn-hh__grad--top" aria-hidden="true"></div>
       <div className="mn-hh__grad mn-hh__grad--bottom" aria-hidden="true"></div>
       <p className="mn-hh__caption">
-        Hotel Colonial Iguaçu, Foz do Iguaçu
+        <span className="mq-mobile">Pousada Cataratas, Foz do Iguaçu</span>
+        <span className="mq-desktop">Hotel Colonial Iguaçu, Foz do Iguaçu</span>
       </p>
       <div className="gs-hero__content">
         <h1 className="gs-hero__title">
