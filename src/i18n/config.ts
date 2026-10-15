@@ -8,6 +8,13 @@ export const DEFAULT_LOCALE: Locale = "pt";
 
 export const isLocale = (s: string): s is Locale => (LOCALES as readonly string[]).includes(s);
 
+/**
+ * Idiomas prontos para o Google. Os que não estão aqui ficam no ar, mas com noindex, fora do sitemap e sem hreflang.
+ * Ao terminar a tradução de um idioma, basta acrescentá-lo a esta lista.
+ */
+export const LOCALES_PUBLISHED: readonly Locale[] = ["pt"];
+export const isPublished = (l: Locale) => LOCALES_PUBLISHED.includes(l);
+
 /** <html lang> e hreflang */
 export const HTML_LANG: Record<Locale, string> = { pt: "pt-BR", es: "es", en: "en" };
 /** Open Graph */

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ORG, ROUTES, SITE_URL } from "./site";
-import { HTML_LANG, LOCALES, OG_LOCALE, localePath, type Locale } from "@/i18n/config";
+import { HTML_LANG, LOCALES_PUBLISHED, OG_LOCALE, isPublished, localePath, type Locale } from "@/i18n/config";
+import { NOINDEX } from "./site";
 
 type PageText = { title: string; description: string; imageAlt: string };
 
@@ -85,10 +86,11 @@ const TEXT: Record<Locale, Record<SeoKey, PageText>> = { pt: PT, es: PT, en: PT 
 /** Título, descrição e imagem de uma página no idioma. */
 export const seoText = (key: SeoKey, locale: Locale) => ({ ...PAGES[key], ...TEXT[locale][key] });
 
-/** hreflang das três versões + x-default no português */
-export function languageAlternates(path: string): Record<string, string> {
+/** hreflang entre os idiomas publicados + x-default no português. Com um idioma só, não há alternativas. */
+export function languageAlternates(path: string): Record<string, string> | undefined {
+  if (LOCALES_PUBLISHED.length < 2) return undefined;
   const langs: Record<string, string> = {};
-  for (const l of LOCALES) langs[HTML_LANG[l]] = localePath(l, path);
+  for (const l of LOCALES_PUBLISHED) langs[HTML_LANG[l]] = localePath(l, path);
   langs["x-default"] = path;
   return langs;
 }
@@ -96,14 +98,19 @@ export function languageAlternates(path: string): Record<string, string> {
 export function pageMetadata(key: SeoKey, locale: Locale): Metadata {
   const p = seoText(key, locale);
   const url = localePath(locale, p.path);
+  const published = isPublished(locale);
+  // Idioma ainda não publicado: no ar, mas fora do Google e sem apontar para as outras versões
+  const languages = published ? languageAlternates(p.path) : undefined;
+  const others = LOCALES_PUBLISHED.filter((l) => l !== locale);
   return {
     title: { absolute: p.title },
     description: p.description,
-    alternates: { canonical: url, languages: languageAlternates(p.path) },
+    alternates: { canonical: url, ...(languages ? { languages } : {}) },
+    ...(published ? {} : { robots: { index: false, follow: !NOINDEX } }),
     openGraph: {
       type: "website",
       locale: OG_LOCALE[locale],
-      alternateLocale: LOCALES.filter((l) => l !== locale).map((l) => OG_LOCALE[l]),
+      ...(published && others.length ? { alternateLocale: others.map((l) => OG_LOCALE[l]) } : {}),
       siteName: ORG.name,
       url,
       title: p.title,
