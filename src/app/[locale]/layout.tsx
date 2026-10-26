@@ -1,11 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "../globals.css";
 import "../site.css";
 import Footer from "@/components/Footer";
 import Behaviors from "@/components/Behaviors";
 import HashRedirect from "@/components/HashRedirect";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import AsksuiteDock from "@/components/AsksuiteDock";
 import JsonLd from "@/components/JsonLd";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 import { getDict } from "@/i18n/dictionaries";
@@ -64,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export const viewport: Viewport = { themeColor: "#052744" };
+export const viewport: Viewport = { themeColor: "#052744", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default async function RootLayout({ children, params }: Props) {
   const { locale: raw } = await params;
@@ -81,6 +84,10 @@ export default async function RootLayout({ children, params }: Props) {
             <Footer locale={locale} />
           </div>
           <Behaviors />
+          <WhatsAppButton />
+          <AsksuiteDock />
+          {/* Chat de atendimento Asksuite (carrega depois que a página fica interativa) */}
+          <Script id="script-infochat" src="https://cdn.asksuite.com/infochat.js?dataConfig=https://control.asksuite.com/api/companies/hotelcolonialiguacu" strategy="afterInteractive" />
           {/* URLs do site antigo (/#/a-meritum...) só existiam em português */}
           {locale === "pt" && <HashRedirect />}
         </LocaleProvider>

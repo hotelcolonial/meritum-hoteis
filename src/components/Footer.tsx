@@ -1,5 +1,5 @@
 import Link from "./LocaleLink";
-import { Wordmark } from "./icons";
+import Logo from "./Logo";
 import { HOTELS, ORG, ROUTES } from "@/lib/site";
 import type { Locale } from "@/i18n/config";
 import { getDict } from "@/i18n/dictionaries";
@@ -27,8 +27,8 @@ export default function Footer({ locale }: { locale: Locale }) {
       <footer id="mn-footer" className="ft">
         <div className="mn-ftgrid">
           <div className="ft__brand">
-            <Link href="/" className="mn-focus" style={{ textDecoration: "none", alignSelf: "flex-start", display: "inline-flex" }}>
-              <Wordmark style={{ fontSize: "30px", color: "#052744" }} label={d.nav.homeLink} />
+            <Link href="/" aria-label="Méritum Hotéis" className="mn-focus" style={{ textDecoration: "none", alignSelf: "flex-start", display: "inline-flex" }}>
+              <Logo variant="vertical" tone="azul" height={96} />
             </Link>
             <div className="mn-ftaddr">
               <address className="ft__addrblock" style={{ fontStyle: "normal" }}>

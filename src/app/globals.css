@@ -366,9 +366,6 @@ img { display: block; max-width: 100%; border-radius: var(--radius-none); }
     @media (min-width:768px){ .bk-sheet .bk-cal__months{ --bk-months:2; } }
     @keyframes bkSheetIn{ from{ transform:translateY(24px); opacity:0; } to{ transform:none; opacity:1; } }
     @media (prefers-reduced-motion: reduce){ .bk-sheet{ animation:none; } }
-    .mn-wordmark{ display:inline-flex; align-items:baseline; font-family:var(--font-sans), "Jost", sans-serif; text-transform:uppercase; letter-spacing:0.02em; line-height:1.25; white-space:nowrap; overflow:visible; padding-top:0.08em; }
-    .mn-wordmark__a{ font-weight:600; }
-    .mn-wordmark__b{ font-weight:300; }
     .gs-hero__content{ position:absolute; left:max(48px, calc((100vw - 1360px) / 2)); right:48px; bottom:72px; z-index:2; }
     .gs-hero__title{ font-family:var(--font-serif); font-weight:500; font-size:clamp(48px,6vw,96px); line-height:1.0; letter-spacing:-0.01em; color:#FFFFFF; margin:0; }
     .gs-hero__title em{ font-style:italic; font-weight:500; }

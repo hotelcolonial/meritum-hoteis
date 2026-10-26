@@ -33,9 +33,9 @@ function initReveal(): () => void {
   if (!reduce) {
     document.querySelectorAll(REVEAL_SECTIONS).forEach((s) => s.classList.add("mn-anim"));
     const items = document.querySelectorAll(REVEAL_ITEMS);
-    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } }), { threshold: 0.2 });
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } }), { threshold: 0, rootMargin: "0px 0px -8% 0px" });
     items.forEach((b) => io.observe(b));
-    const t = setTimeout(() => items.forEach((b) => b.classList.add("is-visible")), 1200);
+    const t = setTimeout(() => items.forEach((b) => b.classList.add("is-visible")), 1500);
     cleanups.push(() => { io.disconnect(); clearTimeout(t); });
   }
 
@@ -46,9 +46,10 @@ function initReveal(): () => void {
         if (!items.length) return;
         wrap.classList.add("mn-anim");
         if (itemSel === ".mn-rv") wrap.classList.add("mn-rvwrap");
-        const io = new IntersectionObserver((es) => es.forEach((x) => { if (x.isIntersecting) { x.target.classList.add("is-visible"); io.unobserve(x.target); } }), { threshold: 0.15 });
+        const io = new IntersectionObserver((es) => es.forEach((x) => { if (x.isIntersecting) { x.target.classList.add("is-visible"); io.unobserve(x.target); } }), { threshold: 0, rootMargin: "0px 0px -8% 0px" });
         items.forEach((n) => io.observe(n));
-        const t = setTimeout(() => items.forEach((n) => { if (n.getBoundingClientRect().top < innerHeight) n.classList.add("is-visible"); }), 1200);
+        // Segurança (Safari iOS): depois de 1,5s tudo fica visível, mesmo o que ainda está fora da tela
+        const t = setTimeout(() => items.forEach((n) => n.classList.add("is-visible")), 1500);
         cleanups.push(() => { io.disconnect(); clearTimeout(t); });
       });
     });

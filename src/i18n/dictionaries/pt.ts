@@ -13,7 +13,6 @@ const pt = {
     closeMenu: "Fechar menu",
     main: "Principal",
     menu: "Menu",
-    homeLink: "Méritum Hotéis, página inicial",
     languages: "Idioma",
     skip: "Pular para o conteúdo",
   },
@@ -52,6 +51,12 @@ const pt = {
     dayLabel: "{d} de {m} de {y}",
     /** {d} dia, {m} mês abreviado, {y} ano */
     dateShort: "{d} {m} {y}",
+    /** Resumo da barra fixa do celular: {d} dia, {m} mês abreviado */
+    dayMonth: "{d} {m}",
+    /** {a} e {b} = datas curtas */
+    dateRange: "{a} a {b}",
+    chooseDates: "Escolha suas datas",
+    yourBooking: "Sua reserva",
     property: "Propriedade",
     checkin: "Check-in",
     checkout: "Check-out",
@@ -110,6 +115,11 @@ const pt = {
     next: "Próxima foto",
     /** {i} foto atual, {n} total */
     count: "{i} de {n}",
+  },
+  whatsapp: {
+    label: "Falar pelo WhatsApp",
+    tooltip: "Fale conosco",
+    message: "Olá, vim pelo site da Méritum Hotéis e tenho interesse em me hospedar em um dos seus hotéis.",
   },
   notFound: {
     title: "Página não encontrada | Méritum Hotéis",

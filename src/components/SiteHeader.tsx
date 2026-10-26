@@ -3,7 +3,8 @@
 import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "./LocaleLink";
-import { CalSmIcon, ChevWhite, CloseIcon, PersonSmIcon, StarIcon, Wordmark } from "./icons";
+import { CalSmIcon, ChevWhite, CloseIcon, PersonSmIcon, StarIcon } from "./icons";
+import Logo from "./Logo";
 import { HOTELS, ROUTES, type PageKey } from "@/lib/site";
 import { HTML_LANG, LANG_NAME, localePath, splitLocale, type Locale } from "@/i18n/config";
 import { useDict, useLocale } from "@/i18n/LocaleProvider";
@@ -88,11 +89,28 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
   }, []);
 
   useEffect(() => {
-    document.documentElement.style.overflow = menuOpen ? "hidden" : "";
+    // No iPhone, overflow:hidden no <html> não impede a página de rolar por trás do menu;
+    // por isso o body fica fixo na posição atual e volta ao mesmo ponto ao fechar.
+    const b = document.body;
+    if (menuOpen) {
+      const y = window.scrollY;
+      b.dataset.lockY = String(y);
+      document.documentElement.style.overflow = "hidden";
+      Object.assign(b.style, { position: "fixed", top: `-${y}px`, left: "0", right: "0", width: "100%" });
+    } else if (b.dataset.lockY !== undefined) {
+      const y = Number(b.dataset.lockY);
+      delete b.dataset.lockY;
+      document.documentElement.style.overflow = "";
+      Object.assign(b.style, { position: "", top: "", left: "", right: "", width: "" });
+      window.scrollTo(0, y);
+    }
     // Ao fechar o menu (X, Escape ou link), o foco volta ao botão ☰
     if (!menuOpen && wasOpen.current) burgerRef.current?.focus({ preventScroll: true });
     wasOpen.current = menuOpen;
-    return () => { document.documentElement.style.overflow = ""; };
+    return () => {
+      document.documentElement.style.overflow = "";
+      Object.assign(document.body.style, { position: "", top: "", left: "", right: "", width: "" });
+    };
   }, [menuOpen]);
 
   const closeAll = () => { setHotelsOpen(false); setMenuOpen(false); setMobHotels(false); };
@@ -120,8 +138,10 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
         </div>
       )}
       <header className="sh-header" style={{ background: bg }}>
-        <Link href="/" className="mn-focus" style={{ display: "flex", alignItems: "center" }} onClick={closeAll}>
-          <Wordmark style={{ color: "#FFFFFF" }} label={d.homeLink} />
+        {/* O header fica sempre transparente sobre o hero ou com fundo azul: logo branco */}
+        <Link href="/" aria-label="Méritum Hotéis" className="mn-focus" style={{ display: "flex", alignItems: "center" }} onClick={closeAll}>
+          <span className="sh-desk"><Logo variant="horizontal" tone="branco" height={44} /></span>
+          <span className="sh-mob"><Logo variant="horizontal" tone="branco" height={32} /></span>
         </Link>
         <nav className="sh-nav sh-desk" aria-label={d.main}>
           <Link href={ROUTES.meritum} className={"mn-link mn-focus" + active("meritum")} style={navLink}>{d.meritum}</Link>
@@ -166,8 +186,8 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
       {menuOpen && (
         <div className="mn-menu sh-menu" role="dialog" aria-modal="true" aria-label={d.menu}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "40px" }}>
-            <Link href="/" className="mn-focus" style={{ textDecoration: "none", display: "inline-flex" }} onClick={closeAll}>
-              <Wordmark style={{ fontSize: "15px", color: "#FFFFFF" }} label={d.homeLink} />
+            <Link href="/" aria-label="Méritum Hotéis" className="mn-focus" style={{ textDecoration: "none", display: "inline-flex" }} onClick={closeAll}>
+              <Logo variant="horizontal" tone="branco" height={32} />
             </Link>
             <button type="button" aria-label={d.closeMenu} onClick={() => setMenuOpen(false)} className="mn-focus sh-close" autoFocus>
               <CloseIcon size={22} />

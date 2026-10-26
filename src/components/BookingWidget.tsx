@@ -9,6 +9,7 @@ import { fill, plural as pl } from "@/i18n/dictionaries";
 
 type Prop = "colonial" | "pousada";
 type Panel = "prop" | "dates" | "guests" | null;
+type CodeAt = "desk" | "tab" | "card" | "full";
 /** Idade null = ainda não escolhida (obrigatória para buscar). */
 type Room = { adults: number; ages: (number | null)[] };
 
@@ -42,13 +43,20 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   const [bkOut, setOut] = useState<string | null>(null);
   const [roomList, setRoomList] = useState<Room[]>([{ adults: 2, ages: [] }]);
   const [code, setCode] = useState("");
-  const [codeEditing, setCodeEditing] = useState(false);
+  // Onde o campo de código está sendo digitado (o botão aparece em mais de um lugar)
+  const [codeEditing, setCodeEditing] = useState<CodeAt | null>(null);
   const [view, setView] = useState<{ y: number; m: number } | null>(null);
   const [invalid, setInvalid] = useState<"dates" | "ages" | null>(null);
   const [mob, setMob] = useState(false);
   const [fixedRaw, setFixed] = useState(false);
   const [hidden, setHidden] = useState(false);
+  // Celular: o cartão do hero saiu da tela / o rodapé ou o formulário de contato estão visíveis
+  const [cardOut, setCardOut] = useState(false);
+  const [barBlocked, setBarBlocked] = useState(false);
   const sentinel = useRef<HTMLDivElement>(null);
+  const card = useRef<HTMLDivElement>(null);
+  const fullClose = useRef<HTMLButtonElement>(null);
+  const barBtn = useRef<HTMLButtonElement>(null);
   const trigger = useRef<HTMLElement | null>(null);
   const openY = useRef(0);
 
@@ -61,7 +69,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   const open = (p: Exclude<Panel, null>, e?: RME<HTMLElement>) => {
     if (e) trigger.current = e.currentTarget;
     openY.current = window.scrollY;
-    setCodeEditing(false);
+    setCodeEditing(null);
     setPanel((cur) => (cur === p ? null : p));
   };
 
@@ -130,6 +138,51 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
     document.documentElement.classList.toggle("bk-mob-lock", mob);
     return () => document.documentElement.classList.remove("bk-mob-lock");
   }, [mob]);
+
+  // Celular: barra fixa quando o cartão do hero sai da tela, escondida sobre o rodapé e o formulário de contato
+  useEffect(() => {
+    if (!oneMonth) return;
+    const c = card.current;
+    if (!c) return;
+    const io = new IntersectionObserver(([en]) => setCardOut(!en.isIntersecting), { threshold: 0 });
+    io.observe(c);
+    const seen = new Set<Element>();
+    const blockers = Array.from(document.querySelectorAll(`${sentinelSelector}, #quero-a-meritum`));
+    const bo = new IntersectionObserver((list) => {
+      list.forEach((en) => (en.isIntersecting ? seen.add(en.target) : seen.delete(en.target)));
+      setBarBlocked(seen.size > 0);
+    }, { threshold: 0 });
+    blockers.forEach((b) => bo.observe(b));
+    return () => { io.disconnect(); bo.disconnect(); setCardOut(false); setBarBlocked(false); };
+  }, [oneMonth, sentinelSelector]);
+
+  // Folha "Sua reserva" (celular): foco no Fechar, Esc fecha e Tab fica dentro dela
+  const full = oneMonth && mob;
+  const panelNow = useRef<Panel>(null);
+  useEffect(() => { panelNow.current = panel; }, [panel]);
+  useEffect(() => {
+    if (!full) return;
+    const opener = document.activeElement as HTMLElement | null;
+    const bar = barBtn.current;
+    setTimeout(() => fullClose.current?.focus(), 40);
+    const key = (e: KeyboardEvent) => {
+      if (panelNow.current) return;
+      if (e.key === "Escape") { setMob(false); return; }
+      const el = document.querySelector("[data-bk-full]");
+      if (e.key !== "Tab" || !el) return;
+      const f = Array.from(el.querySelectorAll<HTMLElement>("button, input")).filter((x) => !(x as HTMLButtonElement).disabled && x.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    document.addEventListener("keydown", key);
+    return () => {
+      document.removeEventListener("keydown", key);
+      const back = opener && opener.isConnected && opener.offsetParent !== null ? opener : bar;
+      setTimeout(() => { try { back?.focus(); } catch { /* */ } }, 0);
+    };
+  }, [full]);
 
   const pick = (d: string) => {
     if (!bkIn || bkOut || d <= bkIn) { setIn(d); setOut(null); return; }
@@ -292,7 +345,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   const outLabel = bkOut ? fmt(bkOut) : t.selectDate;
   const popDir = fixed ? " bk-pop--up" : "";
 
-  const codeField = codeEditing ? (
+  const codeField = (at: CodeAt) => codeEditing === at ? (
     <input
       className="bk-code__input"
       ref={(el) => { if (el && document.activeElement !== el) setTimeout(() => el.focus(), 0); }}
@@ -302,21 +355,68 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
       aria-label={t.promoCode}
       onChange={(e) => setCode(e.target.value.toUpperCase().replace(/\s+/g, ""))}
       onKeyDown={(e) => {
-        if (e.key === "Escape") { e.stopPropagation(); setCodeEditing(false); setCode(""); }
-        if (e.key === "Enter") { e.preventDefault(); setCodeEditing(false); }
+        if (e.key === "Escape") { e.stopPropagation(); setCodeEditing(null); setCode(""); }
+        if (e.key === "Enter") { e.preventDefault(); setCodeEditing(null); }
       }}
-      onBlur={() => { setCodeEditing(false); setCode((c) => c.trim()); }}
+      onBlur={() => { setCodeEditing(null); setCode((c) => c.trim()); }}
     />
   ) : (
-    <button type="button" className="mn-code mn-focus bk-code__btn bk-codebtn" onClick={() => { setCodeEditing(true); setPanel(null); }}>
+    <button type="button" className="mn-code mn-focus bk-code__btn bk-codebtn" onClick={() => { setCodeEditing(at); setPanel(null); }}>
       {code ? t.code + code : t.hasCode}
     </button>
   );
 
   const sheetTitle = panel === "prop" ? t.property : panel === "dates" ? t.stayDates : t.guests;
 
+  // Celular (até 767px): cartão no hero e o mesmo formulário dentro da folha "Sua reserva"
+  const phoneForm = (at: "card" | "full") => (
+    <div className="bk-mcard" ref={at === "card" ? card : undefined}>
+      <button type="button" data-bk-trigger className="mn-focus bk-mfield" aria-haspopup="listbox" aria-expanded={panel === "prop"} onClick={(e) => open("prop", e)}>
+        <span className="bk-textcol"><span className="bk-label">{t.property}</span><span className="bk-value">{PROP_NAME[prop]}</span></span><ChevWhite />
+      </button>
+      <div className="bk-mrow">
+        <button type="button" data-bk-trigger data-bk-dates className={"mn-focus bk-mfield" + bad(datesBad)} aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
+          <span className="bk-textcol"><span className="bk-label">{t.checkin}</span><span className={"bk-value" + (bkIn ? "" : " is-dim")}>{inLabel}</span></span>
+        </button>
+        <button type="button" data-bk-trigger className={"mn-focus bk-mfield" + bad(datesBad)} aria-haspopup="dialog" aria-expanded={panel === "dates"} onClick={(e) => open("dates", e)}>
+          <span className="bk-textcol"><span className="bk-label">{t.checkout}</span><span className={"bk-value" + (bkOut ? "" : " is-dim")}>{outLabel}</span></span>
+        </button>
+      </div>
+      <button type="button" data-bk-trigger className={"mn-focus bk-mfield" + bad(agesBad)} aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
+        <span className="bk-textcol"><span className="bk-label">{t.guests}</span><span className="bk-value">{guestsLabel}</span></span><ChevWhite />
+      </button>
+      <div className="bk-mcode">{codeField(at)}</div>
+      {!!barErr && <p className="bk-err bk-err--static" role="alert">{barErr}</p>}
+      <button type="button" className="mn-focus bk-mgo" onClick={submit}>{t.search}</button>
+    </div>
+  );
+  const dayMonth = (s: string) => { const [, m, d] = s.split("-").map(Number); return fill(t.dayMonth, { d, m: t.monthsShort[m - 1] }); };
+  const guestsMini = [pl(totalAdults, t.adult), totalChildren > 0 && pl(totalChildren, t.child)].filter(Boolean).join(", ").toLocaleLowerCase(locale);
+  const summary = bkIn && bkOut ? `${fill(t.dateRange, { a: dayMonth(bkIn), b: dayMonth(bkOut) })} · ${guestsMini}` : t.chooseDates;
+  const barOn = oneMonth && cardOut && !barBlocked;
+  const openFull = () => { setPanel(null); setMob(true); };
+
   return (
     <div className="bk-wrap">
+      {/* Celular: formulário dentro do hero, barra fixa ao rolar e folha com o formulário completo */}
+      <div className="bk-phone">{phoneForm("card")}</div>
+      <div className={"bk-pbar" + (barOn ? " is-on" : "")} inert={!barOn} aria-hidden={!barOn}>
+        <button type="button" className="bk-pbar__sum mn-focus" aria-haspopup="dialog" aria-expanded={full} onClick={openFull}>
+          <span className="bk-pbar__prop">{PROP_NAME[prop]}</span>
+          <span className="bk-pbar__info">{summary}</span>
+        </button>
+        <button ref={barBtn} type="button" className="bk-pbar__btn mn-focus" aria-haspopup="dialog" aria-expanded={full} onClick={openFull}>{t.book}</button>
+      </div>
+      {full && (
+        <div className="bk-sheet bk-full" data-bk-full role="dialog" aria-modal="true" aria-label={t.yourBooking}>
+          <div className="bk-sheet__head">
+            <p className="bk-sheet__title">{t.yourBooking}</p>
+            <button ref={fullClose} type="button" className="bk-sheet__close" onClick={() => { setMob(false); setPanel(null); }}>{t.close}</button>
+          </div>
+          <div className="bk-sheet__body">{phoneForm("full")}</div>
+        </div>
+      )}
+
       {/* Desktop */}
       <div className="sh-desk" style={{ display: "block" }}>
         <div ref={sentinel} style={{ height: fixed ? "72px" : "0px" }} />
@@ -351,13 +451,13 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
             </button>
             {!isMobile && panel === "guests" && <div className={"bk-pop bk-pop--guests mn-pop" + popDir} data-bk-panel role="dialog" aria-label={t.guests}>{guests}</div>}
           </div>
-          <div className="bk-segcode">{!isMobile && codeField}</div>
+          <div className="bk-segcode">{!isMobile && codeField("desk")}</div>
           <button type="button" className="mn-focus bk-submit bk-go" onClick={submit}>{t.search}</button>
           {!!barErr && !isMobile && <p className={"bk-err" + (fixed ? " bk-err--up" : "")} role="alert">{barErr}</p>}
         </div>
       </div>
 
-      {/* Mobile */}
+      {/* Tablet (768 a 1023px) */}
       <div className="bk-fixbar">
         <span className="bk-fixbar__text">{PROP_NAME[prop]} · {bkIn && bkOut ? t.datesSelected : t.selectDates}</span>
         <button type="button" className="bk-fixbar__btn mn-focus" aria-haspopup="dialog" aria-expanded={mob} onClick={() => setMob(true)}>{t.search}</button>
@@ -380,7 +480,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
           <button type="button" data-bk-trigger className={"mn-focus bk-msegbtn" + bad(agesBad)} aria-haspopup="dialog" aria-expanded={panel === "guests"} onClick={(e) => open("guests", e)}>
             <span><PersonIcon /><span className="bk-textcol"><span className="bk-label">{t.guests}</span><span className="bk-value">{guestsLabel}</span></span></span><ChevWhite />
           </button>
-          <div className="bk-msegcode">{isMobile && codeField}</div>
+          <div className="bk-msegcode">{isMobile && codeField("tab")}</div>
           {!!barErr && isMobile && <p className="bk-err bk-err--static" role="alert">{barErr}</p>}
           <button type="button" className="mn-focus bk-submit bk-go bk-go--mob" onClick={submit}>{t.search}</button>
         </div>

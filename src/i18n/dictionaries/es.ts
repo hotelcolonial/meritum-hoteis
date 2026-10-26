@@ -15,7 +15,6 @@ const es: Dict = {
     closeMenu: "Cerrar menú",
     main: "Principal",
     menu: "Menú",
-    homeLink: "Méritum Hotéis, página de inicio",
     languages: "Idioma",
     skip: "Ir al contenido",
   },
@@ -52,6 +51,12 @@ const es: Dict = {
     weekdays: ["D", "L", "M", "M", "J", "V", "S"],
     dayLabel: "{d} de {m} de {y}",
     dateShort: "{d} {m} {y}",
+    /** Resumen de la barra fija del celular: {d} día, {m} mes abreviado */
+    dayMonth: "{d} {m}",
+    /** {a} y {b} = fechas cortas */
+    dateRange: "{a} a {b}",
+    chooseDates: "Elige tus fechas",
+    yourBooking: "Tu reserva",
     property: "Propiedad",
     checkin: "Check-in",
     checkout: "Check-out",
@@ -108,6 +113,11 @@ const es: Dict = {
     prev: "Foto anterior",
     next: "Foto siguiente",
     count: "{i} de {n}",
+  },
+  whatsapp: {
+    label: "Hablar por WhatsApp",
+    tooltip: "Hable con nosotros",
+    message: "Hola, vengo del sitio de Méritum Hotéis y tengo interés en hospedarme en uno de sus hoteles.",
   },
   notFound: {
     title: "Página no encontrada | Méritum Hotéis",

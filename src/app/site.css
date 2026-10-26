@@ -18,14 +18,12 @@ html { scroll-padding-top: 120px; }
 .sh-util__row { width: 100%; display: flex; align-items: center; justify-content: flex-end; gap: 14px; }
 .sh-util__row--mob { gap: 16px; flex-wrap: wrap; }
 .sh-header { height: 68px; flex-shrink: 0; display: flex; align-items: center; gap: 2rem; padding: 0 48px; overflow: visible; }
-.sh-header .mn-wordmark { font-size: 22px; }
 .sh-nav { display: flex; align-items: center; gap: 32px; margin-left: auto; }
 .sh-burger { flex-direction: column; justify-content: center; align-items: flex-end; gap: 6px; width: 44px; height: 44px; padding: 0; margin: 0 -10px 0 0; background: transparent; border: 0; cursor: pointer; }
 .sh-burger span { display: block; width: 26px; height: 2px; background: #FFFFFF; }
 @media (max-width: 1023px) {
   .sh-util { padding: 0 20px; }
   .sh-header { height: 72px; justify-content: space-between; padding: 0 20px; }
-  .sh-header .mn-wordmark { font-size: 18px; }
 }
 
 /* Menu mobile */
@@ -128,7 +126,7 @@ html { scroll-padding-top: 120px; }
 a.sh-menu__item::before { content: ""; position: absolute; inset: -1px 0; }
 .bk-step__btn::before { content: ""; position: absolute; inset: -6px; }
 /* Home no celular: o campo focado não fica embaixo da barra fixa de reservas */
-@media (max-width: 1023px) { html:has(.bk-fixbar) { scroll-padding-bottom: 80px; } }
+@media (min-width: 768px) and (max-width: 1023px) { html:has(.bk-fixbar) { scroll-padding-bottom: 80px; } }
 /* Lightbox: o deslizar horizontal troca a foto; sem isso o navegador o toma como gesto de "voltar" */
 .ph-modal { touch-action: pan-y pinch-zoom; overscroll-behavior: contain; }
 /* Hero no celular: o recorte vertical já vem enquadrado, então fica centralizado */
@@ -149,5 +147,130 @@ a.sh-menu__item::before { content: ""; position: absolute; inset: -1px 0; }
 /* Até 639px os pontos e a legenda ficam empilhados a 20px da base */
 @media (max-width: 639px) { .mn-hh:not(.mn-hh--sub) .mn-hh__content.hh-center { padding-bottom: 119px !important; } }
 
+/* Barra de reserva no celular (até 767px). O hero ocupa a tela toda: cabeçalho, o cartão do formulário 12px
+   abaixo dele (no fluxo da página) e, na base, o título com os pontos e a legenda do slider, como antes.
+   Ao rolar, uma barra fixa com o resumo da busca assume o lugar do cartão.
+   A barra e o formulário do tablet (768 a 1023px) ficam como estavam. */
+.bk-phone, .bk-pbar { display: none; }
+@media (max-width: 767px) {
+  .mn-hh:not(.mn-hh--sub) { height: auto !important; min-height: 100svh !important; overflow: visible !important; }
+  .mn-hh:not(.mn-hh--sub) .bk-wrap { padding: 12px 20px 0; }
+  /* No mínimo 40px entre o cartão e o título; o título desce para a base */
+  .mn-hh:not(.mn-hh--sub) .mn-hh__content.hh-center { padding-top: 40px !important; }
+  .hh-title { font-size: clamp(36px, 10vw, 48px); }
+  /* Sem overflow hidden no hero: o zoom das fotos cresce para cima, sem invadir a seção seguinte */
+  .mn-hh__slide { transform-origin: 50% 100%; }
+  .bk-fixbar, .bk-mobwrap { display: none !important; }
+  body:has(.bk-fixbar) { padding-bottom: 0; }
+  .bk-phone { display: block; }
+
+  .bk-mcard { width: 100%; background: #093B6B; border-radius: 0; box-shadow: 0 12px 32px rgba(0,0,0,0.25); display: grid; grid-template-columns: minmax(0, 1fr); }
+  .bk-mfield { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-width: 0; padding: 14px 16px; background: transparent; border: 0; border-bottom: 1px solid rgba(255,255,255,0.18); cursor: pointer; text-align: left; }
+  .bk-mrow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .bk-mrow .bk-mfield + .bk-mfield { border-left: 1px solid rgba(255,255,255,0.18); }
+  .bk-mcard .bk-label { font-size: 11px; color: rgba(255,255,255,0.6); }
+  .bk-mcard .bk-value { font-size: 15px; }
+  .bk-mfield.is-invalid { box-shadow: inset 0 -3px 0 #F97066; }
+  .bk-mfield.is-invalid .bk-label { color: #FDA29B; }
+  .bk-mcode { display: flex; align-items: center; min-height: 44px; padding: 0 16px; }
+  .bk-mcode .bk-codebtn { font-size: 13px; min-height: 44px; }
+  .bk-mcard .bk-err--static { padding: 10px 16px; }
+  .bk-mgo { width: 100%; height: 52px; background: #FFFFFF; color: #052744; border: 0; border-radius: 0; font-family: var(--font-sans); font-weight: 500; font-size: 15px; cursor: pointer; transition: background-color .2s cubic-bezier(0.16,1,0.3,1); }
+  .bk-mgo:hover { background: #C9A24A; }
+  .bk-full .bk-sheet__body { padding: 20px; }
+
+  .bk-pbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; height: calc(64px + env(safe-area-inset-bottom)); box-sizing: border-box; padding: 0 16px; padding-bottom: env(safe-area-inset-bottom); background: #093B6B; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 -6px 20px rgba(5,39,68,0.25); transform: translateY(100%); opacity: 0; visibility: hidden; transition: transform .25s cubic-bezier(0.16,1,0.3,1), opacity .25s ease, visibility 0s linear .25s; }
+  .bk-pbar.is-on { transform: none; opacity: 1; visibility: visible; transition: transform .25s cubic-bezier(0.16,1,0.3,1), opacity .25s ease, visibility 0s; }
+  .bk-pbar__sum { flex: 1; min-width: 0; min-height: 44px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px; padding: 0; background: transparent; border: 0; text-align: left; cursor: pointer; font-family: var(--font-sans); color: #FFFFFF; }
+  .bk-pbar__prop, .bk-pbar__info { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bk-pbar__prop { font-size: 14px; font-weight: 500; line-height: 1.3; }
+  .bk-pbar__info { font-size: 12px; line-height: 1.3; color: rgba(255,255,255,0.7); }
+  .bk-pbar__btn { flex: 0 0 auto; min-height: 44px; padding: 12px 20px; background: #FFFFFF; color: #052744; border: 0; border-radius: 0; font-family: var(--font-sans); font-weight: 500; font-size: 14px; line-height: 1.4; white-space: nowrap; cursor: pointer; }
+  body:has(.bk-pbar.is-on) { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  html:has(.bk-pbar.is-on) { scroll-padding-bottom: 80px; }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) { .bk-pbar, .bk-pbar.is-on { transition: none; } }
+
 /* Seletor de idioma dentro do menu do celular, 24px abaixo dos links de Fidelidade, Minha reserva e Área do hóspede */
 .mn-menu__langs { margin-top: 24px; }
+
+/* Botão flutuante de WhatsApp (todas as páginas) */
+.wa-btn { position: fixed; right: 24px; bottom: 24px; z-index: 60; width: 56px; height: 56px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,0,0,0.22); text-decoration: none; transition: bottom .25s ease, opacity .25s ease, visibility .25s, transform .2s ease, background-color .2s ease; }
+.wa-btn:focus-visible { outline: 2px solid #C9A24A; outline-offset: 3px; }
+.wa-btn__tip { position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%); background: #052744; color: #FFFFFF; font-family: var(--font-sans); font-size: 14px; line-height: 1.3; padding: 8px 14px; border-radius: 0; white-space: nowrap; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s ease, visibility 0s linear .2s; }
+@media (hover: hover) and (min-width: 1024px) {
+  .wa-btn:hover { transform: scale(1.06); background: #1EBE5B; }
+  .wa-btn:hover .wa-btn__tip { opacity: 1; visibility: visible; transition: opacity .2s ease, visibility 0s; }
+}
+@media (max-width: 767px) { .wa-btn { right: 16px; bottom: 16px; width: 52px; height: 52px; } }
+/* Acima da barra de reserva fixa: desktop (72px), tablet (64px, sempre visível na home) e celular (64px, ao rolar) */
+@media (min-width: 1024px) { :root:has(.bk-desk-bar.is-fixed:not(.is-hidden)) .wa-btn { bottom: 88px; } }
+@media (min-width: 768px) and (max-width: 1023px) { :root:has(.bk-fixbar) .wa-btn { bottom: 80px; } }
+@media (max-width: 767px) {
+  :root:has(.bk-pbar.is-on) .wa-btn { bottom: calc(80px + env(safe-area-inset-bottom)); }
+  /* Campo de formulário em foco no celular: o botão sai para não cobrir o que se digita */
+  :root:has(input:focus, textarea:focus, select:focus) .wa-btn { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+/* Folhas da reserva, formulário de reserva do tablet e menu do celular abertos */
+:root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) .wa-btn { opacity: 0; visibility: hidden; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .wa-btn:hover { transform: none !important; } }
+
+/* ====================================================================
+   Compatibilidade com iPhone (Safari). No Android tudo isto já funcionava.
+   ==================================================================== */
+
+/* Menu do celular: no Safari os blocos de uma coluna flex com rolagem encolhem
+   além do próprio conteúdo e os textos se sobrepõem. Nada encolhe; quem sobra rola. */
+.sh-menu { height: 100vh; height: 100dvh; bottom: auto;
+  padding-top: calc(1.4rem + env(safe-area-inset-top));
+  padding-bottom: calc(2.4rem + env(safe-area-inset-bottom));
+  -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.sh-menu > *, .sh-menu__nav > *, .sh-menu__sub, .sh-menu__footer, .mn-menu__util, .mn-menu__langs { flex-shrink: 0; }
+.sh-menu__nav { flex: 1 0 auto; }
+/* Acentos de MÉRITUM e GESTÃO não encostam na linha de cima */
+.sh-menu__item { font-size: clamp(30px, 9vw, 40px); line-height: 1.15; }
+/* O Safari aplica estilo próprio a <button>: o item "Hotéis" fica igual aos links */
+.sh-menu__btn { -webkit-appearance: none; appearance: none; font: inherit; font-family: var(--font-serif); font-weight: 500;
+  font-size: clamp(30px, 9vw, 40px); line-height: 1.15; letter-spacing: -0.01em; color: #fff;
+  display: block; width: 100%; margin: 0; padding: 0; border-radius: 0; }
+.sh-menu__subitem { line-height: 1.3; }
+
+/* iPhone dá zoom ao tocar em campos com letra menor que 16px e a página fica desalinhada */
+@media (max-width: 1023px) {
+  input, select, textarea { font-size: 16px !important; }
+}
+input, select, textarea, button { -webkit-tap-highlight-color: transparent; }
+input:not([type="checkbox"]):not([type="radio"]), textarea { -webkit-appearance: none; appearance: none; border-radius: 0; }
+select { border-radius: 0; }
+
+/* Barra fixa e botão de WhatsApp acima da barra inferior do Safari */
+@media (max-width: 767px) { .wa-btn { bottom: calc(16px + env(safe-area-inset-bottom)); } }
+.bk-fixbar { padding-bottom: env(safe-area-inset-bottom); }
+
+/* iPhones com iOS antigo (antes do 15.4) não entendem svh/dvh: sem isto a altura
+   do hero vira zero e a foto e o título somem */
+@supports not (height: 1svh) {
+  .soon { min-height: calc(100vh - 120px); }
+  .bn-hero { min-height: 82vh; }
+  .ph-film { height: 76vh; }
+  .mn-hh { height: 88vh !important; }
+  .mn-hh--sub { height: 72vh !important; }
+  @media (max-width: 1023px) { .mn-hh { height: auto !important; min-height: max(80vh, 560px) !important; } }
+  @media (max-width: 639px) {
+    .mn-hh { height: auto !important; min-height: max(76vh, 520px) !important; }
+    .mn-hh--sub { height: 76vh !important; }
+  }
+  @media (max-width: 767px) { .mn-hh:not(.mn-hh--sub) { height: auto !important; min-height: 100vh !important; } }
+  .sh-menu { height: 100vh; }
+}
+/* overflow-x: clip só existe a partir do Safari 16 */
+@supports not (overflow-x: clip) {
+  body { overflow-x: hidden; }
+}
+
+/* WhatsApp empilhado logo acima da bolha do chat da Asksuite, os dois no canto inferior direito.
+   A bolha da Asksuite tem cerca de 64px e fica a ~20px da base; o WhatsApp fica 12px acima dela.
+   Quando a barra de reserva fixa aparece, os dois sobem juntos a altura dela (--mn-bar-h, medida
+   em AsksuiteDock.tsx). */
+.wa-btn { bottom: calc(100px + var(--mn-bar-h, 0px)) !important; }
+@media (max-width: 767px) { .wa-btn { bottom: calc(92px + var(--mn-bar-h, 0px)) !important; } }
