@@ -31,6 +31,25 @@ function chatRoots(): HTMLElement[] {
   return all.filter((el) => !all.some((o) => o !== el && o.contains(el)));
 }
 
+/** A bolha visível (40 a 120px) mais próxima do canto inferior direito, e o deslocamento já aplicado nela */
+function findBubble(roots: HTMLElement[]): { el: HTMLElement; shift: number } | null {
+  let best: HTMLElement | null = null;
+  let bestScore = Infinity;
+  let shift = 0;
+  roots.forEach((root) => {
+    const ty = new DOMMatrixReadOnly(getComputedStyle(root).transform === "none" ? undefined : getComputedStyle(root).transform).m42;
+    [root, ...Array.from(root.querySelectorAll<HTMLElement>("*"))].forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.width < 40 || r.width > 120 || r.height < 40 || r.height > 120) return;
+      const cs = getComputedStyle(el);
+      if (cs.visibility === "hidden" || cs.display === "none" || Number(cs.opacity) === 0) return;
+      const score = (window.innerWidth - r.right) + (window.innerHeight - r.bottom);
+      if (score < bestScore) { bestScore = score; best = el; shift = ty; }
+    });
+  });
+  return best ? { el: best, shift } : null;
+}
+
 export default function AsksuiteDock() {
   useEffect(() => {
     let raf = 0;
@@ -42,10 +61,24 @@ export default function AsksuiteDock() {
         last = h;
         document.documentElement.style.setProperty("--mn-bar-h", h + "px");
       }
-      chatRoots().forEach((el) => {
+      const roots = chatRoots();
+      roots.forEach((el) => {
         el.style.transition = "transform .25s ease";
         el.style.transform = h ? `translateY(-${h}px)` : "";
       });
+      // Mede a bolha (sem o deslocamento da barra) para centralizar o WhatsApp exatamente acima dela
+      const bubble = findBubble(roots);
+      const root = document.documentElement.style;
+      if (bubble) {
+        const r = bubble.el.getBoundingClientRect();
+        const top = Math.round(window.innerHeight - (r.top - bubble.shift));
+        const cx = Math.round(window.innerWidth - (r.left + r.width / 2));
+        root.setProperty("--mn-chat-top", top + "px");
+        root.setProperty("--mn-chat-cx", cx + "px");
+      } else {
+        root.removeProperty("--mn-chat-top");
+        root.removeProperty("--mn-chat-cx");
+      }
     };
     const schedule = () => { if (!raf) raf = requestAnimationFrame(apply); };
 
@@ -61,7 +94,7 @@ export default function AsksuiteDock() {
       window.removeEventListener("resize", schedule);
       mo.disconnect();
       if (raf) cancelAnimationFrame(raf);
-      document.documentElement.style.removeProperty("--mn-bar-h");
+      ["--mn-bar-h", "--mn-chat-top", "--mn-chat-cx"].forEach((v) => document.documentElement.style.removeProperty(v));
     };
   }, []);
   return null;

@@ -274,3 +274,6 @@ select { border-radius: 0; }
    em AsksuiteDock.tsx). */
 .wa-btn { bottom: calc(100px + var(--mn-bar-h, 0px)) !important; }
 @media (max-width: 767px) { .wa-btn { bottom: calc(92px + var(--mn-bar-h, 0px)) !important; } }
+/* Quando a bolha da Asksuite é encontrada, o WhatsApp fica centralizado sobre ela, 12px acima */
+:root[style*="--mn-chat-cx"] .wa-btn { right: calc(var(--mn-chat-cx) - 28px) !important; bottom: calc(var(--mn-chat-top) + 12px + var(--mn-bar-h, 0px)) !important; }
+@media (max-width: 767px) { :root[style*="--mn-chat-cx"] .wa-btn { right: calc(var(--mn-chat-cx) - 26px) !important; } }
