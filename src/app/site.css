@@ -37,7 +37,7 @@ html { scroll-padding-top: 120px; }
 .sh-menu__subitem { font-family: var(--font-serif); font-weight: 400; font-size: 22px; line-height: 1.2; color: rgba(255,255,255,0.85); text-decoration: none; }
 .sh-menu__footer { display: flex; flex-direction: column; gap: 1.6rem; margin-top: 2rem; }
 .sh-menu__cta { display: inline-flex; align-items: center; align-self: flex-start; gap: 8px; font-family: var(--font-sans); font-weight: 500; font-size: 15px; line-height: 1.2; color: #FFFFFF; border-bottom: 1px solid rgba(255,255,255,0.6); padding: 0 0 6px; text-decoration: none; transition: border-color .2s ease; }
-.sh-menu__cta:hover { color: #fff; border-bottom-color: #C9A24A; }
+.sh-menu__cta:hover { color: #fff; border-bottom-color: var(--gold); }
 .sh-menu__hotels { display: flex; flex-direction: column; gap: 0.7rem; }
 .sh-menu__hotels a { font-family: var(--font-sans); font-weight: 400; font-size: 14px; color: rgba(255,255,255,0.8); text-decoration: none; width: fit-content; }
 .sh-menu__hotels a:hover { color: #fff; }
@@ -53,7 +53,7 @@ html { scroll-padding-top: 120px; }
 .ft__prop:hover { color: #093B6B; }
 .ft__social { display: flex; gap: 1.25rem; margin-top: 40px; }
 .ft__icon { display: inline-flex; color: #052744; transition: color .2s ease; }
-.ft__icon:hover { color: #C9A24A; }
+.ft__icon:hover { color: var(--gold); }
 .ft__legal { display: flex; gap: 1.75rem; flex-wrap: wrap; justify-content: center; }
 .ft__legal a, .ft__legal span { font-family: var(--font-sans); font-weight: 400; font-size: 13px; color: #5B6672; text-decoration: none; transition: color .2s ease; }
 .ft__legal a:hover { color: #052744; }
@@ -88,8 +88,7 @@ html { scroll-padding-top: 120px; }
 .bk-value.is-dim { color: rgba(255,255,255,0.7); }
 .bk-segcode { display: flex; align-items: center; padding: 0 20px; border-left: 1px solid rgba(255,255,255,0.2); }
 .bk-codebtn { font-family: var(--font-sans); font-weight: 400; font-size: 14px; color: #FFFFFF; white-space: nowrap; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; background: transparent; border: 0; cursor: pointer; padding: 0; }
-.bk-go { white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-weight: 500; font-size: 15px; line-height: 1; background: #FFFFFF; color: #052744; border: none; border-radius: 0; cursor: pointer; transition: background-color .2s cubic-bezier(0.16,1,0.3,1); padding: 0 28px; height: 72px; }
-.bk-go:hover { background: #C9A24A; }
+.bk-go { white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-weight: 500; font-size: 15px; line-height: 1; background: var(--cta-bg); color: var(--cta-text); border: none; border-radius: 0; cursor: pointer; padding: 0 28px; height: 72px; }
 .bk-go--mob { width: 100%; padding: 18px; height: auto; }
 /* Telas intermediárias: datas e propriedade com largura natural; só o resumo de hóspedes encolhe (com "…"),
    para o botão nunca sair da barra. O !important vence a regra antiga de globals.css. */
@@ -175,8 +174,7 @@ a.sh-menu__item::before { content: ""; position: absolute; inset: -1px 0; }
   .bk-mcode { display: flex; align-items: center; min-height: 44px; padding: 0 16px; }
   .bk-mcode .bk-codebtn { font-size: 13px; min-height: 44px; }
   .bk-mcard .bk-err--static { padding: 10px 16px; }
-  .bk-mgo { width: 100%; height: 52px; background: #FFFFFF; color: #052744; border: 0; border-radius: 0; font-family: var(--font-sans); font-weight: 500; font-size: 15px; cursor: pointer; transition: background-color .2s cubic-bezier(0.16,1,0.3,1); }
-  .bk-mgo:hover { background: #C9A24A; }
+  .bk-mgo { width: 100%; height: 52px; background: var(--cta-bg); color: var(--cta-text); border: 0; border-radius: 0; font-family: var(--font-sans); font-weight: 500; font-size: 15px; cursor: pointer; }
   .bk-full .bk-sheet__body { padding: 20px; }
 
   .bk-pbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; height: calc(64px + env(safe-area-inset-bottom)); box-sizing: border-box; padding: 0 16px; padding-bottom: env(safe-area-inset-bottom); background: #093B6B; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 -6px 20px rgba(5,39,68,0.25); transform: translateY(100%); opacity: 0; visibility: hidden; transition: transform .25s cubic-bezier(0.16,1,0.3,1), opacity .25s ease, visibility 0s linear .25s; }
@@ -185,7 +183,7 @@ a.sh-menu__item::before { content: ""; position: absolute; inset: -1px 0; }
   .bk-pbar__prop, .bk-pbar__info { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .bk-pbar__prop { font-size: 14px; font-weight: 500; line-height: 1.3; }
   .bk-pbar__info { font-size: 12px; line-height: 1.3; color: rgba(255,255,255,0.7); }
-  .bk-pbar__btn { flex: 0 0 auto; min-height: 44px; padding: 12px 20px; background: #FFFFFF; color: #052744; border: 0; border-radius: 0; font-family: var(--font-sans); font-weight: 500; font-size: 14px; line-height: 1.4; white-space: nowrap; cursor: pointer; }
+  .bk-pbar__btn { flex: 0 0 auto; min-height: 44px; padding: 12px 20px; background: var(--cta-bg); color: var(--cta-text); border: 0; border-radius: 0; font-family: var(--font-sans); font-weight: 500; font-size: 14px; line-height: 1.4; white-space: nowrap; cursor: pointer; }
   body:has(.bk-pbar.is-on) { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
   html:has(.bk-pbar.is-on) { scroll-padding-bottom: 80px; }
 }
@@ -196,7 +194,7 @@ a.sh-menu__item::before { content: ""; position: absolute; inset: -1px 0; }
 
 /* Botão flutuante de WhatsApp (todas as páginas) */
 .wa-btn { position: fixed; right: 24px; bottom: 24px; z-index: 60; width: 56px; height: 56px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,0,0,0.22); text-decoration: none; transition: bottom .25s ease, opacity .25s ease, visibility .25s, transform .2s ease, background-color .2s ease; }
-.wa-btn:focus-visible { outline: 2px solid #C9A24A; outline-offset: 3px; }
+.wa-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 .wa-btn__tip { position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%); background: #052744; color: #FFFFFF; font-family: var(--font-sans); font-size: 14px; line-height: 1.3; padding: 8px 14px; border-radius: 0; white-space: nowrap; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s ease, visibility 0s linear .2s; }
 @media (hover: hover) and (min-width: 1024px) {
   .wa-btn:hover { transform: scale(1.06); background: #1EBE5B; }
@@ -286,7 +284,7 @@ select { border-radius: 0; }
 .mn-popup__box { position: relative; opacity: 0; transform: translateY(16px); transition: opacity .25s cubic-bezier(.2,.7,.2,1), transform .25s cubic-bezier(.2,.7,.2,1); }
 .mn-popup.is-in .mn-popup__box { opacity: 1; transform: none; transition-duration: .4s; }
 .mn-popup__link { display: block; line-height: 0; -webkit-tap-highlight-color: transparent; }
-.mn-popup__link:focus-visible { outline: 2px solid #C9A24A; outline-offset: 4px; }
+.mn-popup__link:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
 /* A largura também é limitada pela altura (proporção da arte), assim a imagem nunca distorce nem corta */
 .mn-popup__img { display: block; height: auto; width: min(420px, 88vw, 65.6vh); max-height: 82vh; filter: drop-shadow(0 18px 40px rgba(0,0,0,.35)); }
 @supports (height: 100dvh) { .mn-popup__img { width: min(420px, 88vw, 65.6dvh); max-height: 82dvh; } }
@@ -296,12 +294,12 @@ select { border-radius: 0; }
 }
 .mn-popup__close { position: absolute; top: -12px; right: -6px; width: 40px; height: 40px; border-radius: 50%; border: 0; padding: 0; background: #FAF8F3; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
 @media (min-width: 768px) { .mn-popup__close { top: -14px; right: -14px; } }
-.mn-popup__close:focus-visible { outline: 2px solid #C9A24A; outline-offset: 3px; }
+.mn-popup__close:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .mn-popup__box { transform: none; } }
-/* Com o pop-up aberto, o WhatsApp e a bolha da Asksuite somem. Com uma folha da reserva aberta, a bolha e o
+/* Com o pop-up aberto, o WhatsApp e a bolha da Asksuite somem. Com uma folha da reserva ou o menu do celular abertos, a bolha e o
    balão da Asksuite também (o WhatsApp já some pela regra de .wa-btn lá em cima) e voltam ao fechar. */
-:root:has(.bk-sheet, .bk-mobwrap.is-open) [id*="asksuite" i], :root:has(.bk-sheet, .bk-mobwrap.is-open) [class*="asksuite" i],
-:root:has(.bk-sheet, .bk-mobwrap.is-open) [id*="infochat" i], :root:has(.bk-sheet, .bk-mobwrap.is-open) [class*="infochat" i],
+:root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [id*="asksuite" i], :root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [class*="asksuite" i],
+:root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [id*="infochat" i], :root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [class*="infochat" i],
 :root.has-popup .wa-btn,
 :root.has-popup [id*="asksuite" i], :root.has-popup [class*="asksuite" i],
 :root.has-popup [id*="infochat" i], :root.has-popup [class*="infochat" i] { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
@@ -317,3 +315,21 @@ select { border-radius: 0; }
 .bk-cal--list .bk-cal__title { text-align: left; margin: 0 0 12px; }
 .bk-cal--list .bk-cal__day { height: 44px; }
 .bk-cal--list .bk-cal__nights { position: sticky; bottom: 0; z-index: 2; background: #FFFFFF; margin: 0; padding: 14px 0 calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid #F4F6F8; }
+
+/* Botões de ação (CTA): dourado (--cta-bg / --cta-text em globals.css). No hover o dourado clareia e o botão
+   sobe 1px; o contorno de foco continua o de cada botão. As cores dos hotéis (.ph-book__btn) e o WhatsApp não entram. */
+.bk-go, .bk-mgo, .bk-pbar__btn, .bk-fixbar__btn, .bk-guests__apply, .bn-how__btn, .mn-join__submit, .ct-row__btn, .pg-prop__btn { transition: filter .2s ease, transform .2s ease; }
+@media (hover: hover) {
+  .bk-go:hover, .bk-mgo:hover, .bk-pbar__btn:hover, .bk-fixbar__btn:hover, .bk-guests__apply:hover, .bn-how__btn:hover, .mn-join__submit:not(:disabled):hover, .ct-row__btn:hover, .pg-prop__btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bk-go:hover, .bk-mgo:hover, .bk-pbar__btn:hover, .bk-fixbar__btn:hover, .bk-guests__apply:hover, .bn-how__btn:hover, .mn-join__submit:hover, .ct-row__btn:hover, .pg-prop__btn:hover { transform: none; }
+}
+
+/* "Fale conosco" na barra superior (SiteHeader.tsx): ícone e rótulo em dourado, e-mail em branco
+   com sublinhado dourado no hover. No celular fica só ícone + rótulo, para caber com idiomas e moeda. */
+.sh-email svg { color: var(--gold); }
+.sh-email__label { font-weight: 500; color: var(--gold); }
+.sh-email__addr { margin-left: 2px; font-weight: 400; color: #FFFFFF; text-decoration: underline 1px transparent; text-underline-offset: 3px; transition: text-decoration-color .2s ease; }
+.sh-email:hover .sh-email__addr { text-decoration-color: var(--gold); }
+@media (max-width: 767px) { .sh-email__addr { display: none; } }

@@ -10,6 +10,8 @@ const en: Dict = {
     loyalty: "Loyalty",
     reservation: "My reservation",
     guestArea: "Guest area",
+    email: "Contact us",
+    emailLabel: "Contact us by email",
     talk: "Talk to Méritum",
     openMenu: "Open menu",
     closeMenu: "Close menu",

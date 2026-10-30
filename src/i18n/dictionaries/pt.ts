@@ -8,6 +8,8 @@ const pt = {
     loyalty: "Fidelidade",
     reservation: "Minha reserva",
     guestArea: "Área do hóspede",
+    email: "Fale conosco",
+    emailLabel: "Fale conosco por e-mail",
     talk: "Fale com a Méritum",
     openMenu: "Abrir menu",
     closeMenu: "Fechar menu",

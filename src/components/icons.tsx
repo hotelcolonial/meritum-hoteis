@@ -1,8 +1,8 @@
 import type { CSSProperties, ReactNode } from "react";
 
-function Svg({ size, stroke, style, children }: { size: number; stroke: string; style?: CSSProperties; children: ReactNode }) {
+function Svg({ size, stroke, strokeWidth = 1.5, style, children }: { size: number; stroke: string; strokeWidth?: number; style?: CSSProperties; children: ReactNode }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={1.5} aria-hidden="true" style={{ flexShrink: 0, ...style }}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={strokeWidth} aria-hidden="true" style={{ flexShrink: 0, ...style }}>
       {children}
     </svg>
   );
@@ -33,6 +33,13 @@ const personPaths = (
 
 export const CalSmIcon = () => <Svg size={14} stroke="currentColor" style={mr}>{calPaths}</Svg>;
 export const PersonSmIcon = () => <Svg size={14} stroke="currentColor" style={mr}>{personPaths}</Svg>;
+/** Envelope do "Fale conosco": sem margem própria, o espaço até o texto vem do gap do link */
+export const MailSmIcon = () => (
+  <Svg size={16} stroke="currentColor" strokeWidth={1.75}>
+    <rect x="3" y="5" width="18" height="14" rx="1" />
+    <polyline points="3 6 12 13 21 6" />
+  </Svg>
+);
 export const CalIcon = () => <Svg size={16} stroke="rgba(255,255,255,0.7)">{calPaths}</Svg>;
 export const PersonIcon = () => <Svg size={16} stroke="rgba(255,255,255,0.7)">{personPaths}</Svg>;
 export const ChevWhite = () => (

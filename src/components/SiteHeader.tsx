@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "./LocaleLink";
-import { CalSmIcon, ChevWhite, CloseIcon, PersonSmIcon, StarIcon } from "./icons";
+import { CalSmIcon, ChevWhite, CloseIcon, MailSmIcon, PersonSmIcon, StarIcon } from "./icons";
 import Logo from "./Logo";
 import { HOTELS, ROUTES, type PageKey } from "@/lib/site";
 import { HTML_LANG, LANG_NAME, localePath, splitLocale, type Locale } from "@/i18n/config";
@@ -44,6 +44,29 @@ function Langs({ menu = false }: { menu?: boolean }) {
         </Fragment>
       ))}
     </div>
+  );
+}
+
+const EMAIL = "alicio@meritumhoteis.com.br";
+
+/** "Fale conosco": e-mail da Méritum, à esquerda da barra superior (desktop e celular) e no menu do celular. */
+function EmailLink({ menu = false }: { menu?: boolean }) {
+  const locale = useLocale();
+  const d = useDict().nav;
+  const track = () => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: "email_click", email_location: menu ? "menu" : "header", page_path: window.location.pathname, language: locale });
+  };
+  return menu ? (
+    <a href={`mailto:${EMAIL}`} className="mn-focus mn-menu__utillink" aria-label={d.emailLabel} onClick={track}>{d.email}</a>
+  ) : (
+    // margin-right:auto empurra o resto da linha (idiomas, links e moeda) para a direita
+    // Ícone e "Fale conosco" em dourado, e-mail em branco (some no celular); estilos em site.css (.sh-email)
+    <a href={`mailto:${EMAIL}`} className="mn-util mn-focus sh-email" style={{ ...utilItem, gap: "8px", marginRight: "auto" }} aria-label={`${d.emailLabel}: ${EMAIL}`} onClick={track}>
+      <MailSmIcon />
+      <span className="sh-email__label">{d.email}</span>
+      <span className="sh-email__addr">{EMAIL}</span>
+    </a>
   );
 }
 
@@ -121,6 +144,7 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
       {showUtil && (
         <div className="sh-util" style={{ background: bg }}>
           <div className="sh-util__row sh-desk">
+            <EmailLink />
             <Langs />
             <span style={vsep} />
             <Link href={ROUTES.bora} className="mn-util mn-focus" style={utilItem} onClick={closeAll}><StarIcon />{d.loyalty}</Link>
@@ -132,6 +156,7 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
             <Currency />
           </div>
           <div className="sh-util__row sh-util__row--mob sh-mob">
+            <EmailLink />
             <Langs />
             <Currency />
           </div>
@@ -214,6 +239,7 @@ export default function SiteHeader({ page, children }: { page: PageKey; children
             <Link href={ROUTES.bora} className="mn-focus mn-menu__utillink" onClick={closeAll}>{d.loyalty}</Link>
             <Link href={ROUTES.reserva} className="mn-focus mn-menu__utillink" onClick={closeAll}>{d.reservation}</Link>
             <Link href={ROUTES.hospede} className="mn-focus mn-menu__utillink" onClick={closeAll}>{d.guestArea}</Link>
+            <EmailLink menu />
           </div>
           <div className="mn-menu__langs">
             <Langs menu />
