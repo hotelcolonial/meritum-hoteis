@@ -265,11 +265,12 @@ select { border-radius: 0; }
 .mn-popup__close:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .mn-popup__box { transform: none; } }
 /* Com o pop-up aberto, uma folha da reserva ou o menu do celular abertos, a bolha e o balão da Asksuite
-   somem e voltam ao fechar. */
+   somem e voltam ao fechar. O balão da Méritum sobre a bolha (.mn-chat) segue as mesmas regras. */
 :root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [id*="asksuite" i], :root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [class*="asksuite" i],
 :root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [id*="infochat" i], :root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [class*="infochat" i],
 :root.has-popup [id*="asksuite" i], :root.has-popup [class*="asksuite" i],
-:root.has-popup [id*="infochat" i], :root.has-popup [class*="infochat" i] { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+:root.has-popup [id*="infochat" i], :root.has-popup [class*="infochat" i],
+:root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) .mn-chat, :root.has-popup .mn-chat { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 
 /* Calendário de datas no celular (até 767px, BookingWidget.tsx): 12 meses em lista vertical com rolagem,
    dias da semana parados no topo e o resumo de noites parado embaixo. Tablet e desktop não usam estas classes. */
@@ -300,3 +301,51 @@ select { border-radius: 0; }
 .sh-email__addr { margin-left: 2px; font-weight: 400; color: #FFFFFF; text-decoration: underline 1px transparent; text-underline-offset: 3px; transition: text-decoration-color .2s ease; }
 .sh-email:hover .sh-email__addr { text-decoration-color: var(--gold); }
 @media (max-width: 767px) { .sh-email__addr { display: none; } }
+
+/* Asksuite com as cores da Méritum (só aparência; o script e o comportamento não mudam). O script deles
+   aplica cores inline e carrega o próprio CSS depois deste, por isso tudo vai com !important.
+   A janela do chat abre num iframe (#botchatbotaskuite) e não recebe este CSS. */
+/* Balão "Pacotes exclusivos" da Asksuite: substituído pelo balão da Méritum (ChatTeaser.tsx, .mn-chat) */
+#titlediv { display: none !important; }
+/* Bolha do bot: azul da Méritum com borda dourada (o selo vermelho de notificação continua).
+   O script grava o fundo verde e a borda branca inline COM !important, que vence qualquer folha de estilo;
+   por isso o azul vem de um background-image sólido (pintado sobre o background-color) e o dourado de um
+   outline com offset negativo, desenhado exatamente sobre a borda branca. */
+.infochat_flt_rel, #infochat_agtpic { background-color: #052744 !important; background-image: linear-gradient(#052744, #052744) !important; }
+.infochat_flt_rel { border: 2px solid var(--gold) !important; outline: 2px solid var(--gold) !important; outline-offset: -2px !important; }
+
+/* Balão da Méritum ao lado da bolha do chat (ChatTeaser.tsx): à esquerda da bolha, borda direita 14px antes dela e
+   base alinhada com a dela (--mn-chat-r, --mn-chat-b e a largura máxima --mn-chat-max são medidos no componente).
+   Sobe junto com a barra de reserva (--mn-bar-h, AsksuiteDock) e fica logo abaixo da bolha (z-index 224748364). */
+.mn-chat { position: fixed; z-index: 224748363; right: var(--mn-chat-r, 114px); bottom: calc(var(--mn-chat-b, 6px) + var(--mn-bar-h, 0px)); width: min(260px, var(--mn-chat-max, 260px)); box-sizing: border-box; padding: 22px 20px 20px; background: #052744; border: 0; border-radius: 0; box-shadow: 0 16px 40px rgba(5,39,68,0.35); text-align: center; opacity: 0; transform: translateX(16px); transition: opacity .2s ease, transform .2s ease, bottom .25s ease; }
+.mn-chat.is-in { opacity: 1; transform: none; transition: opacity .45s cubic-bezier(.34,1.56,.64,1), transform .45s cubic-bezier(.34,1.56,.64,1), bottom .25s ease; }
+/* Pausado pelo pop-up do Bora de Novo (volta 1s depois que ele fecha) */
+.mn-chat.is-paused { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s ease, visibility 0s linear .2s, bottom .25s ease; }
+/* Setinha de 8px na lateral direita, 24px acima da base, apontando para a bolha, na cor do fundo */
+.mn-chat::after { content: ""; position: absolute; right: -8px; bottom: 24px; width: 0; height: 0; border-style: solid; border-color: transparent; border-width: 8px 0 8px 8px; border-left-color: #052744; }
+/* Ícone: a estrela da Méritum em dourado. O arquivo oficial do símbolo (branco, transparente em volta) serve de
+   máscara e o dourado vem do fundo; 30px de altura, largura na proporção do desenho (273 × 263) */
+.mn-chat__icon { display: block; width: 31px; height: 30px; margin: 0 auto 12px; background: var(--gold); -webkit-mask: url("/brand/meritum-simbolo-branco.svg") center / contain no-repeat; mask: url("/brand/meritum-simbolo-branco.svg") center / contain no-repeat; }
+.mn-chat__title { margin: 0 0 6px; font-family: var(--font-serif); font-weight: 500; font-size: 20px; line-height: 1.2; color: #FFFFFF; text-transform: none; }
+.mn-chat__text { margin: 0 0 16px; font-family: var(--font-sans); font-size: 14px; line-height: 1.45; color: rgba(255,255,255,0.85); }
+/* Botão: brilho diagonal que atravessa em 0,9s a cada 4s */
+.mn-chat__cta { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 44px; padding: 0 18px; background: var(--cta-bg); color: #052744; font-family: var(--font-sans); font-weight: 500; font-size: 15px; border: 0; border-radius: 0; cursor: pointer; transition: filter .2s ease; }
+.mn-chat__cta::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 40%; background: linear-gradient(105deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 50%, rgba(255,255,255,0) 100%); transform: translateX(-120%); animation: mnChatShine 4s ease-in-out infinite; pointer-events: none; }
+@keyframes mnChatShine { 0% { transform: translateX(-120%); } 22.5%, 100% { transform: translateX(260%); } }
+.mn-chat__arrow { display: inline-block; transition: transform .2s ease; }
+/* Balanço único, 10s depois de aparecer */
+.mn-chat.is-wobble { animation: mnChatWobble .6s ease-in-out 1; }
+@keyframes mnChatWobble { 0%, 100% { transform: none; } 25% { transform: rotate(-2deg); } 75% { transform: rotate(2deg); } }
+@media (hover: hover) {
+  .mn-chat__cta:hover { filter: brightness(1.08); }
+  .mn-chat__cta:hover .mn-chat__arrow { transform: translateX(3px); }
+  .mn-chat__close:hover { color: #FFFFFF; }
+}
+.mn-chat__close { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; padding: 0; display: flex; align-items: center; justify-content: center; background: transparent; border: 0; color: rgba(255,255,255,0.6); cursor: pointer; transition: color .2s ease; }
+/* Movimento reduzido: só o fade (sem deslizar, brilho nem balanço) */
+@media (prefers-reduced-motion: reduce) {
+  .mn-chat, .mn-chat.is-in { transform: none; }
+  .mn-chat.is-wobble, .mn-chat__cta::after { animation: none; }
+  .mn-chat__cta::after { display: none; }
+  .mn-chat__cta:hover .mn-chat__arrow { transform: none; }
+}

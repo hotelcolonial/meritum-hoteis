@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import Behaviors from "@/components/Behaviors";
 import HashRedirect from "@/components/HashRedirect";
 import AsksuiteDock from "@/components/AsksuiteDock";
+import ChatTeaser from "@/components/ChatTeaser";
 import PromoPopup from "@/components/PromoPopup";
 import JsonLd from "@/components/JsonLd";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
@@ -85,6 +86,7 @@ export default async function RootLayout({ children, params }: Props) {
           </div>
           <Behaviors />
           <AsksuiteDock />
+          <ChatTeaser />
           <PromoPopup />
           {/* Chat de atendimento Asksuite (carrega depois que a página fica interativa) */}
           <Script id="script-infochat" src="https://cdn.asksuite.com/infochat.js?dataConfig=https://control.asksuite.com/api/companies/hotelcolonialiguacu" strategy="afterInteractive" />

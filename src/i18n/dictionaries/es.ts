@@ -116,6 +116,12 @@ const es: Dict = {
     next: "Foto siguiente",
     count: "{i} de {n}",
   },
+  chatTeaser: {
+    title: "Planee su próximo viaje",
+    text: "Resuelva sus dudas y encuentre las mejores tarifas en los hoteles Méritum en Foz do Iguaçu.",
+    cta: "Conversar ahora",
+    close: "Cerrar",
+  },
   notFound: {
     title: "Página no encontrada | Méritum Hotéis",
   },

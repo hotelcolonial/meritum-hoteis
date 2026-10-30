@@ -118,6 +118,12 @@ const pt = {
     /** {i} foto atual, {n} total */
     count: "{i} de {n}",
   },
+  chatTeaser: {
+    title: "Planeje sua próxima viagem",
+    text: "Tire suas dúvidas e encontre as melhores tarifas nos hotéis Méritum em Foz do Iguaçu.",
+    cta: "Conversar agora",
+    close: "Fechar",
+  },
   notFound: {
     title: "Página não encontrada | Méritum Hotéis",
   },
