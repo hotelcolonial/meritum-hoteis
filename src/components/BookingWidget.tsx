@@ -59,6 +59,10 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   const barBtn = useRef<HTMLButtonElement>(null);
   const trigger = useRef<HTMLElement | null>(null);
   const openY = useRef(0);
+  // Lidos nos efeitos de abertura do calendário sem que mudar o check-in os dispare de novo
+  const listCal = useRef(false);
+  const inNow = useRef<string | null>(null);
+  useEffect(() => { listCal.current = oneMonth; inNow.current = bkIn; }, [oneMonth, bkIn]);
 
   const close = useCallback((returnFocus: boolean) => {
     setPanel(null);
@@ -80,10 +84,18 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
       const el = document.querySelector("[data-bk-panel]");
       if (!el) return;
       const f = (el.querySelector(".bk-opt.is-selected") || el.querySelector(".bk-cal__day.is-start") || el.querySelector(".bk-cal__day:not(:disabled):not(.is-empty)") || el.querySelector("button:not(:disabled), input")) as HTMLElement | null;
-      f?.focus();
+      // Na lista de meses do celular quem decide a rolagem é o efeito abaixo, não o foco
+      f?.focus(listCal.current ? { preventScroll: true } : undefined);
     }, 40);
     return () => clearTimeout(t);
   }, [panel]);
+
+  // Celular: ao abrir as datas, a lista começa no mês do check-in (ou no topo, mês atual).
+  // Só ao abrir: escolher o check-in não mexe na rolagem.
+  useEffect(() => {
+    if (panel !== "dates" || !oneMonth || !inNow.current) return;
+    document.querySelector(`.bk-sheet [data-bk-month="${inNow.current.slice(0, 7)}"]`)?.scrollIntoView({ block: "start", behavior: "instant" });
+  }, [panel, oneMonth]);
 
   useEffect(() => {
     const down = (e: PointerEvent) => {
@@ -133,6 +145,11 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
     window.addEventListener("resize", on);
     return () => { window.removeEventListener("scroll", on); window.removeEventListener("resize", on); };
   }, [isMobile, sentinelSelector]);
+
+  // Avisa o pop-up do Bora de Novo (PromoPopup.tsx) que a reserva está em uso: ele fecha e não abre mais nessa visita
+  useEffect(() => {
+    if (panel || mob) window.dispatchEvent(new Event("mn:booking-open"));
+  }, [panel, mob]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("bk-mob-lock", mob);
@@ -227,8 +244,9 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
 
   // Calendário
   const tY = Number(today.slice(0, 4)), tM = Number(today.slice(5, 7)) - 1;
-  const v = view || { y: tY, m: tM };
-  const nMonths = oneMonth ? 1 : 2;
+  // Celular: 12 meses em lista vertical a partir do mês atual, sem setas (ignora view)
+  const v = oneMonth ? { y: tY, m: tM } : view || { y: tY, m: tM };
+  const nMonths = oneMonth ? 12 : 2;
   const months = Array.from({ length: nMonths }, (_, i) => {
     const y = v.y + Math.floor((v.m + i) / 12), m = (v.m + i) % 12;
     const first = new Date(y, m, 1).getDay(), len = new Date(y, m + 1, 0).getDate();
@@ -258,17 +276,24 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
   );
 
   const calendar = (
-    <div className="bk-cal">
-      <div className="bk-cal__nav">
-        <button type="button" className="bk-cal__arrow" disabled={prevDisabled} aria-label={t.prevMonth} onClick={() => setView(v.m === 0 ? { y: v.y - 1, m: 11 } : { y: v.y, m: v.m - 1 })}>‹</button>
-        <button type="button" className="bk-cal__arrow" aria-label={t.nextMonth} onClick={() => setView(v.m === 11 ? { y: v.y + 1, m: 0 } : { y: v.y, m: v.m + 1 })}>›</button>
-      </div>
+    <div className={"bk-cal" + (oneMonth ? " bk-cal--list" : "")}>
+      {oneMonth ? (
+        // Uma linha só de dias da semana, parada no topo enquanto os meses rolam
+        <div className="bk-cal__wdrow" aria-hidden="true">
+          {t.weekdays.map((w, i) => <span key={"w" + i} className="bk-cal__wd">{w}</span>)}
+        </div>
+      ) : (
+        <div className="bk-cal__nav">
+          <button type="button" className="bk-cal__arrow" disabled={prevDisabled} aria-label={t.prevMonth} onClick={() => setView(v.m === 0 ? { y: v.y - 1, m: 11 } : { y: v.y, m: v.m - 1 })}>‹</button>
+          <button type="button" className="bk-cal__arrow" aria-label={t.nextMonth} onClick={() => setView(v.m === 11 ? { y: v.y + 1, m: 0 } : { y: v.y, m: v.m + 1 })}>›</button>
+        </div>
+      )}
       <div className="bk-cal__months">
         {months.map(({ y, m, first, len }) => (
-          <div className="bk-cal__month" key={`${y}-${m}`}>
+          <div className="bk-cal__month" key={`${y}-${m}`} data-bk-month={iso(y, m, 1).slice(0, 7)}>
             <p className="bk-cal__title">{t.months[m]} {y}</p>
             <div className="bk-cal__grid">
-              {t.weekdays.map((w, i) => <span key={"w" + i} className="bk-cal__wd" aria-hidden="true">{w}</span>)}
+              {!oneMonth && t.weekdays.map((w, i) => <span key={"w" + i} className="bk-cal__wd" aria-hidden="true">{w}</span>)}
               {Array.from({ length: first }, (_, k) => <button key={"e" + k} type="button" className="bk-cal__day is-empty" disabled tabIndex={-1} aria-hidden="true" />)}
               {Array.from({ length: len }, (_, k) => {
                 const d = k + 1, s = iso(y, m, d);
@@ -491,7 +516,7 @@ export default function BookingWidget({ sentinelSelector = "#mn-footer" }: { sen
             <p className="bk-sheet__title">{sheetTitle}</p>
             <button type="button" className="bk-sheet__close" onClick={() => close(true)}>{t.close}</button>
           </div>
-          <div className="bk-sheet__body">
+          <div className={"bk-sheet__body" + (panel === "dates" && oneMonth ? " bk-sheet__body--cal" : "")}>
             {panel === "prop" && propList}
             {panel === "dates" && calendar}
             {panel === "guests" && guests}

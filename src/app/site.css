@@ -298,7 +298,22 @@ select { border-radius: 0; }
 @media (min-width: 768px) { .mn-popup__close { top: -14px; right: -14px; } }
 .mn-popup__close:focus-visible { outline: 2px solid #C9A24A; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .mn-popup__box { transform: none; } }
-/* Com o pop-up aberto, o WhatsApp e a bolha da Asksuite somem */
+/* Com o pop-up aberto, o WhatsApp e a bolha da Asksuite somem. Com uma folha da reserva aberta, a bolha e o
+   balão da Asksuite também (o WhatsApp já some pela regra de .wa-btn lá em cima) e voltam ao fechar. */
+:root:has(.bk-sheet, .bk-mobwrap.is-open) [id*="asksuite" i], :root:has(.bk-sheet, .bk-mobwrap.is-open) [class*="asksuite" i],
+:root:has(.bk-sheet, .bk-mobwrap.is-open) [id*="infochat" i], :root:has(.bk-sheet, .bk-mobwrap.is-open) [class*="infochat" i],
 :root.has-popup .wa-btn,
 :root.has-popup [id*="asksuite" i], :root.has-popup [class*="asksuite" i],
 :root.has-popup [id*="infochat" i], :root.has-popup [class*="infochat" i] { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+
+/* Calendário de datas no celular (até 767px, BookingWidget.tsx): 12 meses em lista vertical com rolagem,
+   dias da semana parados no topo e o resumo de noites parado embaixo. Tablet e desktop não usam estas classes. */
+.bk-sheet__body { -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.bk-sheet__body--cal { padding-top: 0; padding-bottom: 0; }
+.bk-cal__wdrow { position: sticky; top: 0; z-index: 2; background: #FFFFFF; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); padding-top: 12px; border-bottom: 1px solid #F4F6F8; }
+.bk-cal--list .bk-cal__months { gap: 28px; padding: 16px 0; }
+/* Ao rolar até o mês do check-in, o título fica logo abaixo da linha dos dias da semana */
+.bk-cal--list .bk-cal__month { scroll-margin-top: 44px; }
+.bk-cal--list .bk-cal__title { text-align: left; margin: 0 0 12px; }
+.bk-cal--list .bk-cal__day { height: 44px; }
+.bk-cal--list .bk-cal__nights { position: sticky; bottom: 0; z-index: 2; background: #FFFFFF; margin: 0; padding: 14px 0 calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid #F4F6F8; }

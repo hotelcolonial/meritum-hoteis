@@ -69,6 +69,7 @@ export default function PromoPopup() {
     if (onBora || done.current) return;
     let t: ReturnType<typeof setTimeout>;
     const open = () => {
+      if (done.current) return;
       if (document.querySelector(BUSY)) { t = setTimeout(open, 2000); return; }
       done.current = true;
       prevFocus.current = document.activeElement as HTMLElement | null;
@@ -100,6 +101,19 @@ export default function PromoPopup() {
   }, [track]);
 
   useEffect(() => () => clearTimeout(exitT.current), []);
+
+  // Reserva aberta (qualquer painel ou folha, aviso do BookingWidget): o pop-up não abre mais nessa visita
+  // e, se estiver na tela, sai na hora, sem animação e sem popup_close, para não ficar por cima da reserva
+  useEffect(() => {
+    const booking = () => {
+      done.current = true;
+      clearTimeout(exitT.current);
+      setShown(false);
+      setMounted(false);
+    };
+    window.addEventListener("mn:booking-open", booking);
+    return () => window.removeEventListener("mn:booking-open", booking);
+  }, []);
 
   // Enquanto aberto: página travada (mesma técnica do menu no SiteHeader), WhatsApp e Asksuite escondidos, Esc fecha
   useEffect(() => {
