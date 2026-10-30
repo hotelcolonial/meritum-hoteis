@@ -9,6 +9,7 @@ import Behaviors from "@/components/Behaviors";
 import HashRedirect from "@/components/HashRedirect";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import AsksuiteDock from "@/components/AsksuiteDock";
+import PromoPopup from "@/components/PromoPopup";
 import JsonLd from "@/components/JsonLd";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 import { getDict } from "@/i18n/dictionaries";
@@ -86,6 +87,7 @@ export default async function RootLayout({ children, params }: Props) {
           <Behaviors />
           <WhatsAppButton />
           <AsksuiteDock />
+          <PromoPopup />
           {/* Chat de atendimento Asksuite (carrega depois que a página fica interativa) */}
           <Script id="script-infochat" src="https://cdn.asksuite.com/infochat.js?dataConfig=https://control.asksuite.com/api/companies/hotelcolonialiguacu" strategy="afterInteractive" />
           {/* URLs do site antigo (/#/a-meritum...) só existiam em português */}
