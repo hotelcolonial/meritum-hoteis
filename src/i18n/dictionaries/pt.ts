@@ -118,11 +118,6 @@ const pt = {
     /** {i} foto atual, {n} total */
     count: "{i} de {n}",
   },
-  whatsapp: {
-    label: "Falar pelo WhatsApp",
-    tooltip: "Fale conosco",
-    message: "Olá, vim pelo site da Méritum Hotéis e tenho interesse em me hospedar em um dos seus hotéis.",
-  },
   notFound: {
     title: "Página não encontrada | Méritum Hotéis",
   },

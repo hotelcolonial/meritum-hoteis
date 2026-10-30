@@ -192,27 +192,6 @@ a.sh-menu__item::before { content: ""; position: absolute; inset: -1px 0; }
 /* Seletor de idioma dentro do menu do celular, 24px abaixo dos links de Fidelidade, Minha reserva e Área do hóspede */
 .mn-menu__langs { margin-top: 24px; }
 
-/* Botão flutuante de WhatsApp (todas as páginas) */
-.wa-btn { position: fixed; right: 24px; bottom: 24px; z-index: 60; width: 56px; height: 56px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,0,0,0.22); text-decoration: none; transition: bottom .25s ease, opacity .25s ease, visibility .25s, transform .2s ease, background-color .2s ease; }
-.wa-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-.wa-btn__tip { position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%); background: #052744; color: #FFFFFF; font-family: var(--font-sans); font-size: 14px; line-height: 1.3; padding: 8px 14px; border-radius: 0; white-space: nowrap; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s ease, visibility 0s linear .2s; }
-@media (hover: hover) and (min-width: 1024px) {
-  .wa-btn:hover { transform: scale(1.06); background: #1EBE5B; }
-  .wa-btn:hover .wa-btn__tip { opacity: 1; visibility: visible; transition: opacity .2s ease, visibility 0s; }
-}
-@media (max-width: 767px) { .wa-btn { right: 16px; bottom: 16px; width: 52px; height: 52px; } }
-/* Acima da barra de reserva fixa: desktop (72px), tablet (64px, sempre visível na home) e celular (64px, ao rolar) */
-@media (min-width: 1024px) { :root:has(.bk-desk-bar.is-fixed:not(.is-hidden)) .wa-btn { bottom: 88px; } }
-@media (min-width: 768px) and (max-width: 1023px) { :root:has(.bk-fixbar) .wa-btn { bottom: 80px; } }
-@media (max-width: 767px) {
-  :root:has(.bk-pbar.is-on) .wa-btn { bottom: calc(80px + env(safe-area-inset-bottom)); }
-  /* Campo de formulário em foco no celular: o botão sai para não cobrir o que se digita */
-  :root:has(input:focus, textarea:focus, select:focus) .wa-btn { opacity: 0; visibility: hidden; pointer-events: none; }
-}
-/* Folhas da reserva, formulário de reserva do tablet e menu do celular abertos */
-:root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) .wa-btn { opacity: 0; visibility: hidden; pointer-events: none; }
-@media (prefers-reduced-motion: reduce) { .wa-btn:hover { transform: none !important; } }
-
 /* ====================================================================
    Compatibilidade com iPhone (Safari). No Android tudo isto já funcionava.
    ==================================================================== */
@@ -241,8 +220,7 @@ input, select, textarea, button { -webkit-tap-highlight-color: transparent; }
 input:not([type="checkbox"]):not([type="radio"]), textarea { -webkit-appearance: none; appearance: none; border-radius: 0; }
 select { border-radius: 0; }
 
-/* Barra fixa e botão de WhatsApp acima da barra inferior do Safari */
-@media (max-width: 767px) { .wa-btn { bottom: calc(16px + env(safe-area-inset-bottom)); } }
+/* Barra fixa acima da barra inferior do Safari */
 .bk-fixbar { padding-bottom: env(safe-area-inset-bottom); }
 
 /* iPhones com iOS antigo (antes do 15.4) não entendem svh/dvh: sem isto a altura
@@ -266,16 +244,6 @@ select { border-radius: 0; }
   body { overflow-x: hidden; }
 }
 
-/* WhatsApp empilhado logo acima da bolha do chat da Asksuite, os dois no canto inferior direito.
-   A bolha da Asksuite tem cerca de 64px e fica a ~20px da base; o WhatsApp fica 12px acima dela.
-   Quando a barra de reserva fixa aparece, os dois sobem juntos a altura dela (--mn-bar-h, medida
-   em AsksuiteDock.tsx). */
-.wa-btn { bottom: calc(100px + var(--mn-bar-h, 0px)) !important; }
-@media (max-width: 767px) { .wa-btn { bottom: calc(92px + var(--mn-bar-h, 0px)) !important; } }
-/* Quando a bolha da Asksuite é encontrada, o WhatsApp fica centralizado sobre ela, 12px acima */
-:root[style*="--mn-chat-cx"] .wa-btn { right: calc(var(--mn-chat-cx) - 28px) !important; bottom: calc(var(--mn-chat-top) + 12px + var(--mn-bar-h, 0px)) !important; }
-@media (max-width: 767px) { :root[style*="--mn-chat-cx"] .wa-btn { right: calc(var(--mn-chat-cx) - 26px) !important; } }
-
 /* Pop-up do Bora de Novo (PromoPopup.tsx). Prefixo .mn-popup porque .mn-pop já é a animação dos painéis
    em globals.css. A arte tem cantos transparentes: sem fundo, borda ou box-shadow na imagem. */
 .mn-popup { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 2147483647; box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); background: rgba(5,39,68,0.72); opacity: 0; transition: opacity .25s ease; }
@@ -296,11 +264,10 @@ select { border-radius: 0; }
 @media (min-width: 768px) { .mn-popup__close { top: -14px; right: -14px; } }
 .mn-popup__close:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .mn-popup__box { transform: none; } }
-/* Com o pop-up aberto, o WhatsApp e a bolha da Asksuite somem. Com uma folha da reserva ou o menu do celular abertos, a bolha e o
-   balão da Asksuite também (o WhatsApp já some pela regra de .wa-btn lá em cima) e voltam ao fechar. */
+/* Com o pop-up aberto, uma folha da reserva ou o menu do celular abertos, a bolha e o balão da Asksuite
+   somem e voltam ao fechar. */
 :root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [id*="asksuite" i], :root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [class*="asksuite" i],
 :root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [id*="infochat" i], :root:has(.bk-sheet, .bk-mobwrap.is-open, .sh-menu) [class*="infochat" i],
-:root.has-popup .wa-btn,
 :root.has-popup [id*="asksuite" i], :root.has-popup [class*="asksuite" i],
 :root.has-popup [id*="infochat" i], :root.has-popup [class*="infochat" i] { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 
@@ -317,7 +284,7 @@ select { border-radius: 0; }
 .bk-cal--list .bk-cal__nights { position: sticky; bottom: 0; z-index: 2; background: #FFFFFF; margin: 0; padding: 14px 0 calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid #F4F6F8; }
 
 /* Botões de ação (CTA): dourado (--cta-bg / --cta-text em globals.css). No hover o dourado clareia e o botão
-   sobe 1px; o contorno de foco continua o de cada botão. As cores dos hotéis (.ph-book__btn) e o WhatsApp não entram. */
+   sobe 1px; o contorno de foco continua o de cada botão. As cores dos hotéis (.ph-book__btn) não entram. */
 .bk-go, .bk-mgo, .bk-pbar__btn, .bk-fixbar__btn, .bk-guests__apply, .bn-how__btn, .mn-join__submit, .ct-row__btn, .pg-prop__btn { transition: filter .2s ease, transform .2s ease; }
 @media (hover: hover) {
   .bk-go:hover, .bk-mgo:hover, .bk-pbar__btn:hover, .bk-fixbar__btn:hover, .bk-guests__apply:hover, .bn-how__btn:hover, .mn-join__submit:not(:disabled):hover, .ct-row__btn:hover, .pg-prop__btn:hover { filter: brightness(1.08); transform: translateY(-1px); }

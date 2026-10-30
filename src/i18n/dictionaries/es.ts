@@ -116,11 +116,6 @@ const es: Dict = {
     next: "Foto siguiente",
     count: "{i} de {n}",
   },
-  whatsapp: {
-    label: "Hablar por WhatsApp",
-    tooltip: "Hable con nosotros",
-    message: "Hola, vengo del sitio de Méritum Hotéis y tengo interés en hospedarme en uno de sus hoteles.",
-  },
   notFound: {
     title: "Página no encontrada | Méritum Hotéis",
   },
